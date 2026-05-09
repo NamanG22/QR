@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.ImageView?>
@@ -12,19 +11,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
-<!-- RDSO QFRDS-style layouts: UTS vs PRS — manual toggle + ticket-driven data -->
+<!-- RDSO QFRDS-style layouts: UTS vs PRS — ticket type selects board -->
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.railway.qfrds.PassengerDisplayView"
             maxHeight="768.0" maxWidth="1024.0" minHeight="768.0" minWidth="1024.0"
             styleClass="passenger-root">
-    <top>
-        <HBox alignment="CENTER_LEFT" styleClass="display-chrome-top">
-            <Button fx:id="boardModeToggle" mnemonicParsing="false" onAction="#handleBoardToggle"
-                    styleClass="board-mode-toggle" text="Switch to PRS"/>
-        </HBox>
-    </top>
     <center>
-        <StackPane maxHeight="694.0" maxWidth="1024.0" styleClass="display-stack">
+        <StackPane maxHeight="736.0" maxWidth="1024.0" styleClass="display-stack">
             <!-- ========== UTS ========== -->
             <BorderPane fx:id="utsBoard" styleClass="tan-board">
                 <padding>

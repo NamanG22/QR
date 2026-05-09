@@ -6,7 +6,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -25,8 +24,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
- * Passenger-facing QFRDS display: **UTS** and **PRS** RDSO-style boards. Ticket packets choose the
- * active board unless the operator uses the manual mode toggle.
+ * Passenger-facing QFRDS display: **UTS** and **PRS** RDSO-style boards; {@link TicketType} selects
+ * which board is shown.
  */
 public class PassengerDisplayView implements Initializable {
 
@@ -40,9 +39,6 @@ public class PassengerDisplayView implements Initializable {
 
     private static final DateTimeFormatter DISPLAY_DDMMYYYY = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final DateTimeFormatter DISPLAY_DDMM = DateTimeFormatter.ofPattern("dd/MM");
-
-    @FXML
-    private Button boardModeToggle;
 
     @FXML
     private BorderPane utsBoard;
@@ -122,11 +118,6 @@ public class PassengerDisplayView implements Initializable {
 
     private final ObservableList<PaxRow> prsPaxRows = FXCollections.observableArrayList();
 
-    /** When {@code false}, visibility follows {@link TicketType}; when {@code true}, toggle picks the board. */
-    private boolean manualBoardSelection;
-    /** Visible board when manual mode is on; also mirrored when auto mode applies a ticket. */
-    private boolean boardShowsPrs;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Tooltip.install(utsLogoPlaceholder, new Tooltip("Indian Railways Logo"));
@@ -135,41 +126,21 @@ public class PassengerDisplayView implements Initializable {
         clearAll();
     }
 
-    @FXML
-    private void handleBoardToggle() {
-        manualBoardSelection = true;
-        boardShowsPrs = !boardShowsPrs;
-        syncBoardVisibility();
-        refreshToggleLabel();
-    }
-
     /**
      * Refreshes the active board (UTS vs PRS) and QR bitmap. JavaFX thread only.
      */
     public void applyTicketUpdate(TicketData ticket, WritableImage qrImage) {
         boolean prs = ticket.getTicketType() == TicketType.PRS;
-        if (!manualBoardSelection) {
-            boardShowsPrs = prs;
-            syncBoardVisibility();
-            refreshToggleLabel();
-        }
+        utsBoard.setVisible(!prs);
+        utsBoard.setManaged(!prs);
+        prsBoard.setVisible(prs);
+        prsBoard.setManaged(prs);
 
         if (prs) {
             fillPrs(ticket, qrImage);
         } else {
             fillUts(ticket, qrImage);
         }
-    }
-
-    private void syncBoardVisibility() {
-        utsBoard.setVisible(!boardShowsPrs);
-        utsBoard.setManaged(!boardShowsPrs);
-        prsBoard.setVisible(boardShowsPrs);
-        prsBoard.setManaged(boardShowsPrs);
-    }
-
-    private void refreshToggleLabel() {
-        boardModeToggle.setText(boardShowsPrs ? "Switch to UTS" : "Switch to PRS");
     }
 
     private void fillUts(TicketData t, WritableImage qrImage) {
@@ -271,10 +242,10 @@ public class PassengerDisplayView implements Initializable {
     }
 
     private void clearAll() {
-        manualBoardSelection = false;
-        boardShowsPrs = false;
-        syncBoardVisibility();
-        refreshToggleLabel();
+        utsBoard.setVisible(true);
+        utsBoard.setManaged(true);
+        prsBoard.setVisible(false);
+        prsBoard.setManaged(false);
 
         utsTerminalId.setText("—");
         utsWindowNo.setText("—");

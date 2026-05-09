@@ -6,28 +6,6 @@
     -fx-background-color: #1a1a1a;
 }
 
-.display-chrome-top {
-    -fx-background-color: #141414;
-    -fx-border-color: #555555;
-    -fx-border-width: 0 0 1 0;
-    -fx-padding: 4 8 4 8;
-}
-
-.board-mode-toggle {
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #eeeeee;
-    -fx-background-color: #3a3a3a;
-    -fx-background-radius: 4px;
-    -fx-border-color: #666666;
-    -fx-border-radius: 4px;
-    -fx-padding: 4 12 4 12;
-}
-
-.board-mode-toggle:hover {
-    -fx-background-color: #4a4a4a;
-}
-
 .display-stack {
     -fx-padding: 0;
     -fx-background-color: #1a1a1a;
