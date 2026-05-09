@@ -75,16 +75,43 @@
     -fx-border-color: #f4d03f;
 }
 
+/*
+ * ComboBox shows the current selection in an inner ListCell; Modena defaults can leave
+ * that label low-contrast. Force white text for the closed control and popup rows.
+ */
+.combo-box-base > .list-cell {
+    -fx-text-fill: #ffffff;
+}
+
+.combo-box-base > .list-cell .text {
+    -fx-fill: #ffffff;
+}
+
 .combo-box-popup .list-view {
     -fx-background-color: #232a3a;
 }
 
 .combo-box-popup .list-cell {
-    -fx-text-fill: #e8ecf7;
+    -fx-text-fill: #ffffff;
+}
+
+.combo-box-popup .list-cell .text {
+    -fx-fill: #ffffff;
 }
 
 .combo-box-popup .list-cell:hover {
     -fx-background-color: #3d4f73;
+    -fx-text-fill: #ffffff;
+}
+
+.combo-box-popup .list-cell:filled:selected,
+.combo-box-popup .list-cell:filled:selected:hover {
+    -fx-background-color: #4a5d82;
+    -fx-text-fill: #ffffff;
+}
+
+.combo-box-popup .list-cell:filled:selected .text {
+    -fx-fill: #ffffff;
 }
 
 .primary-button {
