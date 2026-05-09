@@ -1,11 +1,11 @@
 package com.railway.qfrds;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
 import java.net.URL;
@@ -36,7 +36,7 @@ public class PassengerDisplayView implements Initializable {
     @FXML
     private Label timestampValue;
     @FXML
-    private Label passengerRow;
+    private HBox passengerRow;
     @FXML
     private Label passengerValue;
     @FXML
@@ -53,7 +53,7 @@ public class PassengerDisplayView implements Initializable {
 
     /**
      * Atomically refreshes all passenger-visible fields and swaps the QR bitmap.
-     * Safe to call from JavaFX thread only (invoked via {@link Platform#runLater} from controller).
+     * Safe to call from JavaFX thread only (invoked via {@link javafx.application.Platform#runLater} from controller).
      */
     public void applyTicketUpdate(TicketData ticket, WritableImage qrImage) {
         ticketTypeValue.setText(ticket.getTicketType().name());
