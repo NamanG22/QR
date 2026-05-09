@@ -14,7 +14,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * RS232 listener for the fare repeater controller path: opens {@code COM6}, reads UTF-8 text lines
+ * RS232 listener for the fare repeater controller path: opens the configured port (default {@code COM4}),
+ * reads UTF-8 text lines
  * terminated by newline, and dispatches each complete line to the application layer.
  * <p>
  * A dedicated daemon thread performs blocking reads. If the port drops or cannot be opened,
@@ -27,8 +28,8 @@ public final class SerialListenerService {
 
     private static final Logger LOG = Logger.getLogger(SerialListenerService.class.getName());
 
-    /** Pair with Supervisor Console Simulator wiring — COM6 on typical demo PCs. */
-    public static final String DEFAULT_PORT_NAME = "COM6";
+    /** RX side of virtual pair (com0com): supervisor on COM3, this app on COM4. */
+    public static final String DEFAULT_PORT_NAME = "COM4";
     private static final int BAUD = 9600;
     private static final int DATA_BITS = 8;
     private static final int STOP_BITS = SerialPort.ONE_STOP_BIT;

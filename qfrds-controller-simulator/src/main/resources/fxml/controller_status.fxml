@@ -20,7 +20,7 @@
             </padding>
             <Label styleClass="dash-title" text="QFRDS Intelligent Controller — Monitoring"/>
             <Label styleClass="dash-subtitle"
-                   text="Remote Data Acquisition · RS232 COM6 · Packet decode · QR pipeline · Display sink"/>
+                   text="Remote Data Acquisition · RS232 COM4 (pair with supervisor COM3) · Packet decode · QR pipeline · Display sink"/>
             <HBox alignment="CENTER_LEFT" spacing="16.0">
                 <Label styleClass="cris-banner" text="CRIS connectivity: ONLINE (simulated)"/>
                 <Region HBox.hgrow="ALWAYS"/>

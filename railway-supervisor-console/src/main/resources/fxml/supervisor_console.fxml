@@ -84,7 +84,7 @@
                     <Button mnemonicParsing="false" onAction="#onGenerateTicket" styleClass="primary-button"
                             text="Generate Ticket"/>
                     <Region HBox.hgrow="ALWAYS"/>
-                    <Label styleClass="hint-label" text="9600 baud · COM5 · UTF-8 + LF"/>
+                    <Label styleClass="hint-label" text="9600 baud · COM3 → pair COM4 (controller) · UTF-8 + LF"/>
                 </HBox>
             </VBox>
 

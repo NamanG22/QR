@@ -182,7 +182,7 @@ public class ControllerStatusView implements Initializable {
 
     public void setMockMode(boolean mock) {
         if (mockModeLabel != null) {
-            mockModeLabel.setText(mock ? "MOCK (no COM6)" : "LIVE");
+            mockModeLabel.setText(mock ? ("MOCK (no " + SerialListenerService.DEFAULT_PORT_NAME + ")") : "LIVE");
             mockModeLabel.getStyleClass().removeAll("mock-on", "mock-off");
             mockModeLabel.getStyleClass().add(mock ? "mock-on" : "mock-off");
         }
