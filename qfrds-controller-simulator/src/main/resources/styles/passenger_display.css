@@ -1,19 +1,19 @@
-/* RDSO QFRDS-style passenger boards — dark theme, maroon header, bilingual labels */
+/* RDSO QFRDS-style passenger boards — white canvas, maroon header, dark field cells */
 
 .passenger-root {
-    -fx-font-family: "Arial", "Helvetica Neue", "Noto Sans Devanagari", sans-serif;
+    -fx-font-family: "Rozha One", "Noto Sans Devanagari", "Arial", sans-serif;
     -fx-font-weight: bold;
-    -fx-background-color: #1a1a1a;
+    -fx-background-color: #ffffff;
 }
 
 .display-stack {
     -fx-padding: 0;
-    -fx-background-color: #1a1a1a;
+    -fx-background-color: #ffffff;
 }
 
 /* ----- boards ----- */
 .tan-board {
-    -fx-background-color: #1a1a1a;
+    -fx-background-color: #ffffff;
     -fx-background-radius: 0;
     -fx-border-color: transparent;
     -fx-border-width: 0;
@@ -37,12 +37,6 @@
     -fx-font-size: 32px;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
-}
-
-.rdso-main-subtitle {
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #f0f0f0;
 }
 
 .rdso-divider-h {
@@ -134,14 +128,14 @@
 }
 
 .passenger-footer-tech {
-    -fx-background-color: #141414;
-    -fx-border-color: #555555;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cccccc;
     -fx-border-width: 1 0 0 0;
 }
 
 .footer-note {
     -fx-font-size: 10px;
-    -fx-text-fill: #888888;
+    -fx-text-fill: #555555;
     -fx-font-weight: bold;
 }
 

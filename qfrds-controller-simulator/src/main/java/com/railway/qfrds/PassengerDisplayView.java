@@ -14,7 +14,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,6 +31,28 @@ import java.util.ResourceBundle;
  * which board is shown.
  */
 public class PassengerDisplayView implements Initializable {
+
+    private static final String PASSENGER_FONT_PATH = "/fonts/RozhaOne-Regular.ttf";
+    private static volatile boolean passengerFontLoaded;
+
+    private static void ensurePassengerFontLoaded() {
+        if (passengerFontLoaded) {
+            return;
+        }
+        synchronized (PassengerDisplayView.class) {
+            if (passengerFontLoaded) {
+                return;
+            }
+            try (InputStream in = PassengerDisplayView.class.getResourceAsStream(PASSENGER_FONT_PATH)) {
+                if (in != null) {
+                    Font.loadFont(in, 12);
+                }
+            } catch (IOException ignored) {
+                // fall back to stylesheet font stack
+            }
+            passengerFontLoaded = true;
+        }
+    }
 
     private static final DateTimeFormatter LAST_UPDATED_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -120,6 +145,7 @@ public class PassengerDisplayView implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        ensurePassengerFontLoaded();
         Tooltip.install(utsLogoPlaceholder, new Tooltip("Indian Railways Logo"));
         Tooltip.install(prsLogoPlaceholder, new Tooltip("Indian Railways Logo"));
         initPassengerTable();
