@@ -1,199 +1,213 @@
-/* QFRDS Fare Repeater TAN-style boards — white panel, bilingual labels, black value cells, maroon title */
+/* RDSO QFRDS-style passenger boards — dark theme, maroon header, bilingual labels */
 
 .passenger-root {
-    -fx-font-family: "Segoe UI", "Helvetica Neue", "Noto Sans Devanagari", Arial, sans-serif;
-    -fx-background-color: #5c6570;
+    -fx-font-family: "Arial", "Helvetica Neue", "Noto Sans Devanagari", sans-serif;
+    -fx-font-weight: bold;
+    -fx-background-color: #1a1a1a;
+}
+
+.display-chrome-top {
+    -fx-background-color: #141414;
+    -fx-border-color: #555555;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 4 8 4 8;
+}
+
+.board-mode-toggle {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #eeeeee;
+    -fx-background-color: #3a3a3a;
+    -fx-background-radius: 4px;
+    -fx-border-color: #666666;
+    -fx-border-radius: 4px;
+    -fx-padding: 4 12 4 12;
+}
+
+.board-mode-toggle:hover {
+    -fx-background-color: #4a4a4a;
 }
 
 .display-stack {
-    -fx-padding: 12;
+    -fx-padding: 0;
+    -fx-background-color: #1a1a1a;
 }
 
-/* ----- shared “paper” board ----- */
+/* ----- boards ----- */
 .tan-board {
-    -fx-background-color: #ffffff;
-    -fx-background-radius: 2px;
-    -fx-border-color: #1a1a1a;
-    -fx-border-width: 2px;
-    -fx-border-radius: 2px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.35), 16, 0.2, 2, 4);
+    -fx-background-color: #1a1a1a;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-effect: null;
 }
 
-.tan-sep {
-    -fx-background-color: #333333;
+.rdso-header-bar {
+    -fx-background-color: #8b0000;
+    -fx-padding: 8 12 8 12;
+    -fx-border-color: #555555;
+    -fx-border-width: 0 0 1 0;
 }
 
-.micro-label {
-    -fx-font-size: 10px;
-    -fx-text-fill: #333333;
-}
-
-.tan-main-title {
-    -fx-font-family: "Times New Roman", Times, "Nirmala UI", serif;
-    -fx-font-size: 26px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #6b1111;
-}
-
-.bilingual-label {
+.rdso-header-micro {
     -fx-font-size: 11px;
-    -fx-text-fill: #222222;
-    -fx-font-weight: 600;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
 }
 
-.field-box {
-    -fx-background-color: #000000;
+.rdso-main-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
-    -fx-padding: 6 10 6 10;
-    -fx-background-radius: 2px;
+}
+
+.rdso-main-subtitle {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
+    -fx-text-fill: #f0f0f0;
 }
 
-.field-box.narrow {
-    -fx-min-width: 48px;
-    -fx-alignment: center;
+.rdso-divider-h {
+    -fx-background-color: #777777;
+    -fx-pref-height: 1px;
+    -fx-max-height: 1px;
+    -fx-min-height: 1px;
 }
 
-.field-box.grow {
-    -fx-max-width: infinity;
-}
-
-/* Fare repeater red boxes */
-.fare-box {
-    -fx-background-color: #7f1d1d;
+/* Labels: white, bold, small-caps effect via slightly tracked uppercase styling */
+.rdso-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
-    -fx-padding: 8 12 8 12;
-    -fx-background-radius: 3px;
+}
+
+.rdso-bilingual-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+.rdso-value {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e8e8e8;
+}
+
+.rdso-value-large {
     -fx-font-size: 22px;
     -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
 }
 
-.fare-box-wide {
-    -fx-font-size: 28px;
+.field-shell {
+    -fx-background-color: #2a2a2a;
+    -fx-padding: 6px;
+    -fx-border-color: #555555;
+    -fx-border-width: 1px;
 }
 
-.rail-logo-block {
-    -fx-padding: 4 8 4 8;
-    -fx-border-color: #6b1111;
-    -fx-border-width: 2px;
-    -fx-border-radius: 4px;
+.field-shell-station {
+    -fx-background-color: #111111;
+    -fx-padding: 6px;
+    -fx-border-color: #555555;
+    -fx-border-width: 1px;
 }
 
-.rail-logo-hindi {
+.field-shell-station .rdso-value-large {
+    -fx-background-color: #111111;
+}
+
+.fare-highlight {
+    -fx-background-color: #8b0000;
+    -fx-padding: 6px;
+    -fx-border-color: #555555;
+    -fx-border-width: 1px;
+}
+
+.fare-highlight .rdso-value-large {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 24px;
+}
+
+.qr-placeholder-rect {
+    -fx-fill: #333333;
+    -fx-stroke: #ffffff;
+    -fx-stroke-width: 1px;
+}
+
+.qr-placeholder-label {
     -fx-font-size: 11px;
-    -fx-text-fill: #6b1111;
     -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
 }
 
-.rail-logo-en {
-    -fx-font-size: 10px;
-    -fx-text-fill: #333333;
-}
-
-.tan-grid {
-    -fx-padding: 0 4 0 0;
+.qr-overlay-image {
+    -fx-effect: null;
 }
 
 .tan-footer {
-    -fx-padding: 4 0 0 0;
+    -fx-padding: 0;
 }
 
 .railway-division {
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #1e3a5f;
-}
-
-.qr-panel {
-    -fx-min-width: 260px;
-    -fx-padding: 0 0 0 8px;
-}
-
-.qr-panel-prs {
-    -fx-min-width: 240px;
-    -fx-padding: 0 0 0 8px;
-}
-
-.payment-vertical {
     -fx-font-size: 11px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-    -fx-text-alignment: center;
-    -fx-padding: 10 8 10 8;
-    -fx-background-color: #000000;
-    -fx-background-radius: 3px;
-}
-
-.payment-vertical-prs {
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-    -fx-text-alignment: center;
-    -fx-padding: 10 8 10 8;
-    -fx-background-color: #000000;
-    -fx-background-radius: 3px;
-}
-
-.qr-stack {
-    -fx-alignment: center;
-}
-
-.qr-frame {
-    -fx-background-color: #f8fafc;
-    -fx-border-color: #000000;
-    -fx-border-width: 2px;
-    -fx-background-radius: 4px;
-}
-
-.qr-placeholder-text {
-    -fx-text-fill: #64748b;
-    -fx-font-size: 13px;
-}
-
-.scan-hint {
-    -fx-font-size: 15px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #0f172a;
-}
-
-.last-updated {
-    -fx-font-size: 11px;
-    -fx-text-fill: #64748b;
-}
-
-/* PRS passenger table */
-.section-heading-prs {
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #1e3a5f;
-    -fx-padding: 6 0 2 0;
-}
-
-.pax-table {
-    -fx-padding: 4 0 4 0;
-}
-
-.pax-header {
-    -fx-background-color: #000000;
-    -fx-text-fill: #ffffff;
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
-    -fx-padding: 6 8 6 8;
-}
-
-.pax-cell {
-    -fx-background-color: #000000;
-    -fx-text-fill: #ffffff;
-    -fx-font-size: 12px;
-    -fx-padding: 6 8 6 8;
+    -fx-text-fill: #eeeeee;
 }
 
 .passenger-footer-tech {
-    -fx-background-color: rgba(15, 23, 42, 0.9);
+    -fx-background-color: #141414;
+    -fx-border-color: #555555;
+    -fx-border-width: 1 0 0 0;
 }
 
 .footer-note {
     -fx-font-size: 10px;
-    -fx-text-fill: #94a3b8;
+    -fx-text-fill: #888888;
+    -fx-font-weight: bold;
+}
+
+/* ----- PRS table ----- */
+.prs-pax-table {
+    -fx-background-color: #111111;
+    -fx-border-color: #555555;
+    -fx-border-width: 1px;
+    -fx-table-cell-border-color: transparent;
+}
+
+.prs-pax-table .column-header-background {
+    -fx-background-color: #8b0000;
+}
+
+.prs-pax-table .column-header,
+.prs-pax-table .label {
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+}
+
+.prs-pax-table .table-cell {
+    -fx-background-color: #111111;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    -fx-padding: 2 6 2 6;
+    -fx-border-color: transparent;
+}
+
+.prs-pax-table .table-row-cell {
+    -fx-cell-size: 24px;
+}
+
+.prs-pax-table:focused .table-row-cell:filled:focused:selected,
+.prs-pax-table .table-row-cell:filled:selected {
+    -fx-background-color: #111111;
+    -fx-text-fill: #ffffff;
+}
+
+.payment-banner-prs {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-text-alignment: center;
 }

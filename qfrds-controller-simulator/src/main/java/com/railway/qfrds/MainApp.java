@@ -57,6 +57,9 @@ public class MainApp extends Application {
         passengerStage.setScene(passengerScene);
         passengerStage.setMinWidth(1024);
         passengerStage.setMinHeight(768);
+        passengerStage.setMaxWidth(1024);
+        passengerStage.setMaxHeight(768);
+        passengerStage.setResizable(false);
         passengerScene.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
             if (e.getCode() == KeyCode.F11) {
                 passengerStage.setFullScreen(!passengerStage.isFullScreen());
