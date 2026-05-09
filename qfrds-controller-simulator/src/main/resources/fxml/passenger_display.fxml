@@ -5,8 +5,11 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
@@ -25,26 +28,54 @@
                 </padding>
                 <top>
                     <VBox spacing="0.0">
-                        <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="rdso-header-bar">
-                            <HBox alignment="CENTER_LEFT" spacing="16.0">
-                                <HBox alignment="CENTER_LEFT" spacing="6.0">
-                                    <Label styleClass="rdso-header-micro" text="Terminal ID:"/>
-                                    <Label fx:id="utsTerminalId" styleClass="rdso-header-micro" text="—"/>
+                        <GridPane hgap="12.0" styleClass="rdso-header-bar" vgap="4.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="ALWAYS" maxWidth="Infinity" minWidth="10.0"
+                                                   percentWidth="90.0"/>
+                                <ColumnConstraints hgrow="NEVER" maxWidth="88.0" minWidth="60.0"
+                                                   percentWidth="10.0"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints percentHeight="100.0" vgrow="ALWAYS"/>
+                            </rowConstraints>
+
+                            <!-- Left 90%: row 1 (60%) terminal/windows, row 2 (40%) ticket title -->
+                            <GridPane GridPane.columnIndex="0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0"
+                                      hgap="16.0" maxHeight="Infinity" maxWidth="Infinity" vgap="4.0">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="ALWAYS" maxWidth="Infinity"/>
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints percentHeight="60.0" valignment="CENTER" vgrow="ALWAYS"/>
+                                    <RowConstraints percentHeight="40.0" valignment="CENTER" vgrow="ALWAYS"/>
+                                </rowConstraints>
+
+                                <HBox alignment="CENTER_LEFT" spacing="16.0" GridPane.columnIndex="0"
+                                      GridPane.rowIndex="0">
+                                    <HBox alignment="CENTER_LEFT" spacing="6.0">
+                                        <Label styleClass="rdso-header-micro" text="Terminal ID:"/>
+                                        <Label fx:id="utsTerminalId" styleClass="rdso-header-micro" text="—"/>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" spacing="6.0">
+                                        <Label styleClass="rdso-header-micro" text="Windows No:"/>
+                                        <Label fx:id="utsWindowNo" styleClass="rdso-header-micro" text="—"/>
+                                    </HBox>
                                 </HBox>
-                                <HBox alignment="CENTER_LEFT" spacing="6.0">
-                                    <Label styleClass="rdso-header-micro" text="Windows No:"/>
-                                    <Label fx:id="utsWindowNo" styleClass="rdso-header-micro" text="—"/>
-                                </HBox>
-                            </HBox>
-                            <StackPane HBox.hgrow="ALWAYS">
-                                <VBox alignment="CENTER" spacing="2.0">
+
+                                <VBox alignment="CENTER_LEFT" spacing="2.0" GridPane.columnIndex="0"
+                                      GridPane.rowIndex="1">
                                     <Label styleClass="rdso-main-title" text="Ticket Information"/>
                                     <Label styleClass="rdso-main-subtitle" text="टिकट जानकारी"/>
                                 </VBox>
+                            </GridPane>
+
+                            <StackPane GridPane.columnIndex="1" GridPane.halignment="CENTER"
+                                       GridPane.rowIndex="0" GridPane.valignment="CENTER" maxHeight="Infinity"
+                                       maxWidth="Infinity">
+                                <ImageView fx:id="utsLogoPlaceholder" fitHeight="60.0" fitWidth="60.0"
+                                           preserveRatio="true" smooth="true"/>
                             </StackPane>
-                            <ImageView fx:id="utsLogoPlaceholder" fitHeight="60.0" fitWidth="60.0"
-                                       preserveRatio="true" smooth="true"/>
-                        </HBox>
+                        </GridPane>
                     </VBox>
                 </top>
                 <center>
