@@ -1,13 +1,14 @@
-/* RDSO QFRDS-style passenger boards — white canvas, maroon header, dark field cells */
+/* RDSO QFRDS receipt-style passenger boards
+   White canvas · maroon serif labels in light cells · black value cells with white text
+   Mirrors the printed UTS ticket spec (Annexure-IV / Page 5 of TAN). */
 
-/* Scene root + chrome (covers any unpainted BorderPane / StackPane gaps) */
+/* ====== root ====== */
 .root {
     -fx-background-color: #ffffff;
 }
 
 .passenger-root {
-    -fx-font-family: "Rozha One", "Noto Sans Devanagari", "Arial", sans-serif;
-    -fx-font-weight: bold;
+    -fx-font-family: "Rozha One", "Noto Serif", "Times New Roman", serif;
     -fx-background-color: #ffffff;
 }
 
@@ -16,7 +17,7 @@
     -fx-background-color: #ffffff;
 }
 
-/* ----- boards ----- */
+/* ====== board frame ====== */
 .tan-board {
     -fx-background-color: #ffffff;
     -fx-background-radius: 0;
@@ -25,149 +26,319 @@
     -fx-effect: null;
 }
 
+/* ====== header ====== */
 .rdso-header-bar {
     -fx-background-color: #ffffff;
-    -fx-padding: 8 12 8 12;
-    -fx-border-color: #555555;
-    -fx-border-width: 0 0 1 0;
+    -fx-padding: 4 4 14 4;
+    -fx-border-color: transparent;
 }
 
-.rdso-header-micro {
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
+.rdso-id-strip {
+    -fx-padding: 0 0 0 0;
+}
+
+/* small "Terminal ID  ____  Windows No.  ____" boxes */
+.id-cell {
+    -fx-background-color: #d9d9d9;
+    -fx-border-color: #4a4a4a;
+    -fx-border-width: 1;
+    -fx-padding: 4 14 4 14;
+    -fx-min-height: 26;
+    -fx-pref-height: 26;
+}
+
+.id-cell-label {
+    -fx-font-family: "Rozha One", "Noto Serif", "Times New Roman", serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: #1a1a1a;
+}
+
+.id-cell-value {
+    -fx-background-color: #1a1a1a;
+    -fx-border-color: #4a4a4a;
+    -fx-border-width: 1;
+    -fx-padding: 4 18 4 18;
+    -fx-min-width: 120;
+    -fx-pref-width: 120;
+    -fx-min-height: 26;
+    -fx-pref-height: 26;
+}
+
+.id-cell-value-text {
+    -fx-font-family: "Rozha One", "Noto Serif", "Courier New", monospace;
+    -fx-font-size: 14px;
     -fx-text-fill: #ffffff;
 }
 
+/* big maroon serif "Ticket Information" title */
 .rdso-main-title {
-    -fx-font-size: 70px;
+    -fx-font-family: "Rozha One", "Trajan Pro", "Noto Serif", "Times New Roman", serif;
+    -fx-font-size: 64px;
     -fx-font-weight: 700;
-    -fx-text-fill: #38040e;
+    -fx-text-fill: #5a0a14;
 }
 
-.rdso-divider-h {
-    -fx-background-color: #777777;
-    -fx-pref-height: 1px;
-    -fx-max-height: 1px;
-    -fx-min-height: 1px;
+/* logo placeholder (Indian Railways roundel) */
+.rdso-logo-frame {
+    -fx-background-color: transparent;
 }
 
-/* Labels: white, bold, small-caps effect via slightly tracked uppercase styling */
-.rdso-label {
+.rdso-logo-fallback {
+    -fx-background-color: #c8102e;
+    -fx-background-radius: 200;
+    -fx-border-color: #8a0a1f;
+    -fx-border-radius: 200;
+    -fx-border-width: 2;
+    -fx-padding: 6;
+    -fx-min-width: 108;
+    -fx-min-height: 108;
+    -fx-pref-width: 108;
+    -fx-pref-height: 108;
+    -fx-max-width: 108;
+    -fx-max-height: 108;
+}
+
+.logo-arc-top {
+    -fx-font-size: 9px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "Inter", "Arial", sans-serif;
+}
+
+.logo-emblem {
+    -fx-font-size: 36px;
+    -fx-text-fill: #ffffff;
+}
+
+.logo-arc-bottom {
     -fx-font-size: 11px;
-    -fx-font-weight: bold;
+    -fx-font-weight: 700;
     -fx-text-fill: #ffffff;
+    -fx-font-family: "Noto Sans Devanagari", "Mangal", "Arial Unicode MS", sans-serif;
 }
 
-.rdso-bilingual-label {
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-}
-
-.rdso-value {
-    -fx-font-size: 13px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #e8e8e8;
-}
-
-.rdso-value-large {
-    -fx-font-size: 22px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-}
-
-.field-shell {
-    -fx-background-color: #2a2a2a;
-    -fx-padding: 6px;
-    -fx-border-color: #555555;
-    -fx-border-width: 1px;
-}
-
-.field-shell-station {
-    -fx-background-color: #111111;
-    -fx-padding: 6px;
-    -fx-border-color: #555555;
-    -fx-border-width: 1px;
-}
-
-.field-shell-station .rdso-value-large {
-    -fx-background-color: #111111;
-}
-
-.fare-highlight {
-    -fx-background-color: #8b0000;
-    -fx-padding: 6px;
-    -fx-border-color: #555555;
-    -fx-border-width: 1px;
-}
-
-.fare-highlight .rdso-value-large {
-    -fx-text-fill: #ffffff;
-    -fx-font-size: 24px;
-}
-
-.qr-placeholder-rect {
-    -fx-fill: #333333;
-    -fx-stroke: #ffffff;
-    -fx-stroke-width: 1px;
-}
-
-.qr-placeholder-label {
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-}
-
-.qr-overlay-image {
-    -fx-effect: null;
-}
-
-.tan-footer {
+/* ====== body table ====== */
+.rdso-body {
     -fx-padding: 0;
 }
 
-.railway-division {
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #eeeeee;
+.rdso-row {
+    -fx-min-height: 60;
+    -fx-pref-height: 60;
+    -fx-border-color: #2a2a2a;
+    -fx-border-width: 1 0 1 1;
 }
 
-.passenger-footer-tech {
+/* taller rows for "From / To" station and "Operator" */
+.value-cell-tall .value-station {
+    -fx-font-size: 22px;
+}
+
+.rdso-row-tall {
+    -fx-min-height: 78;
+    -fx-pref-height: 78;
+}
+
+.rdso-row-gap {
+    -fx-min-height: 8;
+    -fx-pref-height: 8;
+    -fx-max-height: 8;
     -fx-background-color: #ffffff;
-    -fx-border-color: #cccccc;
+}
+
+/* label cell — light grey with maroon serif text */
+.label-cell {
+    -fx-background-color: #f0f0f0;
+    -fx-border-color: #2a2a2a;
+    -fx-border-width: 0 1 0 0;
+    -fx-padding: 6 12 6 12;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.label-en {
+    -fx-font-family: "Rozha One", "Trajan Pro", "Noto Serif", "Times New Roman", serif;
+    -fx-font-size: 24px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #5a0a14;
+    -fx-padding: 0;
+}
+
+.label-hi {
+    -fx-font-family: "Noto Sans Devanagari", "Mangal", "Arial Unicode MS", sans-serif;
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #5a0a14;
+    -fx-padding: 0;
+}
+
+.label-en-mini {
+    -fx-font-family: "Rozha One", "Noto Serif", "Times New Roman", serif;
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #5a0a14;
+}
+
+/* stacked Adult/Child label & value cells */
+.label-cell-stack,
+.value-cell-stack {
+    -fx-padding: 0;
+    -fx-spacing: 0;
+    -fx-border-color: #2a2a2a;
+    -fx-border-width: 0 1 0 0;
+}
+
+.label-cell-stack {
+    -fx-background-color: #f0f0f0;
+}
+
+.value-cell-stack {
+    -fx-background-color: #1a1a1a;
+}
+
+.stack-row {
+    -fx-min-height: 30;
+    -fx-pref-height: 30;
+    -fx-alignment: CENTER;
+}
+
+.stack-row-bordered {
+    -fx-border-color: #2a2a2a;
     -fx-border-width: 1 0 0 0;
 }
 
-.footer-note {
-    -fx-font-size: 10px;
-    -fx-text-fill: #555555;
-    -fx-font-weight: bold;
+/* value cell — black with white mono-ish content */
+.value-cell {
+    -fx-background-color: #1a1a1a;
+    -fx-border-color: #2a2a2a;
+    -fx-border-width: 0 1 0 0;
+    -fx-padding: 6 14 6 14;
+    -fx-alignment: CENTER_LEFT;
 }
 
-/* ----- PRS table ----- */
+.value-cell-tall {
+    -fx-padding: 8 14 8 14;
+}
+
+.value-station {
+    -fx-font-family: "Rozha One", "Noto Serif", "Times New Roman", serif;
+    -fx-font-size: 22px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #ffffff;
+}
+
+.value-mono {
+    -fx-font-family: "Rozha One", "Courier New", monospace;
+    -fx-font-size: 18px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #ffffff;
+}
+
+.value-mono-mini {
+    -fx-font-family: "Rozha One", "Courier New", monospace;
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #ffffff;
+}
+
+.value-cell-fare {
+    -fx-background-color: #1a1a1a;
+}
+
+.value-fare {
+    -fx-font-family: "Rozha One", "Noto Serif", "Times New Roman", serif;
+    -fx-font-size: 26px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #ffffff;
+}
+
+/* railway-division badge (last cell of operator row) */
+.railway-cell {
+    -fx-background-color: #ffffff;
+    -fx-padding: 6 12 6 12;
+    -fx-border-color: #2a2a2a;
+    -fx-border-width: 0 0 0 1;
+    -fx-alignment: CENTER;
+}
+
+.railway-en {
+    -fx-font-family: "Rozha One", "Noto Serif", "Times New Roman", serif;
+    -fx-font-size: 18px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #1a1a1a;
+}
+
+.railway-hi {
+    -fx-font-family: "Noto Sans Devanagari", "Mangal", "Arial Unicode MS", sans-serif;
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #1a1a1a;
+}
+
+/* ====== QR (small floating cell at bottom-right of UTS body) ====== */
+.rdso-row-qr {
+    -fx-padding: 12 4 4 4;
+}
+
+.qr-frame {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #2a2a2a;
+    -fx-border-width: 1;
+    -fx-padding: 4;
+}
+
+.qr-placeholder-rect {
+    -fx-fill: #1a1a1a;
+    -fx-stroke: #2a2a2a;
+    -fx-stroke-width: 1;
+}
+
+.qr-placeholder-label {
+    -fx-font-family: "Rozha One", "Noto Serif", "Times New Roman", serif;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #ffffff;
+}
+
+/* ====== PRS payment column ====== */
+.prs-payment-col {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #2a2a2a;
+    -fx-border-width: 1;
+    -fx-padding: 8;
+}
+
+.payment-banner-prs {
+    -fx-font-family: "Rozha One", "Noto Serif", "Times New Roman", serif;
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #5a0a14;
+    -fx-text-alignment: center;
+}
+
+/* ====== PRS passenger table — match same monochrome ticket aesthetic ====== */
 .prs-pax-table {
-    -fx-background-color: #111111;
-    -fx-border-color: #555555;
-    -fx-border-width: 1px;
+    -fx-background-color: #1a1a1a;
+    -fx-border-color: #2a2a2a;
+    -fx-border-width: 1;
     -fx-table-cell-border-color: transparent;
 }
 
 .prs-pax-table .column-header-background {
-    -fx-background-color: #8b0000;
+    -fx-background-color: #5a0a14;
 }
 
 .prs-pax-table .column-header,
 .prs-pax-table .label {
     -fx-text-fill: #ffffff;
-    -fx-font-weight: bold;
+    -fx-font-weight: 700;
     -fx-font-size: 11px;
 }
 
 .prs-pax-table .table-cell {
-    -fx-background-color: #111111;
+    -fx-background-color: #1a1a1a;
     -fx-text-fill: #ffffff;
-    -fx-font-weight: bold;
-    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+    -fx-font-size: 12px;
     -fx-padding: 2 6 2 6;
     -fx-border-color: transparent;
 }
@@ -178,13 +349,20 @@
 
 .prs-pax-table:focused .table-row-cell:filled:focused:selected,
 .prs-pax-table .table-row-cell:filled:selected {
-    -fx-background-color: #111111;
+    -fx-background-color: #1a1a1a;
     -fx-text-fill: #ffffff;
 }
 
-.payment-banner-prs {
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
-    -fx-text-alignment: center;
+/* ====== footer ====== */
+.passenger-footer-tech {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1 0 0 0;
+}
+
+.footer-note {
+    -fx-font-family: "Inter", "Arial", sans-serif;
+    -fx-font-size: 10px;
+    -fx-text-fill: #555555;
+    -fx-font-weight: 700;
 }
