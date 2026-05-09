@@ -62,4 +62,22 @@
             </plugin>
         </plugins>
     </build>
+
+    <!-- Passenger window only (no engineering UI, no serial). Run: mvn -Ppassenger-display-only javafx:run -->
+    <profiles>
+        <profile>
+            <id>passenger-display-only</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.openjfx</groupId>
+                        <artifactId>javafx-maven-plugin</artifactId>
+                        <configuration>
+                            <mainClass>com.railway.qfrds.PassengerDisplayOnlyApp</mainClass>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
