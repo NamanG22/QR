@@ -1,104 +1,199 @@
-/* Passenger-facing repeater display — high contrast, large type, 1024×768 oriented */
+/* QFRDS Fare Repeater TAN-style boards — white panel, bilingual labels, black value cells, maroon title */
 
 .passenger-root {
-    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-    -fx-background-color: linear-gradient(to bottom, #0f172a 0%, #1e293b 35%, #0f172a 100%);
+    -fx-font-family: "Segoe UI", "Helvetica Neue", "Noto Sans Devanagari", Arial, sans-serif;
+    -fx-background-color: #5c6570;
 }
 
-.passenger-header {
-    -fx-background-color: linear-gradient(to bottom, #1e3a5f 0%, #172554 100%);
-    -fx-border-color: #38bdf8;
-    -fx-border-width: 0 0 3 0;
+.display-stack {
+    -fx-padding: 12;
 }
 
-.brand-main {
-    -fx-font-size: 28px;
+/* ----- shared “paper” board ----- */
+.tan-board {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 2px;
+    -fx-border-color: #1a1a1a;
+    -fx-border-width: 2px;
+    -fx-border-radius: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.35), 16, 0.2, 2, 4);
+}
+
+.tan-sep {
+    -fx-background-color: #333333;
+}
+
+.micro-label {
+    -fx-font-size: 10px;
+    -fx-text-fill: #333333;
+}
+
+.tan-main-title {
+    -fx-font-family: "Times New Roman", Times, "Nirmala UI", serif;
+    -fx-font-size: 26px;
     -fx-font-weight: bold;
-    -fx-text-fill: #f8fafc;
+    -fx-text-fill: #6b1111;
 }
 
-.brand-sub {
-    -fx-font-size: 14px;
-    -fx-text-fill: #bae6fd;
-}
-
-.brand-tag {
+.bilingual-label {
     -fx-font-size: 11px;
-    -fx-text-fill: #94a3b8;
-}
-
-.passenger-body {
-    -fx-background-color: transparent;
-}
-
-.cell-label {
-    -fx-font-size: 15px;
-    -fx-text-fill: #94a3b8;
+    -fx-text-fill: #222222;
     -fx-font-weight: 600;
 }
 
-.cell-value {
-    -fx-font-size: 20px;
-    -fx-text-fill: #f1f5f9;
+.field-box {
+    -fx-background-color: #000000;
+    -fx-text-fill: #ffffff;
+    -fx-padding: 6 10 6 10;
+    -fx-background-radius: 2px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
 }
 
-.cell-value.station {
+.field-box.narrow {
+    -fx-min-width: 48px;
+    -fx-alignment: center;
+}
+
+.field-box.grow {
+    -fx-max-width: infinity;
+}
+
+/* Fare repeater red boxes */
+.fare-box {
+    -fx-background-color: #7f1d1d;
+    -fx-text-fill: #ffffff;
+    -fx-padding: 8 12 8 12;
+    -fx-background-radius: 3px;
     -fx-font-size: 22px;
     -fx-font-weight: bold;
 }
 
-.cell-value.mono {
-    -fx-font-family: "Consolas", "Menlo", monospace;
-    -fx-font-size: 17px;
+.fare-box-wide {
+    -fx-font-size: 28px;
 }
 
-.fare-label {
-    -fx-font-size: 16px;
-    -fx-text-fill: #fcd34d;
+.rail-logo-block {
+    -fx-padding: 4 8 4 8;
+    -fx-border-color: #6b1111;
+    -fx-border-width: 2px;
+    -fx-border-radius: 4px;
+}
+
+.rail-logo-hindi {
+    -fx-font-size: 11px;
+    -fx-text-fill: #6b1111;
     -fx-font-weight: bold;
 }
 
-.fare-amount {
-    -fx-font-size: 52px;
+.rail-logo-en {
+    -fx-font-size: 10px;
+    -fx-text-fill: #333333;
+}
+
+.tan-grid {
+    -fx-padding: 0 4 0 0;
+}
+
+.tan-footer {
+    -fx-padding: 4 0 0 0;
+}
+
+.railway-division {
+    -fx-font-size: 12px;
     -fx-font-weight: bold;
-    -fx-text-fill: #fcd34d;
-    -fx-effect: dropshadow(gaussian, rgba(252, 211, 77, 0.35), 12, 0.3, 0, 2);
+    -fx-text-fill: #1e3a5f;
 }
 
-.qr-column {
-    -fx-min-width: 300px;
+.qr-panel {
+    -fx-min-width: 260px;
+    -fx-padding: 0 0 0 8px;
 }
 
-.qr-placeholder {
-    -fx-background-color: #020617;
-    -fx-border-color: #334155;
-    -fx-border-radius: 8px;
-    -fx-background-radius: 8px;
+.qr-panel-prs {
+    -fx-min-width: 240px;
+    -fx-padding: 0 0 0 8px;
+}
+
+.payment-vertical {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-text-alignment: center;
+    -fx-padding: 10 8 10 8;
+    -fx-background-color: #000000;
+    -fx-background-radius: 3px;
+}
+
+.payment-vertical-prs {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-text-alignment: center;
+    -fx-padding: 10 8 10 8;
+    -fx-background-color: #000000;
+    -fx-background-radius: 3px;
+}
+
+.qr-stack {
+    -fx-alignment: center;
+}
+
+.qr-frame {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #000000;
+    -fx-border-width: 2px;
+    -fx-background-radius: 4px;
 }
 
 .qr-placeholder-text {
-    -fx-text-fill: #475569;
-    -fx-font-size: 14px;
+    -fx-text-fill: #64748b;
+    -fx-font-size: 13px;
 }
 
 .scan-hint {
-    -fx-font-size: 22px;
+    -fx-font-size: 15px;
     -fx-font-weight: bold;
-    -fx-text-fill: #38bdf8;
+    -fx-text-fill: #0f172a;
 }
 
 .last-updated {
-    -fx-font-size: 13px;
+    -fx-font-size: 11px;
     -fx-text-fill: #64748b;
 }
 
-.passenger-footer {
-    -fx-background-color: rgba(15, 23, 42, 0.85);
-    -fx-border-color: #334155;
-    -fx-border-width: 1 0 0 0;
+/* PRS passenger table */
+.section-heading-prs {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e3a5f;
+    -fx-padding: 6 0 2 0;
+}
+
+.pax-table {
+    -fx-padding: 4 0 4 0;
+}
+
+.pax-header {
+    -fx-background-color: #000000;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 6 8 6 8;
+}
+
+.pax-cell {
+    -fx-background-color: #000000;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-padding: 6 8 6 8;
+}
+
+.passenger-footer-tech {
+    -fx-background-color: rgba(15, 23, 42, 0.9);
 }
 
 .footer-note {
-    -fx-font-size: 11px;
-    -fx-text-fill: #475569;
+    -fx-font-size: 10px;
+    -fx-text-fill: #94a3b8;
 }

@@ -2,96 +2,248 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
+<!-- QFRDS TAN-style layouts: UTS (page 1) vs PRS (page 2) — only one board visible at a time -->
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.railway.qfrds.PassengerDisplayView"
             minHeight="768.0" minWidth="1024.0" styleClass="passenger-root">
-    <top>
-        <VBox alignment="CENTER_LEFT" spacing="6.0" styleClass="passenger-header">
-            <padding>
-                <Insets bottom="16.0" left="28.0" right="28.0" top="20.0"/>
-            </padding>
-            <Label styleClass="brand-main" text="Indian Railways"/>
-            <Label styleClass="brand-sub" text="QR Fare Repeater Display System · Digital fare verification"/>
-            <Label styleClass="brand-tag" text="Passenger display output (simulated controller sink)"/>
-        </VBox>
-    </top>
     <center>
-        <HBox alignment="CENTER" spacing="28.0" styleClass="passenger-body">
-            <padding>
-                <Insets bottom="24.0" left="28.0" right="28.0" top="16.0"/>
-            </padding>
-            <GridPane hgap="20.0" styleClass="fare-grid" vgap="14.0" HBox.hgrow="ALWAYS">
-                <columnConstraints>
-                    <ColumnConstraints hgrow="NEVER" minWidth="160.0"/>
-                    <ColumnConstraints hgrow="ALWAYS" minWidth="280.0"/>
-                </columnConstraints>
+        <StackPane styleClass="display-stack">
+            <!-- ========== UTS counter board (Fare Repeater TAN — UTS) ========== -->
+            <BorderPane fx:id="utsBoard" styleClass="tan-board">
+                <padding>
+                    <Insets bottom="12.0" left="16.0" right="16.0" top="12.0"/>
+                </padding>
+                <top>
+                    <VBox spacing="8.0">
+                        <HBox alignment="CENTER_LEFT" spacing="24.0">
+                            <VBox spacing="2.0">
+                                <Label styleClass="micro-label" text="Terminal ID"/>
+                                <Label fx:id="utsTerminalId" styleClass="field-box" maxWidth="160.0" text="—"/>
+                            </VBox>
+                            <VBox spacing="2.0">
+                                <Label styleClass="micro-label" text="Windows No."/>
+                                <Label fx:id="utsWindowNo" styleClass="field-box narrow" maxWidth="80.0" text="—"/>
+                            </VBox>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label styleClass="tan-main-title" text="Ticket Information"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <VBox alignment="CENTER_RIGHT" spacing="2.0" styleClass="rail-logo-block">
+                                <Label styleClass="rail-logo-hindi" text="भारतीय रेल"/>
+                                <Label styleClass="rail-logo-en" text="Indian Railways"/>
+                            </VBox>
+                        </HBox>
+                        <Separator styleClass="tan-sep"/>
+                    </VBox>
+                </top>
+                <center>
+                    <HBox spacing="16.0" alignment="TOP_LEFT">
+                        <GridPane hgap="10.0" vgap="10.0" styleClass="tan-grid" HBox.hgrow="ALWAYS">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="NEVER" minWidth="140.0"/>
+                                <ColumnConstraints hgrow="ALWAYS" minWidth="180.0"/>
+                                <ColumnConstraints hgrow="NEVER" minWidth="120.0"/>
+                                <ColumnConstraints hgrow="ALWAYS" minWidth="140.0"/>
+                            </columnConstraints>
 
-                <Label styleClass="cell-label" text="Ticket type" GridPane.columnIndex="0"
-                       GridPane.rowIndex="0"/>
-                <Label fx:id="ticketTypeValue" styleClass="cell-value" text="—" GridPane.columnIndex="1"
-                       GridPane.rowIndex="0"/>
+                            <Label styleClass="bilingual-label" text="From / कहाँ से" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <Label fx:id="utsFrom" styleClass="field-box" maxWidth="Infinity" text="—" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-                <Label styleClass="cell-label" text="From" GridPane.columnIndex="0"
-                       GridPane.rowIndex="1"/>
-                <Label fx:id="sourceValue" styleClass="cell-value station" text="—"
-                       GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                            <Label styleClass="bilingual-label" text="To / कहाँ तक" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                            <Label fx:id="utsTo" styleClass="field-box" maxWidth="Infinity" text="—" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
 
-                <Label styleClass="cell-label" text="To" GridPane.columnIndex="0"
-                       GridPane.rowIndex="2"/>
-                <Label fx:id="destinationValue" styleClass="cell-value station" text="—"
-                       GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                            <Label styleClass="bilingual-label" text="Date / दिनांक" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <Label fx:id="utsDate" styleClass="field-box" maxWidth="Infinity" text="—" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-                <Label styleClass="fare-label" text="Fare" GridPane.columnIndex="0"
-                       GridPane.rowIndex="3"/>
-                <Label fx:id="fareValue" styleClass="fare-amount" text="—" GridPane.columnIndex="1"
-                       GridPane.rowIndex="3"/>
+                            <HBox spacing="8.0" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.columnSpan="2">
+                                <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                                    <Label styleClass="bilingual-label" text="Adult"/>
+                                    <Label fx:id="utsAdult" styleClass="field-box narrow" maxWidth="Infinity" text="1"/>
+                                </VBox>
+                                <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                                    <Label styleClass="bilingual-label" text="Child"/>
+                                    <Label fx:id="utsChild" styleClass="field-box narrow" maxWidth="Infinity" text="0"/>
+                                </VBox>
+                            </HBox>
 
-                <Label styleClass="cell-label" text="Transaction ID" GridPane.columnIndex="0"
-                       GridPane.rowIndex="4"/>
-                <Label fx:id="txnValue" styleClass="cell-value mono" text="—" GridPane.columnIndex="1"
-                       GridPane.rowIndex="4"/>
+                            <Label styleClass="bilingual-label" text="Class" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                            <Label fx:id="utsClass" styleClass="field-box" maxWidth="Infinity" text="—" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-                <Label styleClass="cell-label" text="Timestamp" GridPane.columnIndex="0"
-                       GridPane.rowIndex="5"/>
-                <Label fx:id="timestampValue" styleClass="cell-value mono" text="—"
-                       GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                            <Label styleClass="bilingual-label" text="Fare / किराया" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                            <Label fx:id="utsFare" styleClass="fare-box" maxWidth="Infinity" text="—" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
 
-                <HBox fx:id="passengerRow" spacing="12.0" GridPane.columnIndex="0"
-                      GridPane.columnSpan="2" GridPane.rowIndex="6" alignment="CENTER_LEFT">
-                    <Label styleClass="cell-label" text="Passenger"/>
-                    <Label fx:id="passengerValue" styleClass="cell-value station" text=""/>
-                </HBox>
-            </GridPane>
+                            <Label styleClass="bilingual-label" text="Type of Train / ट्रेन का प्रकार" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2"/>
+                            <Label fx:id="utsTrainType" styleClass="field-box" maxWidth="Infinity" text="—" GridPane.columnIndex="2" GridPane.rowIndex="3" GridPane.columnSpan="2"/>
 
-            <VBox alignment="TOP_CENTER" spacing="12.0" styleClass="qr-column">
-                <StackPane fx:id="qrPlaceholder" styleClass="qr-placeholder" prefHeight="280.0"
-                           prefWidth="280.0">
-                    <Label styleClass="qr-placeholder-text" text="Awaiting ticket…"/>
-                </StackPane>
-                <ImageView fx:id="qrImageView" fitHeight="280.0" fitWidth="280.0" preserveRatio="true"
-                           smooth="true" visible="false" managed="false"/>
-                <Label styleClass="scan-hint" text="Scan QR to Pay"/>
-                <Label fx:id="lastUpdatedLabel" styleClass="last-updated" text="Last updated: —"/>
-            </VBox>
-        </HBox>
+                            <Label styleClass="bilingual-label" text="Pay Mode" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                            <Label fx:id="utsPayMode" styleClass="field-box" maxWidth="Infinity" text="UPI-QR" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+                            <Label styleClass="bilingual-label" text="Transaction Type" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+                            <Label fx:id="utsTxnType" styleClass="field-box" maxWidth="Infinity" text="—" GridPane.columnIndex="3" GridPane.rowIndex="4"/>
+
+                            <Label styleClass="bilingual-label" text="Operator Name" GridPane.columnIndex="0" GridPane.rowIndex="5" GridPane.columnSpan="2"/>
+                            <Label fx:id="utsOperator" styleClass="field-box" maxWidth="Infinity" text="—" GridPane.columnIndex="2" GridPane.rowIndex="5" GridPane.columnSpan="2"/>
+                        </GridPane>
+
+                        <VBox alignment="TOP_CENTER" spacing="8.0" styleClass="qr-panel">
+                            <Label styleClass="payment-vertical" text="Payment Mode&#10;UPI-QR CODE"/>
+                            <StackPane styleClass="qr-stack" prefHeight="240.0" prefWidth="240.0">
+                                <StackPane fx:id="utsQrPlaceholder" styleClass="qr-frame">
+                                    <Label styleClass="qr-placeholder-text" text="Awaiting ticket…"/>
+                                </StackPane>
+                                <ImageView fx:id="utsQrImage" fitHeight="240.0" fitWidth="240.0" preserveRatio="true"
+                                           smooth="true" visible="false" managed="false"/>
+                            </StackPane>
+                            <Label styleClass="scan-hint" text="Scan QR to Pay"/>
+                            <Label fx:id="utsLastUpdated" styleClass="last-updated" text="Last updated: —"/>
+                        </VBox>
+                    </HBox>
+                </center>
+                <bottom>
+                    <HBox alignment="CENTER_RIGHT" styleClass="tan-footer">
+                        <padding>
+                            <Insets top="10.0"/>
+                        </padding>
+                        <Label styleClass="railway-division" text="North Eastern Railway / वाराणसी मंडल"/>
+                    </HBox>
+                </bottom>
+            </BorderPane>
+
+            <!-- ========== PRS counter board (Fare Repeater TAN — PRS) ========== -->
+            <BorderPane fx:id="prsBoard" styleClass="tan-board" visible="false" managed="false">
+                <padding>
+                    <Insets bottom="12.0" left="16.0" right="16.0" top="12.0"/>
+                </padding>
+                <top>
+                    <VBox spacing="8.0">
+                        <HBox alignment="CENTER_LEFT" spacing="20.0">
+                            <Label styleClass="tan-main-title" text="Ticket Information"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <VBox alignment="CENTER_RIGHT" spacing="2.0">
+                                <Label styleClass="micro-label" text="Operator Code"/>
+                                <Label fx:id="prsOperatorCode" styleClass="field-box" text="CLIENT"/>
+                            </VBox>
+                            <VBox alignment="CENTER_RIGHT" spacing="2.0" styleClass="rail-logo-block">
+                                <Label styleClass="rail-logo-hindi" text="भारतीय रेल"/>
+                                <Label styleClass="rail-logo-en" text="Indian Railways"/>
+                            </VBox>
+                        </HBox>
+                        <Separator styleClass="tan-sep"/>
+                    </VBox>
+                </top>
+                <center>
+                    <HBox spacing="14.0" alignment="TOP_LEFT">
+                        <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+                            <GridPane hgap="10.0" vgap="8.0" styleClass="tan-grid">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="NEVER" minWidth="130.0"/>
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="100.0"/>
+                                    <ColumnConstraints hgrow="NEVER" minWidth="110.0"/>
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="100.0"/>
+                                    <ColumnConstraints hgrow="NEVER" minWidth="70.0"/>
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="80.0"/>
+                                </columnConstraints>
+
+                                <Label styleClass="bilingual-label" text="From (कहाँ से)" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                <Label fx:id="prsFrom" styleClass="field-box" maxWidth="Infinity" text="—" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                                <Label styleClass="bilingual-label" text="To (कहाँ तक)" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                                <Label fx:id="prsTo" styleClass="field-box" maxWidth="Infinity" text="—" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                                <Label styleClass="bilingual-label" text="Train No. (गाड़ी सं.)" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                <Label fx:id="prsTrainNo" styleClass="field-box" maxWidth="Infinity" text="—" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                                <Label styleClass="bilingual-label" text="Quota (कोटा)" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                                <Label fx:id="prsQuota" styleClass="field-box" maxWidth="Infinity" text="GN" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+
+                                <Label styleClass="bilingual-label" text="Date (दिनांक)" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                <Label fx:id="prsDate" styleClass="field-box" maxWidth="Infinity" text="—" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                                <Label styleClass="bilingual-label" text="Total Passengers" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                                <Label fx:id="prsTotalPax" styleClass="field-box" maxWidth="Infinity" text="01" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+
+                                <Label styleClass="bilingual-label" text="Class" GridPane.columnIndex="4" GridPane.rowIndex="2"/>
+                                <Label fx:id="prsClass" styleClass="field-box" maxWidth="Infinity" text="SL" GridPane.columnIndex="5" GridPane.rowIndex="2"/>
+
+                                <Label styleClass="bilingual-label" text="Fare (किराया)" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                <Label fx:id="prsFare" styleClass="fare-box fare-box-wide" maxWidth="Infinity" text="—" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="5"/>
+                            </GridPane>
+
+                            <HBox spacing="12.0">
+                                <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                                    <Label styleClass="bilingual-label" text="Boarding Point"/>
+                                    <Label fx:id="prsBoarding" styleClass="field-box" maxWidth="Infinity" text="—"/>
+                                </VBox>
+                                <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                                    <Label styleClass="bilingual-label" text="Reservation Up To"/>
+                                    <Label fx:id="prsResUpto" styleClass="field-box" maxWidth="Infinity" text="—"/>
+                                </VBox>
+                            </HBox>
+
+                            <Label styleClass="section-heading-prs" text="Passenger details"/>
+                            <GridPane fx:id="prsPaxGrid" hgap="6.0" vgap="4.0" styleClass="pax-table">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="120.0"/>
+                                    <ColumnConstraints hgrow="NEVER" minWidth="50.0"/>
+                                    <ColumnConstraints hgrow="NEVER" minWidth="48.0"/>
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="100.0"/>
+                                </columnConstraints>
+                                <Label styleClass="pax-header" text="Passenger Name" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                <Label styleClass="pax-header" text="Sex" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                <Label styleClass="pax-header" text="Age" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                                <Label styleClass="pax-header" text="Status" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+                                <Label fx:id="prsPaxName" styleClass="pax-cell" text="—" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                <Label fx:id="prsPaxSex" styleClass="pax-cell" text="—" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                                <Label fx:id="prsPaxAge" styleClass="pax-cell" text="—" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                                <Label fx:id="prsPaxStatus" styleClass="pax-cell" text="—" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                            </GridPane>
+
+                            <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                <Label styleClass="bilingual-label" text="Operator Name"/>
+                                <Label fx:id="prsOperatorName" styleClass="field-box grow" maxWidth="Infinity" text="—" HBox.hgrow="ALWAYS"/>
+                            </HBox>
+                        </VBox>
+
+                        <VBox alignment="TOP_CENTER" spacing="8.0" styleClass="qr-panel-prs">
+                            <Label styleClass="payment-vertical-prs" text="Payment Mode&#10;UPI-QR CODE"/>
+                            <StackPane styleClass="qr-stack" prefHeight="220.0" prefWidth="220.0">
+                                <StackPane fx:id="prsQrPlaceholder" styleClass="qr-frame">
+                                    <Label styleClass="qr-placeholder-text" text="Awaiting ticket…"/>
+                                </StackPane>
+                                <ImageView fx:id="prsQrImage" fitHeight="220.0" fitWidth="220.0" preserveRatio="true"
+                                           smooth="true" visible="false" managed="false"/>
+                            </StackPane>
+                            <Label styleClass="scan-hint" text="Scan QR to Pay"/>
+                            <Label fx:id="prsLastUpdated" styleClass="last-updated" text="Last updated: —"/>
+                        </VBox>
+                    </HBox>
+                </center>
+                <bottom>
+                    <HBox alignment="CENTER_RIGHT" styleClass="tan-footer">
+                        <padding>
+                            <Insets top="8.0"/>
+                        </padding>
+                        <Label styleClass="railway-division" text="North Eastern Railway · वाराणसी मंडल"/>
+                    </HBox>
+                </bottom>
+            </BorderPane>
+        </StackPane>
     </center>
     <bottom>
-        <HBox alignment="CENTER_LEFT" styleClass="passenger-footer">
+        <HBox alignment="CENTER_RIGHT" styleClass="passenger-footer-tech">
             <padding>
-                <Insets bottom="14.0" left="28.0" right="28.0" top="10.0"/>
+                <Insets bottom="8.0" left="16.0" right="16.0" top="6.0"/>
             </padding>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Label styleClass="footer-note" text="1024×768 layout · F11 fullscreen"/>
+            <Label styleClass="footer-note" text="QFRDS display simulator · F11 fullscreen"/>
         </HBox>
     </bottom>
 </BorderPane>
