@@ -1,5 +1,10 @@
 /* RDSO QFRDS-style passenger boards — white canvas, maroon header, dark field cells */
 
+/* Scene root + chrome (covers any unpainted BorderPane / StackPane gaps) */
+.root {
+    -fx-background-color: #ffffff;
+}
+
 .passenger-root {
     -fx-font-family: "Rozha One", "Noto Sans Devanagari", "Arial", sans-serif;
     -fx-font-weight: bold;
