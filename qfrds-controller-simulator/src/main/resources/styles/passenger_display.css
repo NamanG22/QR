@@ -29,7 +29,8 @@
 /* ====== header ====== */
 .rdso-header-bar {
     -fx-background-color: #ffffff;
-    -fx-padding: 4 4 14 4;
+    -fx-padding: 4 0 14 0;
+    -fx-hgap: 6;
     -fx-border-color: transparent;
 }
 
@@ -70,17 +71,18 @@
     -fx-text-fill: #ffffff;
 }
 
-/* big maroon serif "Ticket Information" title */
+/* big maroon serif "Ticket Information" title — sized to fit row D (40% of 160px header) */
 .rdso-main-title {
     -fx-font-family: "Rozha One", "Trajan Pro", "Noto Serif", "Times New Roman", serif;
-    -fx-font-size: 64px;
+    -fx-font-size: 48px;
     -fx-font-weight: 700;
     -fx-text-fill: #5a0a14;
 }
 
-/* logo placeholder (Indian Railways roundel) */
+/* logo placeholder (Indian Railways roundel) — fits within 10% column (~98px @ 988px usable) */
 .rdso-logo-frame {
     -fx-background-color: transparent;
+    -fx-padding: 0;
 }
 
 .rdso-logo-fallback {
@@ -89,29 +91,29 @@
     -fx-border-color: #8a0a1f;
     -fx-border-radius: 200;
     -fx-border-width: 2;
-    -fx-padding: 6;
-    -fx-min-width: 108;
-    -fx-min-height: 108;
-    -fx-pref-width: 108;
-    -fx-pref-height: 108;
-    -fx-max-width: 108;
-    -fx-max-height: 108;
+    -fx-padding: 4;
+    -fx-min-width: 92;
+    -fx-min-height: 92;
+    -fx-pref-width: 92;
+    -fx-pref-height: 92;
+    -fx-max-width: 92;
+    -fx-max-height: 92;
 }
 
 .logo-arc-top {
-    -fx-font-size: 9px;
+    -fx-font-size: 8px;
     -fx-font-weight: 700;
     -fx-text-fill: #ffffff;
     -fx-font-family: "Inter", "Arial", sans-serif;
 }
 
 .logo-emblem {
-    -fx-font-size: 36px;
+    -fx-font-size: 28px;
     -fx-text-fill: #ffffff;
 }
 
 .logo-arc-bottom {
-    -fx-font-size: 11px;
+    -fx-font-size: 10px;
     -fx-font-weight: 700;
     -fx-text-fill: #ffffff;
     -fx-font-family: "Noto Sans Devanagari", "Mangal", "Arial Unicode MS", sans-serif;

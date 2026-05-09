@@ -95,18 +95,34 @@
             flex-direction: column;
         }
 
-        /* ===== header ===== */
+        /* ===== header (GridPane: A 90% | B 10% ; A nested rows C 60% / D 40%) ===== */
         .rdso-header-bar {
+            display: grid;
+            grid-template-columns: 90% 10%;
+            grid-template-rows: 100%;
+            min-height: 160px;
+            padding: 4px 0 14px 0;
+            column-gap: 6px;
+        }
+
+        .rdso-header-col-a {
+            display: grid;
+            grid-template-columns: 100%;
+            grid-template-rows: 60% 40%;
+            min-width: 0;
+        }
+
+        .rdso-header-col-b {
             display: flex;
-            flex-direction: column;
-            gap: 8px;
-            padding: 4px 4px 14px 4px;
+            align-items: center;
+            justify-content: center;
         }
 
         .rdso-id-strip {
             display: flex;
             align-items: center;
             gap: 10px;
+            min-width: 0;
         }
 
         .id-cell {
@@ -138,30 +154,29 @@
         .header-title-row {
             display: flex;
             align-items: center;
+            min-width: 0;
         }
 
         .rdso-main-title {
-            flex: 1 1 auto;
-            text-align: center;
             font-family: "Rozha One", "Trajan Pro", "Noto Serif", "Times New Roman", serif;
-            font-size: 64px;
+            font-size: 48px;
             font-weight: 700;
             color: var(--maroon);
             line-height: 1;
+            white-space: nowrap;
         }
 
         .rdso-logo-frame {
-            width: 116px;
-            height: 116px;
+            width: 92px;
+            height: 92px;
             display: flex;
             align-items: center;
             justify-content: center;
-            flex: 0 0 116px;
         }
 
         .rdso-logo-fallback {
-            width: 108px;
-            height: 108px;
+            width: 92px;
+            height: 92px;
             border-radius: 50%;
             background: var(--ir-red);
             border: 2px solid var(--ir-red-dark);
@@ -170,19 +185,20 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 2px;
-            padding: 8px;
+            gap: 0;
+            padding: 4px;
+            line-height: 1.05;
         }
         .logo-arc-top {
             font-family: "Inter", "Arial", sans-serif;
-            font-size: 9px;
+            font-size: 8px;
             font-weight: 700;
             letter-spacing: 0.5px;
         }
-        .logo-emblem { font-size: 36px; line-height: 1; }
+        .logo-emblem { font-size: 28px; line-height: 1; }
         .logo-arc-bottom {
             font-family: "Noto Sans Devanagari", "Mangal", sans-serif;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
         }
 
@@ -454,19 +470,24 @@
         <!-- ============================================== -->
         <div id="utsBoard" class="display-stack board active">
             <div class="tan-board">
-                <!-- header -->
+                <!-- header: column A 90% (rows C 60% / D 40%) | column B 10% (logo) -->
                 <div class="rdso-header-bar">
-                    <div class="rdso-id-strip">
-                        <div class="id-cell">Terminal ID</div>
-                        <div class="id-cell-value">TVM-001</div>
-                        <div class="id-cell">Windows No.</div>
-                        <div class="id-cell-value">03</div>
+                    <div class="rdso-header-col-a">
+                        <div class="rdso-id-strip">
+                            <div class="id-cell">Terminal ID</div>
+                            <div class="id-cell-value">TVM-001</div>
+                            <div class="id-cell">Windows No.</div>
+                            <div class="id-cell-value">03</div>
+                        </div>
+                        <div class="header-title-row">
+                            <div class="rdso-main-title">Ticket Information</div>
+                        </div>
                     </div>
-                    <div class="header-title-row">
-                        <div class="rdso-main-title">Ticket Information</div>
+                    <div class="rdso-header-col-b">
                         <div class="rdso-logo-frame">
                             <div class="rdso-logo-fallback">
-                                <span class="logo-arc-top">INDIAN RAILWAYS</span>
+                                <span class="logo-arc-top">INDIAN</span>
+                                <span class="logo-arc-top">RAILWAYS</span>
                                 <span class="logo-emblem">🚂</span>
                                 <span class="logo-arc-bottom">भारतीय रेल</span>
                             </div>
@@ -592,15 +613,20 @@
         <div id="prsBoard" class="display-stack board">
             <div class="tan-board">
                 <div class="rdso-header-bar">
-                    <div class="rdso-id-strip">
-                        <div class="id-cell">Operator Code</div>
-                        <div class="id-cell-value">CLIENT</div>
+                    <div class="rdso-header-col-a">
+                        <div class="rdso-id-strip">
+                            <div class="id-cell">Operator Code</div>
+                            <div class="id-cell-value">CLIENT</div>
+                        </div>
+                        <div class="header-title-row">
+                            <div class="rdso-main-title">Ticket Information</div>
+                        </div>
                     </div>
-                    <div class="header-title-row">
-                        <div class="rdso-main-title">Ticket Information</div>
+                    <div class="rdso-header-col-b">
                         <div class="rdso-logo-frame">
                             <div class="rdso-logo-fallback">
-                                <span class="logo-arc-top">INDIAN RAILWAYS</span>
+                                <span class="logo-arc-top">INDIAN</span>
+                                <span class="logo-arc-top">RAILWAYS</span>
                                 <span class="logo-emblem">🚂</span>
                                 <span class="logo-arc-bottom">भारतीय रेल</span>
                             </div>
