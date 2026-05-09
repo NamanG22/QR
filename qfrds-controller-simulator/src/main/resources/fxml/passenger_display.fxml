@@ -79,16 +79,40 @@
                 </top>
                 <center>
                     <VBox spacing="0.0" BorderPane.alignment="TOP_LEFT">
-                        <!-- Row 1: From / To -->
+                        <!-- Row 1: From / To — each half split 20% label / 80% value -->
                         <HBox spacing="0.0">
-                            <VBox spacing="4.0" HBox.hgrow="ALWAYS" styleClass="field-shell-station">
-                                <Label styleClass="rdso-bilingual-label" text="FROM / कहाँ से"/>
-                                <Label fx:id="utsFrom" styleClass="rdso-value-large" text="—" wrapText="true"/>
-                            </VBox>
-                            <VBox spacing="4.0" HBox.hgrow="ALWAYS" styleClass="field-shell-station">
-                                <Label styleClass="rdso-bilingual-label" text="TO / कहाँ तक"/>
-                                <Label fx:id="utsTo" styleClass="rdso-value-large" text="—" wrapText="true"/>
-                            </VBox>
+                            <GridPane hgap="8.0" styleClass="field-shell-station" HBox.hgrow="ALWAYS"
+                                      maxWidth="Infinity" vgap="4.0">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="NEVER" minWidth="40.0" percentWidth="20.0"/>
+                                    <ColumnConstraints hgrow="ALWAYS" maxWidth="Infinity" percentWidth="80.0"/>
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints minHeight="36.0" valignment="CENTER" vgrow="ALWAYS"/>
+                                </rowConstraints>
+                                <VBox alignment="TOP_LEFT" spacing="2.0" GridPane.columnIndex="0"
+                                      GridPane.rowIndex="0">
+                                    <Label styleClass="rdso-bilingual-label" text="From / कहाँ से" wrapText="true"/>
+                                </VBox>
+                                <Label fx:id="utsFrom" styleClass="rdso-value-large" text="—" wrapText="true"
+                                       GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.valignment="CENTER"/>
+                            </GridPane>
+                            <GridPane hgap="8.0" styleClass="field-shell-station" HBox.hgrow="ALWAYS"
+                                      maxWidth="Infinity" vgap="4.0">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="NEVER" minWidth="40.0" percentWidth="20.0"/>
+                                    <ColumnConstraints hgrow="ALWAYS" maxWidth="Infinity" percentWidth="80.0"/>
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints minHeight="36.0" valignment="CENTER" vgrow="ALWAYS"/>
+                                </rowConstraints>
+                                <VBox alignment="TOP_LEFT" spacing="2.0" GridPane.columnIndex="0"
+                                      GridPane.rowIndex="0">
+                                    <Label styleClass="rdso-bilingual-label" text="To / कहाँ तक" wrapText="true"/>
+                                </VBox>
+                                <Label fx:id="utsTo" styleClass="rdso-value-large" text="—" wrapText="true"
+                                       GridPane.columnIndex="1" GridPane.rowIndex="0" GridPane.valignment="CENTER"/>
+                            </GridPane>
                         </HBox>
                         <!-- Row 2: Date / Adult / Child / Class / Fare / QR -->
                         <HBox spacing="0.0">
@@ -179,14 +203,41 @@
                     <HBox spacing="0.0" BorderPane.alignment="TOP_LEFT">
                         <VBox spacing="0.0" HBox.hgrow="ALWAYS">
                             <HBox spacing="0.0">
-                                <VBox spacing="4.0" HBox.hgrow="ALWAYS" styleClass="field-shell-station">
-                                    <Label styleClass="rdso-bilingual-label" text="FROM / कहाँ से"/>
-                                    <Label fx:id="prsFrom" styleClass="rdso-value-large" text="—" wrapText="true"/>
-                                </VBox>
-                                <VBox spacing="4.0" HBox.hgrow="ALWAYS" styleClass="field-shell-station">
-                                    <Label styleClass="rdso-bilingual-label" text="TO / कहाँ तक"/>
-                                    <Label fx:id="prsTo" styleClass="rdso-value-large" text="—" wrapText="true"/>
-                                </VBox>
+                                <GridPane hgap="8.0" styleClass="field-shell-station" HBox.hgrow="ALWAYS"
+                                          maxWidth="Infinity" vgap="4.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="NEVER" minWidth="40.0" percentWidth="20.0"/>
+                                        <ColumnConstraints hgrow="ALWAYS" maxWidth="Infinity" percentWidth="80.0"/>
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="36.0" valignment="CENTER" vgrow="ALWAYS"/>
+                                    </rowConstraints>
+                                    <VBox alignment="TOP_LEFT" spacing="2.0" GridPane.columnIndex="0"
+                                          GridPane.rowIndex="0">
+                                        <Label styleClass="rdso-bilingual-label" text="FROM / कहाँ से"
+                                               wrapText="true"/>
+                                    </VBox>
+                                    <Label fx:id="prsFrom" styleClass="rdso-value-large" text="—" wrapText="true"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                           GridPane.valignment="CENTER"/>
+                                </GridPane>
+                                <GridPane hgap="8.0" styleClass="field-shell-station" HBox.hgrow="ALWAYS"
+                                          maxWidth="Infinity" vgap="4.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="NEVER" minWidth="40.0" percentWidth="20.0"/>
+                                        <ColumnConstraints hgrow="ALWAYS" maxWidth="Infinity" percentWidth="80.0"/>
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="36.0" valignment="CENTER" vgrow="ALWAYS"/>
+                                    </rowConstraints>
+                                    <VBox alignment="TOP_LEFT" spacing="2.0" GridPane.columnIndex="0"
+                                          GridPane.rowIndex="0">
+                                        <Label styleClass="rdso-bilingual-label" text="TO / कहाँ तक" wrapText="true"/>
+                                    </VBox>
+                                    <Label fx:id="prsTo" styleClass="rdso-value-large" text="—" wrapText="true"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                           GridPane.valignment="CENTER"/>
+                                </GridPane>
                             </HBox>
                             <HBox spacing="0.0">
                                 <VBox spacing="4.0" HBox.hgrow="ALWAYS" styleClass="field-shell">
