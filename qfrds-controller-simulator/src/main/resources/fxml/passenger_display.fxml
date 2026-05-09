@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.railway.qfrds.PassengerDisplayView"
+            minHeight="768.0" minWidth="1024.0" styleClass="passenger-root">
+    <top>
+        <VBox alignment="CENTER_LEFT" spacing="6.0" styleClass="passenger-header">
+            <padding>
+                <Insets bottom="16.0" left="28.0" right="28.0" top="20.0"/>
+            </padding>
+            <Label styleClass="brand-main" text="Indian Railways"/>
+            <Label styleClass="brand-sub" text="QR Fare Repeater Display System · Digital fare verification"/>
+            <Label styleClass="brand-tag" text="Passenger display output (simulated controller sink)"/>
+        </VBox>
+    </top>
+    <center>
+        <HBox alignment="CENTER" spacing="28.0" styleClass="passenger-body">
+            <padding>
+                <Insets bottom="24.0" left="28.0" right="28.0" top="16.0"/>
+            </padding>
+            <GridPane hgap="20.0" styleClass="fare-grid" vgap="14.0" HBox.hgrow="ALWAYS">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="NEVER" minWidth="160.0"/>
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="280.0"/>
+                </columnConstraints>
+
+                <Label styleClass="cell-label" text="Ticket type" GridPane.columnIndex="0"
+                       GridPane.rowIndex="0"/>
+                <Label fx:id="ticketTypeValue" styleClass="cell-value" text="—" GridPane.columnIndex="1"
+                       GridPane.rowIndex="0"/>
+
+                <Label styleClass="cell-label" text="From" GridPane.columnIndex="0"
+                       GridPane.rowIndex="1"/>
+                <Label fx:id="sourceValue" styleClass="cell-value station" text="—"
+                       GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                <Label styleClass="cell-label" text="To" GridPane.columnIndex="0"
+                       GridPane.rowIndex="2"/>
+                <Label fx:id="destinationValue" styleClass="cell-value station" text="—"
+                       GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                <Label styleClass="fare-label" text="Fare" GridPane.columnIndex="0"
+                       GridPane.rowIndex="3"/>
+                <Label fx:id="fareValue" styleClass="fare-amount" text="—" GridPane.columnIndex="1"
+                       GridPane.rowIndex="3"/>
+
+                <Label styleClass="cell-label" text="Transaction ID" GridPane.columnIndex="0"
+                       GridPane.rowIndex="4"/>
+                <Label fx:id="txnValue" styleClass="cell-value mono" text="—" GridPane.columnIndex="1"
+                       GridPane.rowIndex="4"/>
+
+                <Label styleClass="cell-label" text="Timestamp" GridPane.columnIndex="0"
+                       GridPane.rowIndex="5"/>
+                <Label fx:id="timestampValue" styleClass="cell-value mono" text="—"
+                       GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+                <HBox fx:id="passengerRow" spacing="12.0" GridPane.columnIndex="0"
+                      GridPane.columnSpan="2" GridPane.rowIndex="6" alignment="CENTER_LEFT">
+                    <Label styleClass="cell-label" text="Passenger"/>
+                    <Label fx:id="passengerValue" styleClass="cell-value station" text=""/>
+                </HBox>
+            </GridPane>
+
+            <VBox alignment="TOP_CENTER" spacing="12.0" styleClass="qr-column">
+                <StackPane fx:id="qrPlaceholder" styleClass="qr-placeholder" prefHeight="280.0"
+                           prefWidth="280.0">
+                    <Label styleClass="qr-placeholder-text" text="Awaiting ticket…"/>
+                </StackPane>
+                <ImageView fx:id="qrImageView" fitHeight="280.0" fitWidth="280.0" preserveRatio="true"
+                           smooth="true" visible="false" managed="false"/>
+                <Label styleClass="scan-hint" text="Scan QR to Pay"/>
+                <Label fx:id="lastUpdatedLabel" styleClass="last-updated" text="Last updated: —"/>
+            </VBox>
+        </HBox>
+    </center>
+    <bottom>
+        <HBox alignment="CENTER_LEFT" styleClass="passenger-footer">
+            <padding>
+                <Insets bottom="14.0" left="28.0" right="28.0" top="10.0"/>
+            </padding>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label styleClass="footer-note" text="1024×768 layout · F11 fullscreen"/>
+        </HBox>
+    </bottom>
+</BorderPane>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.railway.qfrds.ControllerStatusView">
+    <top>
+        <VBox spacing="8.0" styleClass="dash-header">
+            <padding>
+                <Insets bottom="12.0" left="16.0" right="16.0" top="14.0"/>
+            </padding>
+            <Label styleClass="dash-title" text="QFRDS Intelligent Controller — Monitoring"/>
+            <Label styleClass="dash-subtitle"
+                   text="Remote Data Acquisition · RS232 COM6 · Packet decode · QR pipeline · Display sink"/>
+            <HBox alignment="CENTER_LEFT" spacing="16.0">
+                <Label styleClass="cris-banner" text="CRIS connectivity: ONLINE (simulated)"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="heartbeatLedLabel" styleClass="heartbeat hb-stale" text="○ IDLE"/>
+            </HBox>
+            <Separator styleClass="dash-sep"/>
+        </VBox>
+    </top>
+    <center>
+        <VBox spacing="12.0" styleClass="dash-body">
+            <padding>
+                <Insets bottom="12.0" left="16.0" right="16.0" top="8.0"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="metric-row">
+                <Label styleClass="metric-label" minWidth="140.0" text="Serial connection"/>
+                <Label fx:id="serialConnectionLabel" styleClass="metric-value wrap" maxWidth="Infinity"
+                       text="—" wrapText="true" HBox.hgrow="ALWAYS"/>
+                <Label styleClass="metric-label" text="Mock mode"/>
+                <Label fx:id="mockModeLabel" styleClass="mock-badge mock-on" text="MOCK"/>
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="metric-row">
+                <Label styleClass="metric-label" minWidth="140.0" text="Reconnect attempts"/>
+                <Label fx:id="reconnectLabel" styleClass="metric-value mono" text="0"/>
+                <Region prefWidth="40.0"/>
+                <Label styleClass="metric-label" text="Detected ticket type"/>
+                <Label fx:id="ticketTypeLabel" styleClass="metric-value mono" text="—"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label styleClass="metric-label" text="QR generation"/>
+                <Label fx:id="qrStatusLabel" styleClass="metric-value mono" text="IDLE"/>
+            </HBox>
+
+            <VBox spacing="6.0">
+                <Label styleClass="metric-label" text="Last packet received (raw line)"/>
+                <Label fx:id="lastPacketLabel" styleClass="metric-value mono wrap" maxWidth="Infinity"
+                       text="—" wrapText="true"/>
+            </VBox>
+
+            <Label styleClass="section-label" text="Pipeline LEDs · animated"/>
+            <HBox alignment="CENTER_LEFT" spacing="18.0" styleClass="led-row">
+                <VBox alignment="CENTER" spacing="4.0" styleClass="led-stack">
+                    <Circle fx:id="ledSerial" radius="10.0" styleClass="led led-green"/>
+                    <Label styleClass="led-caption" text="COM RX"/>
+                </VBox>
+                <VBox alignment="CENTER" spacing="4.0" styleClass="led-stack">
+                    <Circle fx:id="ledQr" radius="10.0" styleClass="led led-green"/>
+                    <Label styleClass="led-caption" text="QR Gen"/>
+                </VBox>
+                <VBox alignment="CENTER" spacing="4.0" styleClass="led-stack">
+                    <Circle fx:id="ledDisplay" radius="10.0" styleClass="led led-green"/>
+                    <Label styleClass="led-caption" text="Display"/>
+                </VBox>
+                <VBox alignment="CENTER" spacing="4.0" styleClass="led-stack">
+                    <Circle fx:id="ledError" radius="10.0" styleClass="led led-red"/>
+                    <Label styleClass="led-caption" text="Fault"/>
+                </VBox>
+            </HBox>
+
+            <Label styleClass="section-label" text="Parsing &amp; decode log"/>
+            <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="log-scroll" VBox.vgrow="ALWAYS">
+                <TextArea fx:id="parseLogArea" editable="false" wrapText="true"/>
+            </ScrollPane>
+        </VBox>
+    </center>
+</BorderPane>

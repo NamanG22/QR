@@ -1,0 +1,158 @@
+/* Industrial monitoring dashboard — dark SCADA-inspired panels */
+
+.root {
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 13px;
+    -fx-background-color: linear-gradient(to bottom, #141923 0%, #1b2230 40%, #121722 100%);
+}
+
+.dash-header {
+    -fx-background-color: rgba(12, 16, 24, 0.95);
+    -fx-border-color: #2e3c52;
+    -fx-border-width: 0 0 1 0;
+}
+
+.dash-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #7fb3d5;
+}
+
+.dash-subtitle {
+    -fx-font-size: 11px;
+    -fx-text-fill: #94a3b8;
+}
+
+.cris-banner {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #27ae60;
+    -fx-padding: 4 10 4 10;
+    -fx-background-color: rgba(39, 174, 96, 0.12);
+    -fx-background-radius: 4px;
+    -fx-border-color: rgba(39, 174, 96, 0.35);
+    -fx-border-radius: 4px;
+}
+
+.dash-sep {
+    -fx-background-color: #334155;
+}
+
+.dash-body {
+    -fx-background-color: transparent;
+}
+
+.metric-row {
+    -fx-padding: 4 0 4 0;
+}
+
+.metric-label {
+    -fx-text-fill: #94a3b8;
+    -fx-font-weight: 600;
+}
+
+.metric-value {
+    -fx-text-fill: #e2e8f0;
+}
+
+.metric-value.mono {
+    -fx-font-family: "Consolas", "Menlo", monospace;
+}
+
+.metric-value.wrap {
+    -fx-wrap-text: true;
+}
+
+.mock-badge {
+    -fx-padding: 4 12 4 12;
+    -fx-background-radius: 4px;
+    -fx-font-weight: bold;
+}
+
+.mock-on {
+    -fx-text-fill: #fbbf24;
+    -fx-background-color: rgba(251, 191, 36, 0.15);
+    -fx-border-color: rgba(251, 191, 36, 0.4);
+    -fx-border-radius: 4px;
+}
+
+.mock-off {
+    -fx-text-fill: #34d399;
+    -fx-background-color: rgba(52, 211, 153, 0.12);
+    -fx-border-color: rgba(52, 211, 153, 0.35);
+    -fx-border-radius: 4px;
+}
+
+.section-label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #64748b;
+    -fx-padding: 8 0 0 0;
+}
+
+.heartbeat {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.hb-ok {
+    -fx-text-fill: #34d399;
+}
+
+.hb-stale {
+    -fx-text-fill: #64748b;
+}
+
+.led-row {
+    -fx-padding: 8 0 12 0;
+}
+
+.led-stack {
+    -fx-alignment: center;
+}
+
+.led-caption {
+    -fx-font-size: 10px;
+    -fx-text-fill: #64748b;
+}
+
+.led {
+    -fx-opacity: 0.45;
+}
+
+.led-green {
+    -fx-fill: radial-gradient(center 40% 40%, radius 70%, #34d399 0%, #065f46 100%);
+    -fx-stroke: #065f46;
+}
+
+.led-amber {
+    -fx-fill: radial-gradient(center 40% 40%, radius 70%, #fbbf24 0%, #b45309 100%);
+    -fx-stroke: #b45309;
+}
+
+.led-red {
+    -fx-fill: radial-gradient(center 40% 40%, radius 70%, #f87171 0%, #991b1b 100%);
+    -fx-stroke: #991b1b;
+}
+
+.log-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: #334155;
+    -fx-border-radius: 4px;
+    -fx-padding: 0;
+}
+
+.log-scroll .viewport {
+    -fx-background-color: #0b1120;
+}
+
+.text-area {
+    -fx-control-inner-background: #0b1120;
+    -fx-background-color: #0b1120;
+    -fx-text-fill: #a5f3fc;
+    -fx-font-family: "Consolas", "Menlo", monospace;
+    -fx-font-size: 11px;
+}
+
+.alert.dialog-pane {
+    -fx-background-color: #1e293b;
+}
