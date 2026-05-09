@@ -1,0 +1,158 @@
+/*
+ * Dark railway supervisor terminal theme — high contrast, CRT-inspired accents,
+ * monospace telemetry readout for serial logs.
+ */
+
+.root {
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 13px;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #151821 0%, #1c2230 55%, #141821 100%);
+}
+
+/* Vertical split: form vs serial log */
+.console-split {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.console-split > .split-pane-divider {
+    -fx-background-color: #2f3a52;
+    -fx-pref-height: 6px;
+}
+
+.console-split > .split-pane-divider:hover {
+    -fx-background-color: #f4d03f;
+}
+
+.header-panel {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #1e2433 0%, #171c28 100%);
+    -fx-border-color: #2a3347;
+    -fx-border-width: 0 0 1 0;
+}
+
+.title-label {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f4d03f;
+    -fx-effect: dropshadow(gaussian, rgba(244, 208, 63, 0.35), 8, 0.2, 0, 1);
+}
+
+.subtitle-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #9ca8c7;
+}
+
+.header-separator {
+    -fx-background-color: #3d4f73;
+}
+
+.main-panel {
+    -fx-background-color: transparent;
+}
+
+.field-label {
+    -fx-text-fill: #c8d2ec;
+    -fx-font-weight: 600;
+}
+
+.hint-label {
+    -fx-text-fill: #6f7c99;
+    -fx-font-size: 11px;
+}
+
+.combo-box-base,
+.text-field {
+    -fx-background-color: #232a3a;
+    -fx-background-radius: 4px;
+    -fx-border-color: #3d4a63;
+    -fx-border-radius: 4px;
+    -fx-text-fill: #e8ecf7;
+    -fx-prompt-text-fill: #6d7994;
+}
+
+.combo-box-base:hover,
+.text-field:focused {
+    -fx-border-color: #f4d03f;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: #232a3a;
+}
+
+.combo-box-popup .list-cell {
+    -fx-text-fill: #e8ecf7;
+}
+
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: #3d4f73;
+}
+
+.primary-button {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #f7dc6f 0%, #d4ac0d 100%);
+    -fx-text-fill: #1a1f2e;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 22px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+}
+
+.primary-button:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #fcf3cf 0%, #f4d03f 100%);
+}
+
+.primary-button:pressed {
+    -fx-background-color: #b7950b;
+}
+
+.log-panel {
+    -fx-background-color: rgba(10, 12, 18, 0.92);
+    -fx-border-color: #2f3a52;
+    -fx-border-width: 1 0 0 0;
+    -fx-min-height: 160px;
+}
+
+.log-title {
+    -fx-text-fill: #85c1e9;
+    -fx-font-weight: bold;
+}
+
+.text-area {
+    -fx-control-inner-background: #0d1018;
+    -fx-background-color: #0d1018;
+    -fx-border-color: #2c3549;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-text-fill: #58d68d;
+    -fx-font-family: "Consolas", "JetBrains Mono", "Menlo", monospace;
+    -fx-font-size: 12px;
+}
+
+.text-area .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical,
+.scroll-bar:horizontal {
+    -fx-background-color: #1a1f2e;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #4a5a78;
+    -fx-background-radius: 4px;
+}
+
+.alert.dialog-pane {
+    -fx-background-color: #232a3a;
+}
+
+.alert.dialog-pane .header-panel {
+    -fx-background-color: #2c3549;
+}
+
+.alert.dialog-pane .content.label {
+    -fx-text-fill: #e8ecf7;
+}

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.railway.supervisor.SupervisorController">
+    <top>
+        <VBox styleClass="header-panel" spacing="6.0">
+            <padding>
+                <Insets bottom="16.0" left="20.0" right="20.0" top="18.0"/>
+            </padding>
+            <Label styleClass="title-label" text="Indian Railways Supervisor Console"/>
+            <Label styleClass="subtitle-label"
+                   text="PRS / UTS supervisor terminal · QR Fare Repeater Display demo"/>
+            <Separator styleClass="header-separator"/>
+        </VBox>
+    </top>
+    <center>
+        <SplitPane dividerPositions="0.62" orientation="VERTICAL" styleClass="console-split">
+            <VBox spacing="14.0" styleClass="main-panel">
+                <padding>
+                    <Insets bottom="16.0" left="20.0" right="20.0" top="16.0"/>
+                </padding>
+                <GridPane hgap="12.0" maxHeight="Infinity" vgap="12.0" VBox.vgrow="NEVER">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="NEVER" maxWidth="140.0" minWidth="120.0"/>
+                        <ColumnConstraints hgrow="ALWAYS" maxWidth="Infinity" minWidth="200.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="32.0" valignment="CENTER"/>
+                        <RowConstraints minHeight="32.0" valignment="CENTER"/>
+                        <RowConstraints minHeight="32.0" valignment="CENTER"/>
+                        <RowConstraints minHeight="32.0" valignment="CENTER"/>
+                        <RowConstraints minHeight="32.0" valignment="CENTER"/>
+                        <RowConstraints minHeight="32.0" valignment="CENTER"/>
+                    </rowConstraints>
+
+                    <Label styleClass="field-label" text="Ticket Type" GridPane.columnIndex="0"
+                           GridPane.rowIndex="0"/>
+                    <ComboBox fx:id="ticketTypeCombo" maxWidth="Infinity" GridPane.columnIndex="1"
+                              GridPane.rowIndex="0"/>
+
+                    <Label styleClass="field-label" text="Source Station" GridPane.columnIndex="0"
+                           GridPane.rowIndex="1"/>
+                    <TextField fx:id="sourceField" promptText="e.g. NDLS" GridPane.columnIndex="1"
+                               GridPane.rowIndex="1"/>
+
+                    <Label styleClass="field-label" text="Destination Station" GridPane.columnIndex="0"
+                           GridPane.rowIndex="2"/>
+                    <TextField fx:id="destinationField" promptText="e.g. BCT" GridPane.columnIndex="1"
+                               GridPane.rowIndex="2"/>
+
+                    <Label styleClass="field-label" text="Fare (Rs)" GridPane.columnIndex="0"
+                           GridPane.rowIndex="3"/>
+                    <TextField fx:id="fareField" promptText="Numeric amount" GridPane.columnIndex="1"
+                               GridPane.rowIndex="3"/>
+
+                    <Label styleClass="field-label" text="Transaction ID" GridPane.columnIndex="0"
+                           GridPane.rowIndex="4"/>
+                    <TextField fx:id="transactionField" promptText="Unique transaction reference"
+                               GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+                    <Label fx:id="passengerNameLabel" styleClass="field-label" text="Passenger Name"
+                           GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                    <TextField fx:id="passengerNameField" promptText="Required for PRS"
+                               GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                </GridPane>
+
+                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                    <Button mnemonicParsing="false" onAction="#onGenerateTicket" styleClass="primary-button"
+                            text="Generate Ticket"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label styleClass="hint-label" text="9600 baud · COM5 · UTF-8 + LF"/>
+                </HBox>
+            </VBox>
+
+            <VBox spacing="8.0" styleClass="log-panel">
+                <padding>
+                    <Insets bottom="16.0" left="20.0" right="20.0" top="12.0"/>
+                </padding>
+                <Label styleClass="log-title" text="Serial log · packets &amp; status"/>
+                <TextArea fx:id="logArea" editable="false" focusTraversable="false" minHeight="120.0"
+                          prefRowCount="8" wrapText="true" VBox.vgrow="ALWAYS"/>
+            </VBox>
+        </SplitPane>
+    </center>
+</BorderPane>
