@@ -1,0 +1,670 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>QFRDS Passenger Display — Static Preview</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <style>
+        @font-face {
+            font-family: "Rozha One";
+            font-style: normal;
+            font-weight: 400;
+            src: url("../src/main/resources/fonts/RozhaOne-Regular.ttf") format("truetype");
+            font-display: swap;
+        }
+
+        :root {
+            --maroon: #8b0000;
+            --dark: #2a2a2a;
+            --dark-deep: #111111;
+            --border: #555555;
+            --label: #ffffff;
+            --value: #e8e8e8;
+            --footer-bg: #ffffff;
+            --footer-border: #cccccc;
+            --footer-text: #555555;
+            --rail-text: #eeeeee;
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            background: #2b2f33;
+            color: #ddd;
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid #1f2226;
+            background: #23272b;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .toolbar h1 {
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0 12px 0 0;
+            letter-spacing: 0.3px;
+            color: #f0f0f0;
+        }
+        .toolbar .spacer { flex: 1; }
+        .toolbar .info { font-size: 12px; color: #9aa0a6; }
+        .toolbar button {
+            font: 600 12px/1 "Inter", system-ui, sans-serif;
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: 1px solid #3a3f44;
+            background: #2c3033;
+            color: #e6e6e6;
+            cursor: pointer;
+        }
+        .toolbar button.active {
+            background: var(--maroon);
+            border-color: var(--maroon);
+            color: #fff;
+        }
+
+        .stage {
+            display: flex;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        /* ===== passenger-root: outer frame 1024 x 768 ===== */
+        .passenger-root {
+            width: 1024px;
+            height: 768px;
+            background: #ffffff;
+            font-family: "Rozha One", "Noto Sans Devanagari", "Arial", sans-serif;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.45);
+            overflow: hidden;
+        }
+
+        /* center StackPane = the board area, 1024 x 736 */
+        .display-stack {
+            flex: 0 0 auto;
+            height: 736px;
+            background: #ffffff;
+            position: relative;
+        }
+
+        .tan-board {
+            position: absolute;
+            inset: 0;
+            background: #ffffff;
+            padding: 4px 8px 6px 8px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== header ===== */
+        .rdso-header-bar {
+            background: var(--maroon);
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border);
+            display: grid;
+            column-gap: 12px;
+        }
+
+        .rdso-header-micro {
+            font-size: 11px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .rdso-main-title {
+            font-size: 42px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.05;
+        }
+
+        /* ===== UTS header layout: 90% / 10% ===== */
+        .uts-header {
+            grid-template-columns: 90% 10%;
+        }
+
+        .uts-header-left {
+            display: grid;
+            grid-template-rows: 60% 40%;
+            row-gap: 4px;
+        }
+        .uts-header-line1 {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .uts-header-line1 .pair {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .uts-header-line2 {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .header-logo .logo-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-family: "Inter", sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        /* ===== PRS header (single HBox: title left, code+logo right) ===== */
+        .prs-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .prs-header .right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-left: auto;
+        }
+        .prs-header .op-code {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        /* ===== body rows (UTS center + PRS center) ===== */
+        .board-body {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        .row-h {
+            display: flex;
+            flex-direction: row;
+        }
+
+        /* field cells */
+        .field-shell,
+        .field-shell-station,
+        .fare-highlight {
+            padding: 6px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0;
+            color: #fff;
+        }
+        .field-shell {
+            background: var(--dark);
+        }
+        .field-shell-station {
+            background: var(--dark-deep);
+        }
+        .fare-highlight {
+            background: var(--maroon);
+        }
+
+        .grow {
+            flex: 1 1 0;
+        }
+
+        .rdso-bilingual-label {
+            font-size: 11px;
+            font-weight: bold;
+            color: #ffffff;
+            line-height: 1.1;
+            font-family: "Rozha One", "Noto Sans Devanagari", "Arial", sans-serif;
+        }
+
+        .rdso-value {
+            font-size: 13px;
+            font-weight: bold;
+            color: var(--value);
+            line-height: 1.2;
+        }
+
+        .rdso-value-large {
+            font-size: 22px;
+            font-weight: bold;
+            color: #ffffff;
+            line-height: 1.1;
+        }
+
+        .fare-highlight .rdso-value-large {
+            font-size: 24px;
+            color: #ffffff;
+        }
+
+        /* QR placeholders */
+        .qr-cell {
+            justify-content: center;
+            align-items: center;
+        }
+        .qr-placeholder-rect {
+            background: #333333;
+            border: 1px solid #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .qr-uts {
+            width: 120px;
+            height: 120px;
+        }
+        .qr-prs {
+            width: 130px;
+            height: 130px;
+        }
+
+        /* PRS payment column */
+        .prs-payment-col {
+            width: 148px;
+            background: var(--dark);
+            border: 1px solid var(--border);
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .payment-banner-prs {
+            font-size: 12px;
+            font-weight: bold;
+            color: #fff;
+            text-align: center;
+        }
+
+        /* operator + railway division row */
+        .operator-row {
+            display: flex;
+            align-items: center;
+        }
+        .railway-division {
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--rail-text);
+            text-align: right;
+        }
+        .right-align {
+            align-items: flex-end;
+        }
+        .right-align .rdso-bilingual-label,
+        .right-align .railway-division {
+            text-align: right;
+            width: 100%;
+        }
+
+        /* PRS passenger table */
+        .prs-pax-table {
+            background: var(--dark-deep);
+            border: 1px solid var(--border);
+            height: 172px;
+            display: flex;
+            flex-direction: column;
+            color: #fff;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .prs-pax-table .thead {
+            background: var(--maroon);
+            display: grid;
+            grid-template-columns: 60px 1.6fr 70px 60px 70px 90px 110px;
+            color: #fff;
+            border-bottom: 1px solid var(--border);
+        }
+        .prs-pax-table .thead > div {
+            padding: 4px 6px;
+            border-right: 1px solid rgba(255,255,255,0.15);
+        }
+        .prs-pax-table .thead > div:last-child { border-right: 0; }
+        .prs-pax-table .tbody {
+            flex: 1;
+            overflow: hidden;
+        }
+        .prs-pax-table .row {
+            display: grid;
+            grid-template-columns: 60px 1.6fr 70px 60px 70px 90px 110px;
+            height: 24px;
+            align-items: center;
+        }
+        .prs-pax-table .row > div {
+            padding: 2px 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* ===== footer ===== */
+        .passenger-footer-tech {
+            background: var(--footer-bg);
+            border-top: 1px solid var(--footer-border);
+            padding: 4px 10px 6px 10px;
+            display: flex;
+            align-items: center;
+            font-family: "Inter", system-ui, sans-serif;
+        }
+        .footer-note {
+            font-size: 10px;
+            color: var(--footer-text);
+            font-weight: bold;
+        }
+        .footer-spacer { flex: 1; }
+
+        /* ===== UTS column widths (matches FXML prefWidth) ===== */
+        .uts-row2 { display: flex; flex-direction: row; }
+        .uts-row2 > .field-shell-date     { width: 140px; flex: 0 0 140px; }
+        .uts-row2 > .field-shell-num      { width: 72px;  flex: 0 0 72px;  }
+        .uts-row2 > .field-shell-class    { width: 88px;  flex: 0 0 88px;  }
+        .uts-row2 > .fare-highlight       { flex: 1 1 auto; }
+        .uts-row2 > .qr-cell              { width: 120px; height: 120px; flex: 0 0 120px; padding: 0; }
+
+        /* ===== PRS column widths ===== */
+        .prs-row3 { display: flex; flex-direction: row; }
+        .prs-row3 > .field-shell-date     { width: 120px; flex: 0 0 120px; }
+        .prs-row3 > .field-shell-pax      { width: 120px; flex: 0 0 120px; }
+        .prs-row3 > .field-shell-class    { width: 88px;  flex: 0 0 88px;  }
+        .prs-row3 > .fare-highlight       { flex: 1 1 auto; }
+
+        /* ===== board switch ===== */
+        .board { display: none; }
+        .board.active { display: flex; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div class="toolbar">
+    <h1>QFRDS Passenger Display — static HTML preview</h1>
+    <span class="info">1024 × 768 fixed canvas · matches passenger_display.fxml + passenger_display.css</span>
+    <span class="spacer"></span>
+    <button id="btnUts" class="active" onclick="show('uts')">UTS layout</button>
+    <button id="btnPrs" onclick="show('prs')">PRS layout</button>
+</div>
+
+<div class="stage">
+    <div class="passenger-root">
+
+        <!-- ============================================== -->
+        <!-- ===============   UTS BOARD   ================ -->
+        <!-- ============================================== -->
+        <div id="utsBoard" class="display-stack board active">
+            <div class="tan-board">
+                <!-- header -->
+                <div class="rdso-header-bar uts-header">
+                    <div class="uts-header-left">
+                        <div class="uts-header-line1">
+                            <div class="pair">
+                                <span class="rdso-header-micro">Terminal ID:</span>
+                                <span class="rdso-header-micro">TVM-001</span>
+                            </div>
+                            <div class="pair">
+                                <span class="rdso-header-micro">Windows No:</span>
+                                <span class="rdso-header-micro">03</span>
+                            </div>
+                        </div>
+                        <div class="uts-header-line2">
+                            <span class="rdso-main-title">Ticket Information</span>
+                        </div>
+                    </div>
+                    <div class="header-logo">
+                        <div class="logo-circle">LOGO</div>
+                    </div>
+                </div>
+
+                <!-- body -->
+                <div class="board-body">
+                    <!-- row 1: from / to -->
+                    <div class="row-h">
+                        <div class="field-shell-station grow">
+                            <div class="rdso-bilingual-label">FROM / कहाँ से</div>
+                            <div class="rdso-value-large">VARANASI JN</div>
+                        </div>
+                        <div class="field-shell-station grow">
+                            <div class="rdso-bilingual-label">TO / कहाँ तक</div>
+                            <div class="rdso-value-large">PRAYAGRAJ JN</div>
+                        </div>
+                    </div>
+
+                    <!-- row 2: date / adult / child / class / fare / qr -->
+                    <div class="uts-row2">
+                        <div class="field-shell field-shell-date">
+                            <div class="rdso-bilingual-label">DATE / दिनांक</div>
+                            <div class="rdso-value">10-MAY-26</div>
+                        </div>
+                        <div class="field-shell field-shell-num">
+                            <div class="rdso-bilingual-label">ADULT / वयस्क</div>
+                            <div class="rdso-value">2</div>
+                        </div>
+                        <div class="field-shell field-shell-num">
+                            <div class="rdso-bilingual-label">CHILD / बाल</div>
+                            <div class="rdso-value">0</div>
+                        </div>
+                        <div class="field-shell field-shell-class">
+                            <div class="rdso-bilingual-label">CLASS / श्रेणी</div>
+                            <div class="rdso-value">2S</div>
+                        </div>
+                        <div class="fare-highlight">
+                            <div class="rdso-bilingual-label">FARE / किराया</div>
+                            <div class="rdso-value-large">₹ 240</div>
+                        </div>
+                        <div class="field-shell qr-cell">
+                            <div class="qr-placeholder-rect qr-uts">QR&nbsp;CODE</div>
+                        </div>
+                    </div>
+
+                    <!-- row 3: train type / pay mode -->
+                    <div class="row-h">
+                        <div class="field-shell grow">
+                            <div class="rdso-bilingual-label">TYPE OF TRAIN / ट्रेन का प्रकार</div>
+                            <div class="rdso-value">ORDINARY</div>
+                        </div>
+                        <div class="field-shell grow">
+                            <div class="rdso-bilingual-label">PAY MODE / भुगतान विधि</div>
+                            <div class="rdso-value">UPI</div>
+                        </div>
+                    </div>
+
+                    <!-- row 4: transaction -->
+                    <div class="field-shell">
+                        <div class="rdso-bilingual-label">TRANSACTION TYPE / लेनदेन प्रकार</div>
+                        <div class="rdso-value">JOURNEY</div>
+                    </div>
+
+                    <!-- row 5: operator / railway -->
+                    <div class="row-h operator-row">
+                        <div class="field-shell grow">
+                            <div class="rdso-bilingual-label">OPERATOR NAME / संचालक नाम</div>
+                            <div class="rdso-value">A. K. PANDEY</div>
+                        </div>
+                        <div class="field-shell grow right-align">
+                            <div></div>
+                            <div class="railway-division">North Eastern Railway / वाराणसी मंडल</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- ===============   PRS BOARD   ================ -->
+        <!-- ============================================== -->
+        <div id="prsBoard" class="display-stack board">
+            <div class="tan-board">
+                <!-- header: title left, op code + logo right -->
+                <div class="rdso-header-bar prs-header">
+                    <div>
+                        <div class="rdso-main-title">Ticket Information</div>
+                    </div>
+                    <div class="right">
+                        <div class="op-code">
+                            <span class="rdso-header-micro">Operator Code:</span>
+                            <span class="rdso-header-micro">CLIENT</span>
+                        </div>
+                        <div class="logo-circle">LOGO</div>
+                    </div>
+                </div>
+
+                <!-- body: HBox = left content column + right payment column -->
+                <div class="board-body" style="flex-direction: row;">
+                    <div style="display:flex; flex-direction:column; flex:1 1 0; min-width:0;">
+                        <!-- from / to -->
+                        <div class="row-h">
+                            <div class="field-shell-station grow">
+                                <div class="rdso-bilingual-label">FROM / कहाँ से</div>
+                                <div class="rdso-value-large">VARANASI JN</div>
+                            </div>
+                            <div class="field-shell-station grow">
+                                <div class="rdso-bilingual-label">TO / कहाँ तक</div>
+                                <div class="rdso-value-large">NEW DELHI</div>
+                            </div>
+                        </div>
+
+                        <!-- train no / quota -->
+                        <div class="row-h">
+                            <div class="field-shell grow">
+                                <div class="rdso-bilingual-label">TRAIN NO. / गाड़ी सं.</div>
+                                <div class="rdso-value-large">12559</div>
+                            </div>
+                            <div class="field-shell grow">
+                                <div class="rdso-bilingual-label">QUOTA / कोटा</div>
+                                <div class="rdso-value">GN</div>
+                            </div>
+                        </div>
+
+                        <!-- date / pax / class / fare -->
+                        <div class="prs-row3">
+                            <div class="field-shell field-shell-date">
+                                <div class="rdso-bilingual-label">DATE / दिनांक</div>
+                                <div class="rdso-value">10-MAY-26</div>
+                            </div>
+                            <div class="field-shell field-shell-pax">
+                                <div class="rdso-bilingual-label">TOTAL PASSENGERS / कुल यात्री</div>
+                                <div class="rdso-value">2</div>
+                            </div>
+                            <div class="field-shell field-shell-class">
+                                <div class="rdso-bilingual-label">CLASS / श्रेणी</div>
+                                <div class="rdso-value">SL</div>
+                            </div>
+                            <div class="fare-highlight">
+                                <div class="rdso-bilingual-label">FARE / किराया</div>
+                                <div class="rdso-value-large">₹ 1,240</div>
+                            </div>
+                        </div>
+
+                        <!-- boarding / reservation up to -->
+                        <div class="row-h">
+                            <div class="field-shell grow">
+                                <div class="rdso-bilingual-label">BOARDING POINT / चढ़ने का स्थान</div>
+                                <div class="rdso-value">VARANASI JN</div>
+                            </div>
+                            <div class="field-shell grow">
+                                <div class="rdso-bilingual-label">RESERVATION UP TO / आरक्षण तक</div>
+                                <div class="rdso-value">NEW DELHI</div>
+                            </div>
+                        </div>
+
+                        <!-- passenger table -->
+                        <div class="prs-pax-table">
+                            <div class="thead">
+                                <div>SL.</div>
+                                <div>NAME / नाम</div>
+                                <div>AGE / आयु</div>
+                                <div>SEX</div>
+                                <div>BERTH</div>
+                                <div>COACH/SEAT</div>
+                                <div>STATUS</div>
+                            </div>
+                            <div class="tbody">
+                                <div class="row"><div>1</div><div>RAJESH KUMAR</div><div>34</div><div>M</div><div>LB</div><div>S5 / 23</div><div>CNF</div></div>
+                                <div class="row"><div>2</div><div>SUNITA DEVI</div><div>31</div><div>F</div><div>UB</div><div>S5 / 26</div><div>CNF</div></div>
+                                <div class="row"><div>3</div><div>—</div><div>—</div><div>—</div><div>—</div><div>—</div><div>—</div></div>
+                                <div class="row"><div>4</div><div>—</div><div>—</div><div>—</div><div>—</div><div>—</div><div>—</div></div>
+                                <div class="row"><div>5</div><div>—</div><div>—</div><div>—</div><div>—</div><div>—</div><div>—</div></div>
+                                <div class="row"><div>6</div><div>—</div><div>—</div><div>—</div><div>—</div><div>—</div><div>—</div></div>
+                            </div>
+                        </div>
+
+                        <!-- operator / railway -->
+                        <div class="row-h operator-row">
+                            <div class="field-shell grow">
+                                <div class="rdso-bilingual-label">OPERATOR NAME / संचालक नाम</div>
+                                <div class="rdso-value">R. K. SINGH</div>
+                            </div>
+                            <div style="width:12px;"></div>
+                            <div class="field-shell grow right-align">
+                                <div></div>
+                                <div class="railway-division">North Eastern Railway / वाराणसी मंडल</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- right column: payment QR -->
+                    <div class="prs-payment-col">
+                        <div class="payment-banner-prs">PAYMENT MODE</div>
+                        <div class="qr-placeholder-rect qr-prs">UPI-QR&nbsp;CODE</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- footer -->
+        <div class="passenger-footer-tech">
+            <span class="footer-note" id="footerLastUpdated">Last updated: 10-MAY-26 01:25</span>
+            <span class="footer-spacer"></span>
+            <span class="footer-note">QFRDS display · F11 fullscreen</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    function show(which) {
+        const uts = document.getElementById('utsBoard');
+        const prs = document.getElementById('prsBoard');
+        const btnU = document.getElementById('btnUts');
+        const btnP = document.getElementById('btnPrs');
+        if (which === 'prs') {
+            uts.classList.remove('active');
+            prs.classList.add('active');
+            btnP.classList.add('active');
+            btnU.classList.remove('active');
+        } else {
+            prs.classList.remove('active');
+            uts.classList.add('active');
+            btnU.classList.add('active');
+            btnP.classList.remove('active');
+        }
+    }
+</script>
+
+</body>
+</html>

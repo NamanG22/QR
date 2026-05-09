@@ -34,8 +34,8 @@
 }
 
 .rdso-main-title {
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
+    -fx-font-size: 42px;
+    -fx-font-weight: 700;
     -fx-text-fill: #ffffff;
 }
 

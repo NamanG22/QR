@@ -8,4 +8,4 @@ cd "$(dirname "$0")"
 if [[ "${1:-}" == "prs" ]]; then
   export QFRDS_PREVIEW=prs
 fi
-exec mvn -q -Ppassenger-display-only javafx:run
+exec mvn -U -Ppassenger-display-only org.openjfx:javafx-maven-plugin:0.0.8:run
