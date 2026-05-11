@@ -29,9 +29,9 @@
 /* ====== header ====== */
 .rdso-header-bar {
     -fx-background-color: #ffffff;
-    -fx-padding: 4 0 14 0;
-    -fx-hgap: 6;
-    -fx-border-color: transparent;
+    -fx-padding: 0 10 0 5;
+    /* -fx-hgap: 6; */
+    /* -fx-border-color: transparent; */
 }
 
 .rdso-id-strip {
@@ -71,10 +71,10 @@
     -fx-text-fill: #ffffff;
 }
 
-/* big maroon serif "Ticket Information" title — sized to fit row D (40% of 160px header) */
+/* big maroon serif "Ticket Information" title — fits row D (40% of 200px header = 80px) */
 .rdso-main-title {
     -fx-font-family: "Rozha One", "Trajan Pro", "Noto Serif", "Times New Roman", serif;
-    -fx-font-size: 48px;
+    -fx-font-size: 72px;
     -fx-font-weight: 700;
     -fx-text-fill: #5a0a14;
 }
@@ -153,13 +153,13 @@
     -fx-background-color: #f0f0f0;
     -fx-border-color: #2a2a2a;
     -fx-border-width: 0 1 0 0;
-    -fx-padding: 6 12 6 12;
+    -fx-padding: 6 8 6 8;
     -fx-alignment: CENTER_LEFT;
 }
 
 .label-en {
     -fx-font-family: "Rozha One", "Trajan Pro", "Noto Serif", "Times New Roman", serif;
-    -fx-font-size: 24px;
+    -fx-font-size: 22px;
     -fx-font-weight: 700;
     -fx-text-fill: #5a0a14;
     -fx-padding: 0;
@@ -256,7 +256,7 @@
 /* railway-division badge (last cell of operator row) */
 .railway-cell {
     -fx-background-color: #ffffff;
-    -fx-padding: 6 12 6 12;
+    -fx-padding: 6 8 6 8;
     -fx-border-color: #2a2a2a;
     -fx-border-width: 0 0 0 1;
     -fx-alignment: CENTER;
@@ -264,14 +264,14 @@
 
 .railway-en {
     -fx-font-family: "Rozha One", "Noto Serif", "Times New Roman", serif;
-    -fx-font-size: 18px;
+    -fx-font-size: 15px;
     -fx-font-weight: 700;
     -fx-text-fill: #1a1a1a;
 }
 
 .railway-hi {
     -fx-font-family: "Noto Sans Devanagari", "Mangal", "Arial Unicode MS", sans-serif;
-    -fx-font-size: 14px;
+    -fx-font-size: 12px;
     -fx-font-weight: 700;
     -fx-text-fill: #1a1a1a;
 }
@@ -367,4 +367,235 @@
     -fx-font-size: 10px;
     -fx-text-fill: #555555;
     -fx-font-weight: 700;
+}
+
+/* ----- UTS preview layout (matches passenger-display-preview App.tsx / Tailwind) ----- */
+.pv-uts-board {
+    -fx-background-color: transparent;
+}
+
+.pv-uts-canvas {
+    -fx-background-color: #d1d5db;
+    -fx-font-family: "Playfair Display", "Georgia", "Times New Roman", serif;
+}
+
+.pv-card-white {
+    -fx-background-color: #ffffff;
+}
+
+.pv-header-strip-row {
+    -fx-padding: 8 8 0 8;
+}
+
+.pv-strip-cell {
+    -fx-padding: 8;
+    -fx-alignment: TOP_CENTER;
+    -fx-spacing: 8;
+}
+
+.pv-strip-label {
+    -fx-font-family: "Playfair Display", "Georgia", serif;
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #470000;
+}
+
+.pv-strip-value {
+    -fx-font-family: "Playfair Display", "Courier New", monospace;
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #470000;
+}
+
+.pv-line-black {
+    -fx-background-color: #000000;
+    -fx-min-height: 2;
+    -fx-pref-height: 2;
+    -fx-max-height: 2;
+}
+
+.pv-line-gray100 {
+    -fx-background-color: #f3f4f6;
+    -fx-min-height: 2;
+    -fx-pref-height: 2;
+    -fx-max-height: 2;
+}
+
+.pv-title-ticket {
+    -fx-font-family: "Playfair Display", "Georgia", serif;
+    -fx-font-size: 84px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #470000;
+    -fx-padding: 0 8 0 8;
+    -fx-wrap-text: false;
+}
+
+.pv-row {
+    -fx-border-width: 0;
+}
+
+.pv-grid-tight {
+    -fx-padding: 0;
+}
+
+.pv-label-block {
+    -fx-background-color: #ffffff;
+    -fx-padding: 4;
+    -fx-spacing: 2;
+    -fx-alignment: TOP_LEFT;
+}
+
+.pv-label-px {
+    -fx-padding: 4 8 4 8;
+}
+
+.pv-label-stack {
+    -fx-alignment: CENTER;
+}
+
+.pv-label-hi-lg {
+    -fx-font-family: "Tiro Devanagari Hindi", "Noto Sans Devanagari", "Mangal", sans-serif;
+    -fx-font-size: 18px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #470000;
+}
+
+.pv-label-en-lg {
+    -fx-font-family: "Playfair Display", "Georgia", serif;
+    -fx-font-size: 18px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #470000;
+}
+
+.pv-label-en-xl {
+    -fx-font-family: "Playfair Display", "Georgia", serif;
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #470000;
+}
+
+.pv-label-hi-xl {
+    -fx-font-family: "Tiro Devanagari Hindi", "Noto Sans Devanagari", "Mangal", sans-serif;
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #470000;
+}
+
+.pv-pad-md {
+    -fx-padding: 8;
+}
+
+.pv-pay-label {
+    -fx-padding: 8 4 8 4;
+}
+
+.pv-txn-label {
+    -fx-padding: 20 8 20 8;
+}
+
+.pv-op-label {
+    -fx-padding: 8;
+}
+
+.pv-value-block {
+    -fx-background-color: #000000;
+    -fx-padding: 8;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.pv-value-pad-sm {
+    -fx-padding: 4;
+}
+
+.pv-value-text {
+    -fx-font-family: "Playfair Display", "Georgia", serif;
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #ffffff;
+}
+
+.pv-value-text-lg {
+    -fx-font-family: "Playfair Display", "Georgia", serif;
+    -fx-font-size: 18px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #ffffff;
+}
+
+.pv-value-stack {
+    -fx-alignment: CENTER;
+    -fx-spacing: 0;
+}
+
+.pv-class-stack {
+    -fx-background-color: #000000;
+    -fx-padding: 4;
+    -fx-alignment: CENTER;
+    -fx-spacing: 4;
+}
+
+.pv-class-inner {
+    -fx-font-family: "Playfair Display", "Georgia", serif;
+    -fx-font-size: 18px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #ffffff;
+}
+
+.pv-fare-maroon {
+    -fx-background-color: #470000;
+    -fx-padding: 4;
+    -fx-alignment: CENTER;
+}
+
+.pv-fare-amount {
+    -fx-font-family: "Playfair Display", "Georgia", serif;
+    -fx-font-size: 30px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #ffffff;
+}
+
+.pv-middle-row {
+    -fx-padding: 0;
+}
+
+.pv-middle-left {
+    -fx-background-color: transparent;
+}
+
+.pv-row-inner {
+    -fx-alignment: CENTER_LEFT;
+}
+
+.pv-black-fill {
+    -fx-background-color: #000000;
+}
+
+.pv-side-white {
+    -fx-background-color: #ffffff;
+    -fx-padding: 8;
+    -fx-spacing: 8;
+}
+
+.pv-qr-in-panel {
+    -fx-border-color: #000000;
+    -fx-border-width: 1;
+}
+
+.pv-railway-box {
+    -fx-background-color: #ffffff;
+    -fx-padding: 4;
+    -fx-alignment: CENTER;
+}
+
+.pv-railway-en {
+    -fx-font-family: "Google Sans Flex", "Roboto", "Segoe UI", sans-serif;
+    -fx-font-size: 24px;
+    -fx-font-weight: 400;
+    -fx-text-fill: #470000;
+}
+
+.pv-railway-hi {
+    -fx-font-family: "Tiro Devanagari Hindi", "Noto Sans Devanagari", "Mangal", sans-serif;
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #470000;
 }

@@ -1,0 +1,280 @@
+<div class="stage">
+    <div class="passenger-root">
+
+        <!-- ============================================== -->
+        <!-- ===============   UTS BOARD   ================ -->
+        <!-- ============================================== -->
+        <div id="utsBoard" class="display-stack board active">
+            <div class="tan-board" style="background-color: #808080; gap: 10px;">
+                <!-- header: column A 90% (rows C 60% / D 40%) | column B 10% (logo) -->
+                <div class="rdso-header-bar" style="background-color: #ffffff; border: 1px solid black;">
+                    <div class="rdso-header-col-a" style="padding-left: 10px;">
+                        <div class="rdso-id-strip">
+                            <div class="id-cell">Terminal ID</div>
+                            <div class="id-cell-value">TVM-001</div>
+                            <div class="id-cell">Windows No.</div>
+                            <div class="id-cell-value">03</div>
+                        </div>
+                        <div class="header-title-row">
+                            <div class="rdso-main-title">Ticket Information</div>
+                        </div>
+                    </div>
+                    <div class="rdso-header-col-b" style="border: 1px solid black;">
+                        <div class="rdso-logo-frame">
+                            <div class="rdso-logo-fallback">
+                                <span class="logo-arc-top">INDIAN</span>
+                                <span class="logo-arc-top">RAILWAYS</span>
+                                <span class="logo-emblem">🚂</span>
+                                <span class="logo-arc-bottom">भारतीय रेल</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="bg-black">
+
+                    <!-- Row 1: From | To -->
+                    <div style="display: grid; grid-template-columns: 50% 50%; width: 100%; gap: 5px;">
+                        <div style="display: flex; gap: 5px;">
+                            <div class="label-cell w-110">
+                                <div class="label-en">From</div>
+                                <div class="label-hi">कहाँ से</div>
+                            </div>
+                            <div class="value-cell value-cell-tall">
+                                <span class="value-station">VARANASI JN</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 5px;">
+                            <div class="label-cell w-90">
+                                <div class="label-en">To</div>
+                                <div class="label-hi">कहाँ तक</div>
+                            </div>
+                            <div style="background-color: #000000; width: full;">
+                                <span class="value-station">PRAYAGRAJ JN</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Date | Adult/Child stack | Class | Fare -->
+                    <div class="rdso-row">
+                        <div class="label-cell w-110">
+                            <div class="label-en">Date</div>
+                            <div class="label-hi">दिनांक</div>
+                        </div>
+                        <div class="value-cell">
+                            <span class="value-mono">10/05/2026</span>
+                        </div>
+
+                        <div class="label-cell-stack w-70">
+                            <div class="stack-row"><span class="label-en-mini">Adult</span></div>
+                            <div class="stack-row stack-row-bordered"><span class="label-en-mini">Child</span></div>
+                        </div>
+                        <div class="value-cell-stack w-56">
+                            <div class="stack-row"><span class="value-mono-mini">02</span></div>
+                            <div class="stack-row stack-row-bordered"><span class="value-mono-mini">00</span></div>
+                        </div>
+
+                        <div class="label-cell w-70">
+                            <div class="label-en">Class</div>
+                        </div>
+                        <div class="value-cell w-60">
+                            <span class="value-mono">II</span>
+                        </div>
+
+                        <div class="label-cell w-90">
+                            <div class="label-en">Fare</div>
+                            <div class="label-hi">किराया</div>
+                        </div>
+                        <div class="value-cell value-cell-fare">
+                            <span class="value-fare">₹ 240.00</span>
+                        </div>
+                    </div>
+
+                    <div class="rdso-row-gap"></div>
+
+                    <!-- Row 3: Type of Train | Pay Mode -->
+                    <div class="rdso-row">
+                        <div class="label-cell w-170">
+                            <div class="label-en">Type of Train</div>
+                            <div class="label-hi">ट्रेन का प्रकार</div>
+                        </div>
+                        <div class="value-cell">
+                            <span class="value-mono">ORDINARY</span>
+                        </div>
+                        <div class="label-cell w-130">
+                            <div class="label-en">Pay Mode</div>
+                        </div>
+                        <div class="value-cell">
+                            <span class="value-mono">UPI-QR</span>
+                        </div>
+                    </div>
+
+                    <!-- Row 4: Transaction Type -->
+                    <div class="rdso-row">
+                        <div class="label-cell w-170">
+                            <div class="label-en">Transaction Type</div>
+                        </div>
+                        <div class="value-cell">
+                            <span class="value-mono">TXN-2026-05-10-00321</span>
+                        </div>
+                    </div>
+
+                    <div class="rdso-row-gap"></div>
+
+                    <!-- Row 5: Operator Name | Railway Division -->
+                    <div class="rdso-row rdso-row-tall">
+                        <div class="label-cell w-160">
+                            <div class="label-en">Operator</div>
+                            <div class="label-en">Name</div>
+                        </div>
+                        <div class="value-cell">
+                            <span class="value-mono">A. K. PANDEY</span>
+                        </div>
+                        <div class="railway-cell w-220">
+                            <div class="railway-en">North Eastern Railway</div>
+                            <div class="railway-hi">वाराणसी मंडल</div>
+                        </div>
+                    </div>
+
+                    <!-- QR floating bottom-right -->
+                    <div class="rdso-row-qr">
+                        <div class="qr-frame">
+                            <div class="qr-placeholder-rect">QR&nbsp;CODE</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- ===============   PRS BOARD   ================ -->
+        <!-- ============================================== -->
+        <div id="prsBoard" class="display-stack board">
+            <div class="tan-board">
+                <div class="rdso-header-bar">
+                    <div class="rdso-header-col-a">
+                        <div class="rdso-id-strip">
+                            <div class="id-cell">Operator Code</div>
+                            <div class="id-cell-value">CLIENT</div>
+                        </div>
+                        <div class="header-title-row">
+                            <div class="rdso-main-title">Ticket Information</div>
+                        </div>
+                    </div>
+                    <div class="rdso-header-col-b">
+                        <div class="rdso-logo-frame">
+                            <div class="rdso-logo-fallback">
+                                <span class="logo-arc-top">INDIAN</span>
+                                <span class="logo-arc-top">RAILWAYS</span>
+                                <span class="logo-emblem">🚂</span>
+                                <span class="logo-arc-bottom">भारतीय रेल</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rdso-body" style="flex-direction: row;">
+                    <div class="prs-left">
+
+                        <div class="rdso-row rdso-row-tall">
+                            <div class="label-cell w-100">
+                                <div class="label-en">From</div>
+                                <div class="label-hi">कहाँ से</div>
+                            </div>
+                            <div class="value-cell value-cell-tall">
+                                <span class="value-station">VARANASI JN</span>
+                            </div>
+                            <div class="label-cell w-80">
+                                <div class="label-en">To</div>
+                                <div class="label-hi">कहाँ तक</div>
+                            </div>
+                            <div class="value-cell value-cell-tall">
+                                <span class="value-station">NEW DELHI</span>
+                            </div>
+                        </div>
+
+                        <div class="rdso-row">
+                            <div class="label-cell w-100">
+                                <div class="label-en">Train No.</div>
+                                <div class="label-hi">गाड़ी सं.</div>
+                            </div>
+                            <div class="value-cell"><span class="value-mono">12559</span></div>
+                            <div class="label-cell w-80">
+                                <div class="label-en">Quota</div>
+                                <div class="label-hi">कोटा</div>
+                            </div>
+                            <div class="value-cell"><span class="value-mono">GN</span></div>
+                        </div>
+
+                        <div class="rdso-row">
+                            <div class="label-cell w-100">
+                                <div class="label-en">Date</div>
+                                <div class="label-hi">दिनांक</div>
+                            </div>
+                            <div class="value-cell"><span class="value-mono">10/05/2026</span></div>
+                            <div class="label-cell w-80">
+                                <div class="label-en">Pax</div>
+                                <div class="label-hi">यात्री</div>
+                            </div>
+                            <div class="value-cell w-56"><span class="value-mono">02</span></div>
+                            <div class="label-cell w-70">
+                                <div class="label-en">Class</div>
+                            </div>
+                            <div class="value-cell w-56"><span class="value-mono">SL</span></div>
+                            <div class="label-cell w-84">
+                                <div class="label-en">Fare</div>
+                                <div class="label-hi">किराया</div>
+                            </div>
+                            <div class="value-cell value-cell-fare"><span class="value-fare">₹ 1,240</span></div>
+                        </div>
+
+                        <div class="rdso-row">
+                            <div class="label-cell w-130">
+                                <div class="label-en">Boarding Pt.</div>
+                                <div class="label-hi">चढ़ने का स्थान</div>
+                            </div>
+                            <div class="value-cell"><span class="value-mono">VARANASI JN</span></div>
+                            <div class="label-cell w-140">
+                                <div class="label-en">Reservation Up To</div>
+                                <div class="label-hi">आरक्षण तक</div>
+                            </div>
+                            <div class="value-cell"><span class="value-mono">NEW DELHI</span></div>
+                        </div>
+
+                        <div class="prs-pax-table">
+                            <div class="thead">
+                                <div>SL.</div><div>NAME</div><div>AGE</div><div>SEX</div>
+                                <div>BERTH</div><div>COACH/SEAT</div><div>STATUS</div>
+                            </div>
+                            <div class="row"><div>1</div><div>RAJESH KUMAR</div><div>34</div><div>M</div><div>LB</div><div>S5/23</div><div>CNF</div></div>
+                            <div class="row"><div>2</div><div>SUNITA DEVI</div><div>31</div><div>F</div><div>UB</div><div>S5/26</div><div>CNF</div></div>
+                            <div class="row"><div>3</div><div>—</div><div>—</div><div>—</div><div>—</div><div>—</div><div>—</div></div>
+                            <div class="row"><div>4</div><div>—</div><div>—</div><div>—</div><div>—</div><div>—</div><div>—</div></div>
+                            <div class="row"><div>5</div><div>—</div><div>—</div><div>—</div><div>—</div><div>—</div><div>—</div></div>
+                            <div class="row"><div>6</div><div>—</div><div>—</div><div>—</div><div>—</div><div>—</div><div>—</div></div>
+                        </div>
+
+                        <div class="rdso-row-gap"></div>
+
+                        <div class="rdso-row rdso-row-tall">
+                            <div class="label-cell w-140">
+                                <div class="label-en">Operator</div>
+                                <div class="label-en">Name</div>
+                            </div>
+                            <div class="value-cell"><span class="value-mono">R. K. SINGH</span></div>
+                            <div class="railway-cell w-200">
+                                <div class="railway-en">North Eastern Railway</div>
+                                <div class="railway-hi">वाराणसी मंडल</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="prs-payment-col">
+                        <div class="payment-banner-prs">PAYMENT MODE</div>
+                        <div class="qr-prs">UPI-QR&nbsp;CODE</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>QFRDS Passenger Display — RDSO Receipt Preview</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@200;400;600;800&family=Inter:wght@400;600;700&family=Noto+Sans+Devanagari:wght@500;700&family=Playfair+Display:wght@900&family=Rozha+One&family=Tiro+Devanagari+Hindi&display=swap"
+          rel="stylesheet"/>
+    <link rel="stylesheet" href="/src/styles.css"/>
+</head>
+<body>
+
+<div class="toolbar">
+    <h1>QFRDS Passenger Display — RDSO receipt preview</h1>
+    <span class="info">1024 × 768 fixed canvas</span>
+    <span class="spacer"></span>
+    <button id="btnUts" class="active" data-board="uts">UTS layout</button>
+    <button id="btnPrs" data-board="ps">PRS layout</button>
+</div>
+
+<div id="tw-root"></div>
+
+
+<script type="module" src="/src/main.js"></script>
+<script type="module" src="/src/main.tsx"></script>
+
+</body>
+</html>

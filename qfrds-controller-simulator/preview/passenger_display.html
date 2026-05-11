@@ -90,7 +90,7 @@
             position: absolute;
             inset: 0;
             background: #ffffff;
-            padding: 14px 18px;
+            padding: 10px 10px;
             display: flex;
             flex-direction: column;
         }
@@ -100,7 +100,7 @@
             display: grid;
             grid-template-columns: 90% 10%;
             grid-template-rows: 100%;
-            min-height: 160px;
+            min-height: 200px;
             padding: 4px 0 14px 0;
             column-gap: 6px;
         }
@@ -159,7 +159,7 @@
 
         .rdso-main-title {
             font-family: "Rozha One", "Trajan Pro", "Noto Serif", "Times New Roman", serif;
-            font-size: 48px;
+            font-size: 72px;
             font-weight: 700;
             color: var(--maroon);
             line-height: 1;
@@ -233,12 +233,12 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 6px 12px;
+            padding: 6px 8px;
             min-width: 0;
         }
         .label-en {
             font-family: "Rozha One", "Trajan Pro", "Noto Serif", "Times New Roman", serif;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
             color: var(--maroon);
             line-height: 1.05;
@@ -315,14 +315,22 @@
 
         /* fixed width helpers */
         .w-140 { flex: 0 0 140px; width: 140px; }
+        .w-130 { flex: 0 0 130px; width: 130px; }
         .w-120 { flex: 0 0 120px; width: 120px; }
+        .w-110 { flex: 0 0 110px; width: 110px; }
         .w-100 { flex: 0 0 100px; width: 100px; }
+        .w-90  { flex: 0 0 90px;  width: 90px;  }
         .w-86  { flex: 0 0 86px;  width: 86px;  }
+        .w-84  { flex: 0 0 84px;  width: 84px;  }
         .w-80  { flex: 0 0 80px;  width: 80px;  }
+        .w-70  { flex: 0 0 70px;  width: 70px;  }
         .w-64  { flex: 0 0 64px;  width: 64px;  }
         .w-60  { flex: 0 0 60px;  width: 60px;  }
+        .w-56  { flex: 0 0 56px;  width: 56px;  }
         .w-160 { flex: 0 0 160px; width: 160px; }
+        .w-170 { flex: 0 0 170px; width: 170px; }
         .w-200 { flex: 0 0 200px; width: 200px; }
+        .w-220 { flex: 0 0 220px; width: 220px; }
         .w-240 { flex: 0 0 240px; width: 240px; }
         .w-280 { flex: 0 0 280px; width: 280px; }
 
@@ -333,18 +341,18 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 6px 12px;
+            padding: 6px 8px;
             text-align: center;
         }
         .railway-en {
             font-family: "Rozha One", "Noto Serif", serif;
-            font-size: 18px;
+            font-size: 15px;
             font-weight: 700;
             color: #1a1a1a;
         }
         .railway-hi {
             font-family: "Noto Sans Devanagari", "Mangal", sans-serif;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 700;
             color: #1a1a1a;
         }
@@ -469,9 +477,9 @@
         <!-- ===============   UTS BOARD   ================ -->
         <!-- ============================================== -->
         <div id="utsBoard" class="display-stack board active">
-            <div class="tan-board">
+            <div class="tan-board" style="gap: 10px;">
                 <!-- header: column A 90% (rows C 60% / D 40%) | column B 10% (logo) -->
-                <div class="rdso-header-bar">
+                <div class="rdso-header-bar" style="border: 1px solid black; padding-left: 10px; padding-right: 5px;">
                     <div class="rdso-header-col-a">
                         <div class="rdso-id-strip">
                             <div class="id-cell">Terminal ID</div>
@@ -483,13 +491,10 @@
                             <div class="rdso-main-title">Ticket Information</div>
                         </div>
                     </div>
-                    <div class="rdso-header-col-b">
-                        <div class="rdso-logo-frame">
-                            <div class="rdso-logo-fallback">
-                                <span class="logo-arc-top">INDIAN</span>
-                                <span class="logo-arc-top">RAILWAYS</span>
-                                <span class="logo-emblem">🚂</span>
-                                <span class="logo-arc-bottom">भारतीय रेल</span>
+                    <div style="border: 1px solid black;">
+                        <div>
+                            <div>
+    
                             </div>
                         </div>
                     </div>
@@ -500,14 +505,14 @@
 
                     <!-- Row 1: From | To -->
                     <div class="rdso-row rdso-row-tall">
-                        <div class="label-cell w-140">
+                        <div class="label-cell w-110">
                             <div class="label-en">From</div>
                             <div class="label-hi">कहाँ से</div>
                         </div>
                         <div class="value-cell value-cell-tall">
                             <span class="value-station">VARANASI JN</span>
                         </div>
-                        <div class="label-cell w-120">
+                        <div class="label-cell w-90">
                             <div class="label-en">To</div>
                             <div class="label-hi">कहाँ तक</div>
                         </div>
@@ -518,7 +523,7 @@
 
                     <!-- Row 2: Date | Adult/Child stack | Class | Fare -->
                     <div class="rdso-row">
-                        <div class="label-cell w-140">
+                        <div class="label-cell w-110">
                             <div class="label-en">Date</div>
                             <div class="label-hi">दिनांक</div>
                         </div>
@@ -526,23 +531,23 @@
                             <span class="value-mono">10/05/2026</span>
                         </div>
 
-                        <div class="label-cell-stack w-80">
+                        <div class="label-cell-stack w-70">
                             <div class="stack-row"><span class="label-en-mini">Adult</span></div>
                             <div class="stack-row stack-row-bordered"><span class="label-en-mini">Child</span></div>
                         </div>
-                        <div class="value-cell-stack w-64">
+                        <div class="value-cell-stack w-56">
                             <div class="stack-row"><span class="value-mono-mini">02</span></div>
                             <div class="stack-row stack-row-bordered"><span class="value-mono-mini">00</span></div>
                         </div>
 
-                        <div class="label-cell w-86">
+                        <div class="label-cell w-70">
                             <div class="label-en">Class</div>
                         </div>
-                        <div class="value-cell w-80">
+                        <div class="value-cell w-60">
                             <span class="value-mono">II</span>
                         </div>
 
-                        <div class="label-cell w-120">
+                        <div class="label-cell w-90">
                             <div class="label-en">Fare</div>
                             <div class="label-hi">किराया</div>
                         </div>
@@ -555,14 +560,14 @@
 
                     <!-- Row 3: Type of Train | Pay Mode -->
                     <div class="rdso-row">
-                        <div class="label-cell w-200">
+                        <div class="label-cell w-170">
                             <div class="label-en">Type of Train</div>
                             <div class="label-hi">ट्रेन का प्रकार</div>
                         </div>
                         <div class="value-cell">
                             <span class="value-mono">ORDINARY</span>
                         </div>
-                        <div class="label-cell w-160">
+                        <div class="label-cell w-130">
                             <div class="label-en">Pay Mode</div>
                         </div>
                         <div class="value-cell">
@@ -572,7 +577,7 @@
 
                     <!-- Row 4: Transaction Type -->
                     <div class="rdso-row">
-                        <div class="label-cell w-200">
+                        <div class="label-cell w-170">
                             <div class="label-en">Transaction Type</div>
                         </div>
                         <div class="value-cell">
@@ -584,14 +589,14 @@
 
                     <!-- Row 5: Operator Name | Railway Division -->
                     <div class="rdso-row rdso-row-tall">
-                        <div class="label-cell w-200">
+                        <div class="label-cell w-160">
                             <div class="label-en">Operator</div>
                             <div class="label-en">Name</div>
                         </div>
                         <div class="value-cell">
                             <span class="value-mono">A. K. PANDEY</span>
                         </div>
-                        <div class="railway-cell w-280">
+                        <div class="railway-cell w-220">
                             <div class="railway-en">North Eastern Railway</div>
                             <div class="railway-hi">वाराणसी मंडल</div>
                         </div>

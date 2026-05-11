@@ -1,0 +1,25 @@
+{
+  "name": "passenger-display-preview",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Standalone Vite preview of the QFRDS RDSO passenger display (UTS / PRS).",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.7.0",
+    "tailwindcss": "^4.3.0",
+    "typescript": "^6.0.3",
+    "vite": "^5.4.10"
+  },
+  "dependencies": {
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
+  }
+}
