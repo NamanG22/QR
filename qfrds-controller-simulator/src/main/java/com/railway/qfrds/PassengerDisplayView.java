@@ -277,7 +277,7 @@ public class PassengerDisplayView implements Initializable {
         utsWindowNo.setText("—");
         utsFrom.setText("—");
         utsTo.setText("—");
-        utsDate.setText("—/--/----");
+        utsDate.setText("--/--/----");
         utsAdult.setText("0");
         utsChild.setText("0");
         utsClass.setText("—");

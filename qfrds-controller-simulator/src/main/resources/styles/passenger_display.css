@@ -499,11 +499,14 @@
 
 .pv-value-block {
     -fx-background-color: #000000;
+    /* background-color: #000000; */
     -fx-padding: 8;
     -fx-alignment: CENTER_LEFT;
 }
 
 .pv-value-pad-sm {
+    -fx-background-color: #000000;
+    /* background-color: #000000; */
     -fx-padding: 4;
 }
 

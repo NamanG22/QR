@@ -17,10 +17,9 @@
 <!-- RDSO QFRDS receipt-style layouts: paired cells = white maroon-serif label + black value box -->
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.railway.qfrds.PassengerDisplayView"
-            maxHeight="768.0" maxWidth="1024.0" minHeight="768.0" minWidth="1024.0"
             styleClass="passenger-root">
     <center>
-        <StackPane maxHeight="736.0" maxWidth="1024.0" styleClass="display-stack">
+        <StackPane styleClass="display-stack">
 
             <!-- ========================================================== -->
             <!-- ============           UTS BOARD              ============ -->
@@ -58,7 +57,7 @@
                         </VBox>
 
                         <!-- From | To row: 10+40+10+40 % (20/80 of each half) -->
-                        <GridPane hgap="4.0" styleClass="pv-row pv-grid-tight" VBox.vgrow="NEVER">
+                        <GridPane hgap="4.0" styleClass="pv-row,pv-grid-tight" VBox.vgrow="NEVER">
                             <columnConstraints>
                                 <ColumnConstraints percentWidth="10.0" hgrow="SOMETIMES"/>
                                 <ColumnConstraints percentWidth="40.0" hgrow="SOMETIMES"/>
@@ -98,17 +97,17 @@
                                     <Label styleClass="pv-label-en-lg" text="Date"/>
                                     <Label styleClass="pv-label-hi-lg" text="दिनांक"/>
                                 </VBox>
-                                <StackPane styleClass="pv-value-block pv-value-pad-sm" GridPane.columnIndex="1"
+                                <StackPane styleClass="pv-value-block,pv-value-pad-sm" GridPane.columnIndex="1"
                                            GridPane.rowIndex="0">
                                     <Label fx:id="utsDate" styleClass="pv-value-text-lg" text=""/>
                                 </StackPane>
-                                <VBox alignment="CENTER" styleClass="pv-label-block pv-label-stack"
+                                <VBox alignment="CENTER" styleClass="pv-label-block,pv-label-stack"
                                        GridPane.columnIndex="2" GridPane.rowIndex="0">
                                     <Label styleClass="pv-label-en-lg" text="Adult"/>
                                     <Region styleClass="pv-line-black" prefHeight="2.0" maxWidth="Infinity"/>
                                     <Label styleClass="pv-label-en-lg" text="Child"/>
                                 </VBox>
-                                <VBox alignment="CENTER" styleClass="pv-value-block pv-value-stack"
+                                <VBox alignment="CENTER" styleClass="pv-value-block,pv-value-stack"
                                        GridPane.columnIndex="3" GridPane.rowIndex="0">
                                     <Label fx:id="utsAdult" styleClass="pv-value-text-lg" text=""/>
                                     <Region styleClass="pv-line-gray100" prefHeight="2.0" maxWidth="Infinity"/>
@@ -127,7 +126,7 @@
                                     <Region styleClass="pv-line-gray100" prefHeight="2.0" maxWidth="Infinity"/>
                                     <Label fx:id="utsClass" styleClass="pv-class-inner" text=""/>
                                 </VBox>
-                                <VBox styleClass="pv-label-block pv-label-px" GridPane.columnIndex="1"
+                                <VBox styleClass="pv-label-block,pv-label-px" GridPane.columnIndex="1"
                                        GridPane.rowIndex="0">
                                     <Label styleClass="pv-label-en-lg" text="Fare"/>
                                     <Label styleClass="pv-label-hi-lg" text="किराया"/>
@@ -140,7 +139,7 @@
                         </HBox>
 
                         <!-- middle: 70% block (py-20, space-y-1) + 30% white (QR lives here) -->
-                        <GridPane hgap="4.0" styleClass="pv-row pv-middle-row" VBox.vgrow="ALWAYS">
+                        <GridPane hgap="4.0" styleClass="pv-row,pv-middle-row" VBox.vgrow="ALWAYS">
                             <columnConstraints>
                                 <ColumnConstraints percentWidth="70.0" hgrow="ALWAYS"/>
                                 <ColumnConstraints percentWidth="30.0" hgrow="ALWAYS"/>
@@ -148,7 +147,7 @@
                             <VBox spacing="4.0" styleClass="pv-middle-left" GridPane.columnIndex="0"
                                   GridPane.rowIndex="0" maxWidth="Infinity">
                                 <padding>
-                                    <Insets bottom="80.0" top="80.0"/>
+                                    <Insets bottom="20.0" top="20.0"/>
                                 </padding>
                                 <HBox spacing="4.0" styleClass="pv-row-inner">
                                     <GridPane hgap="4.0" HBox.hgrow="ALWAYS" minWidth="0.0"
@@ -157,12 +156,12 @@
                                             <ColumnConstraints percentWidth="51.0" hgrow="SOMETIMES"/>
                                             <ColumnConstraints percentWidth="49.0" hgrow="SOMETIMES"/>
                                         </columnConstraints>
-                                        <VBox styleClass="pv-label-block pv-pad-md" GridPane.columnIndex="0"
+                                        <VBox styleClass="pv-label-block,pv-pad-md" GridPane.columnIndex="0"
                                               GridPane.rowIndex="0">
                                             <Label styleClass="pv-label-en-xl" text="Type of Train"/>
                                             <Label styleClass="pv-label-hi-xl" text="ट्रेन का प्रकार"/>
                                         </VBox>
-                                        <StackPane styleClass="pv-value-block pv-pad-md" GridPane.columnIndex="1"
+                                        <StackPane styleClass="pv-value-block,pv-pad-md" GridPane.columnIndex="1"
                                                    GridPane.rowIndex="0">
                                             <Label fx:id="utsTrainType" styleClass="pv-value-text" text=""/>
                                         </StackPane>
@@ -173,11 +172,11 @@
                                             <ColumnConstraints percentWidth="30.0" hgrow="SOMETIMES"/>
                                             <ColumnConstraints percentWidth="70.0" hgrow="SOMETIMES"/>
                                         </columnConstraints>
-                                        <VBox alignment="CENTER" styleClass="pv-label-block pv-pay-label"
+                                        <VBox alignment="CENTER" styleClass="pv-label-block,pv-pay-label"
                                               GridPane.columnIndex="0" GridPane.rowIndex="0">
                                             <Label styleClass="pv-label-en-xl" text="Pay Mode"/>
                                         </VBox>
-                                        <StackPane styleClass="pv-value-block pv-pad-md" GridPane.columnIndex="1"
+                                        <StackPane styleClass="pv-value-block,pv-pad-md" GridPane.columnIndex="1"
                                                    GridPane.rowIndex="0">
                                             <Label fx:id="utsPayMode" styleClass="pv-value-text" text=""/>
                                         </StackPane>
@@ -190,11 +189,11 @@
                                             <ColumnConstraints percentWidth="51.0" hgrow="SOMETIMES"/>
                                             <ColumnConstraints percentWidth="49.0" hgrow="SOMETIMES"/>
                                         </columnConstraints>
-                                        <VBox alignment="CENTER" styleClass="pv-label-block pv-txn-label"
+                                        <VBox alignment="CENTER" styleClass="pv-label-block,pv-txn-label"
                                               GridPane.columnIndex="0" GridPane.rowIndex="0">
                                             <Label styleClass="pv-label-en-lg" text="Transaction Type"/>
                                         </VBox>
-                                        <StackPane styleClass="pv-value-block pv-pad-md" GridPane.columnIndex="1"
+                                        <StackPane styleClass="pv-value-block,pv-pad-md" GridPane.columnIndex="1"
                                                    GridPane.rowIndex="0">
                                             <Label fx:id="utsTxnType" styleClass="pv-value-text" text=""/>
                                         </StackPane>
@@ -227,7 +226,7 @@
                                     <ColumnConstraints percentWidth="25.0" hgrow="SOMETIMES"/>
                                     <ColumnConstraints percentWidth="75.0" hgrow="SOMETIMES"/>
                                 </columnConstraints>
-                                <VBox alignment="CENTER" styleClass="pv-label-block pv-op-label"
+                                <VBox alignment="CENTER" styleClass="pv-label-block,pv-op-label"
                                       GridPane.columnIndex="0" GridPane.rowIndex="0">
                                     <Label styleClass="pv-label-en-xl" text="Operator"/>
                                     <Label styleClass="pv-label-en-xl" text="Name"/>
@@ -316,7 +315,7 @@
                                         <Label styleClass="label-hi" text="कहाँ से"/>
                                     </VBox>
                                     <StackPane HBox.hgrow="ALWAYS" minWidth="0.0"
-                                               styleClass="value-cell value-cell-tall">
+                                               styleClass="value-cell,value-cell-tall">
                                         <Label fx:id="prsFrom" styleClass="value-station" text="" wrapText="true"/>
                                     </StackPane>
                                 </HBox>
@@ -405,7 +404,7 @@
                             <TableView fx:id="prsPaxTable" prefHeight="160.0" styleClass="prs-pax-table"
                                        VBox.vgrow="NEVER"/>
                             <Region styleClass="rdso-row-gap"/>
-                            <HBox alignment="CENTER_LEFT" spacing="0.0" styleClass="rdso-row rdso-row-tall">
+                            <HBox alignment="CENTER_LEFT" spacing="0.0" styleClass="rdso-row,rdso-row-tall">
                                 <VBox styleClass="label-cell" prefWidth="140.0"
                                       minWidth="140.0" maxWidth="140.0">
                                     <Label styleClass="label-en" text="Operator"/>
