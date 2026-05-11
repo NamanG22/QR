@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -25,6 +26,12 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader statusLoader = new FXMLLoader(Objects.requireNonNull(
                 MainApp.class.getResource("/fxml/controller_status.fxml")));
+
+        Font.loadFont(
+            getClass().getResourceAsStream("/fonts/PlayfairDisplay-Black.ttf"),
+            14
+        );
+
         Parent statusRoot = statusLoader.load();
         ControllerStatusView statusView = statusLoader.getController();
 

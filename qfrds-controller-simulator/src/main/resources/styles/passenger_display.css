@@ -376,7 +376,7 @@
 
 .pv-uts-canvas {
     -fx-background-color: #d1d5db;
-    -fx-font-family: "Playfair Display", "Georgia", "Times New Roman", serif;
+    -fx-font-family: "Playfair Display Black", "Georgia", "Times New Roman", serif;
 }
 
 .pv-card-white {
@@ -394,14 +394,14 @@
 }
 
 .pv-strip-label {
-    -fx-font-family: "Playfair Display", "Georgia", serif;
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
     -fx-font-size: 15px;
     -fx-font-weight: 700;
     -fx-text-fill: #470000;
 }
 
 .pv-strip-value {
-    -fx-font-family: "Playfair Display", "Courier New", monospace;
+    -fx-font-family: "Playfair Display Black", "Courier New", monospace;
     -fx-font-size: 15px;
     -fx-font-weight: 700;
     -fx-text-fill: #470000;
@@ -422,7 +422,7 @@
 }
 
 .pv-title-ticket {
-    -fx-font-family: "Playfair Display", "Georgia", serif;
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
     -fx-font-size: 84px;
     -fx-font-weight: 900;
     -fx-text-fill: #470000;
@@ -442,6 +442,7 @@
     -fx-background-color: #ffffff;
     -fx-padding: 4;
     -fx-spacing: 2;
+    -fx-margin: 0 0 0 4;
     -fx-alignment: TOP_LEFT;
 }
 
@@ -461,14 +462,14 @@
 }
 
 .pv-label-en-lg {
-    -fx-font-family: "Playfair Display", "Georgia", serif;
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
     -fx-font-size: 18px;
     -fx-font-weight: 700;
     -fx-text-fill: #470000;
 }
 
 .pv-label-en-xl {
-    -fx-font-family: "Playfair Display", "Georgia", serif;
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
     -fx-font-size: 20px;
     -fx-font-weight: 700;
     -fx-text-fill: #470000;
@@ -511,14 +512,14 @@
 }
 
 .pv-value-text {
-    -fx-font-family: "Playfair Display", "Georgia", serif;
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
     -fx-font-size: 20px;
     -fx-font-weight: 700;
     -fx-text-fill: #ffffff;
 }
 
 .pv-value-text-lg {
-    -fx-font-family: "Playfair Display", "Georgia", serif;
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
     -fx-font-size: 18px;
     -fx-font-weight: 700;
     -fx-text-fill: #ffffff;
@@ -537,7 +538,7 @@
 }
 
 .pv-class-inner {
-    -fx-font-family: "Playfair Display", "Georgia", serif;
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
     -fx-font-size: 18px;
     -fx-font-weight: 700;
     -fx-text-fill: #ffffff;
@@ -550,7 +551,7 @@
 }
 
 .pv-fare-amount {
-    -fx-font-family: "Playfair Display", "Georgia", serif;
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
     -fx-font-size: 30px;
     -fx-font-weight: 700;
     -fx-text-fill: #ffffff;
