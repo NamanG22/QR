@@ -25,7 +25,7 @@ public final class SerialService {
     private static final Logger LOG = Logger.getLogger(SerialService.class.getName());
 
     /** TX side of virtual pair with QFRDS controller (com0com: pair with e.g. COM4). */
-    public static final String DEFAULT_PORT_NAME = "COM3";
+    public static final String DEFAULT_PORT_NAME = "COM10";
     private static final int BAUD = 9600;
     private static final int DATA_BITS = 8;
     private static final int STOP_BITS = SerialPort.ONE_STOP_BIT;
