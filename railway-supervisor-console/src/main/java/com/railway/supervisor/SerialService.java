@@ -19,11 +19,11 @@ import java.util.logging.Logger;
  *   <li>Fall back to {@linkplain #isMockMode() mock mode} when the port is missing or busy.</li>
  * </ul>
  */
-public final class SerialService {
+public final class SerialService implements LineOutputService {
 
     private static final Logger LOG = Logger.getLogger(SerialService.class.getName());
 
-    /** TX side of virtual pair with QFRDS controller (com0com: pair with e.g. COM11). Override: QFRDS_SUPERVISOR_PORT. */
+    /** TX side of com0com pair (default COM11; controller on COM10). Override: QFRDS_SUPERVISOR_PORT. */
     public static final String DEFAULT_PORT_NAME = SerialPortConfig.DEFAULT_PORT_NAME;
     private static final int BAUD = 9600;
     private static final int DATA_BITS = 8;
@@ -41,6 +41,7 @@ public final class SerialService {
         this.logSink = Objects.requireNonNull(logSink, "logSink");
     }
 
+    @Override
     public boolean isMockMode() {
         return mockMode;
     }
@@ -49,10 +50,16 @@ public final class SerialService {
         logSink.accept(line);
     }
 
+    @Override
+    public String linkLabel() {
+        return SerialPortConfig.portName();
+    }
+
     /**
-     * Attempts to open {@link #DEFAULT_PORT_NAME}. On failure the service stays in mock mode
+     * Attempts to open {@link SerialPortConfig#portName()}. On failure the service stays in mock mode
      * so the demo UI remains usable without hardware.
      */
+    @Override
     public void connect() {
         disconnectQuietly();
 
@@ -70,6 +77,7 @@ public final class SerialService {
         candidate.setNumDataBits(DATA_BITS);
         candidate.setNumStopBits(STOP_BITS);
         candidate.setParity(PARITY);
+        candidate.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
         // Blocking write with bounded wait avoids indefinite hangs on full UART buffers.
         candidate.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 2000);
 
@@ -101,6 +109,7 @@ public final class SerialService {
      * Sends {@code payload} as UTF-8 bytes followed by {@code \n}. In mock mode, nothing is written
      * to hardware; callers should still log success for demo continuity.
      */
+    @Override
     public boolean sendLine(String payload) {
         Objects.requireNonNull(payload, "payload");
         byte[] bytes = (payload + "\n").getBytes(StandardCharsets.UTF_8);
@@ -124,6 +133,7 @@ public final class SerialService {
         }
     }
 
+    @Override
     public void disconnectQuietly() {
         if (port != null && port.isOpen()) {
             try {

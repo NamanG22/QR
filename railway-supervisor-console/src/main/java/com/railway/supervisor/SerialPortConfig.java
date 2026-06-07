@@ -9,7 +9,7 @@ import com.fazecast.jSerialComm.SerialPortInvalidPortException;
  */
 public final class SerialPortConfig {
 
-    public static final String DEFAULT_PORT_NAME = "COM10";
+    public static final String DEFAULT_PORT_NAME = "COM11";
     private static final String ENV_KEY = "QFRDS_SUPERVISOR_PORT";
 
     private SerialPortConfig() {

@@ -49,6 +49,8 @@ public class ControllerStatusView implements Initializable {
     private Timeline heartbeatTimeline;
     private Timeline ledPulseTimeline;
 
+    private String linkLabel = SerialPortConfig.linkLabel();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         lastActivityNanos = System.nanoTime();
@@ -174,6 +176,12 @@ public class ControllerStatusView implements Initializable {
         }
     }
 
+    public void setLinkLabel(String label) {
+        if (label != null && !label.isBlank()) {
+            this.linkLabel = label;
+        }
+    }
+
     public void setReconnectCount(int n) {
         if (reconnectLabel != null) {
             reconnectLabel.setText(String.valueOf(n));
@@ -182,12 +190,12 @@ public class ControllerStatusView implements Initializable {
 
     public void setMockMode(boolean mock) {
         if (mockModeLabel != null) {
-            mockModeLabel.setText(mock ? ("MOCK (no " + SerialPortConfig.portName() + ")") : "LIVE");
+            mockModeLabel.setText(mock ? ("MOCK (no " + linkLabel + ")") : "LIVE");
             mockModeLabel.getStyleClass().removeAll("mock-on", "mock-off");
             mockModeLabel.getStyleClass().add(mock ? "mock-on" : "mock-off");
         }
         setSerialConnectionSummary(mock
-                ? "DISCONNECTED — retrying " + SerialPortConfig.portName()
-                : "CONNECTED — " + SerialPortConfig.portName() + " 9600 8N1");
+                ? "DISCONNECTED — retrying " + linkLabel
+                : "CONNECTED — " + linkLabel + (linkLabel.startsWith("TCP:") ? "" : " 9600 8N1"));
     }
 }

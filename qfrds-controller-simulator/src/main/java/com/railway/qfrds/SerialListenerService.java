@@ -23,12 +23,14 @@ import java.util.logging.Logger;
  * attempting so plugging in a device later succeeds without restart.
  * </p>
  */
-public final class SerialListenerService {
+public final class SerialListenerService implements LineInputService {
 
     private static final Logger LOG = Logger.getLogger(SerialListenerService.class.getName());
 
-    /** RX side of virtual pair (com0com): supervisor on COM10, this app on COM11. Override: QFRDS_CONTROLLER_PORT. */
+    /** RX side of com0com pair (default COM10; supervisor on COM11). Override: QFRDS_CONTROLLER_PORT. */
     public static final String DEFAULT_PORT_NAME = SerialPortConfig.DEFAULT_PORT_NAME;
+
+    private volatile SerialPort pairHoldPort;
     private static final int BAUD = 9600;
     private static final int DATA_BITS = 8;
     private static final int STOP_BITS = SerialPort.ONE_STOP_BIT;
@@ -63,10 +65,12 @@ public final class SerialListenerService {
         this.heartbeatCallback = heartbeatCallback;
     }
 
+    @Override
     public boolean isMockMode() {
         return mockMode;
     }
 
+    @Override
     public int getReconnectAttempts() {
         return reconnectAttempts;
     }
@@ -75,9 +79,15 @@ public final class SerialListenerService {
         logSink.accept(line);
     }
 
+    @Override
+    public String linkLabel() {
+        return SerialPortConfig.portName();
+    }
+
     /**
      * Starts the listener loop if not already running. Safe to call once at application bootstrap.
      */
+    @Override
     public void start() {
         if (!running.compareAndSet(false, true)) {
             return;
@@ -92,12 +102,14 @@ public final class SerialListenerService {
     /**
      * Stops the listener and closes the port.
      */
+    @Override
     public void stop() {
         running.set(false);
         if (worker != null) {
             worker.interrupt();
         }
         closePortQuietly();
+        closePairHoldQuietly();
         logTs("Serial listener stopped.");
     }
 
@@ -153,6 +165,8 @@ public final class SerialListenerService {
         closePortQuietly();
 
         String target = SerialPortConfig.portName();
+        openPairHoldIfNeeded(target);
+
         SerialPort candidate = SerialPortConfig.findPort(target);
         if (candidate == null) {
             return false;
@@ -162,16 +176,55 @@ public final class SerialListenerService {
         candidate.setNumDataBits(DATA_BITS);
         candidate.setNumStopBits(STOP_BITS);
         candidate.setParity(PARITY);
+        candidate.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
         candidate.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 500, 0);
 
         if (!candidate.openPort()) {
-            lastOpenFailure = SerialPortConfig.openFailureDetail(candidate);
+            lastOpenFailure = "openPort returned false";
             return false;
         }
         lastOpenFailure = "";
         port = candidate;
         reconnectAttempts = 0;
         return true;
+    }
+
+    /** Some com0com CNCB ports stay busy until the paired CNCA port is opened first. */
+    private void openPairHoldIfNeeded(String primaryPort) {
+        String pair = SerialPortConfig.pairPortName(primaryPort);
+        if (pair == null || pair.equalsIgnoreCase(primaryPort)) {
+            return;
+        }
+        if (pairHoldPort != null && pairHoldPort.isOpen()) {
+            return;
+        }
+        closePairHoldQuietly();
+        SerialPort partner = SerialPortConfig.findPort(pair);
+        if (partner == null) {
+            return;
+        }
+        partner.setBaudRate(BAUD);
+        partner.setNumDataBits(DATA_BITS);
+        partner.setNumStopBits(STOP_BITS);
+        partner.setParity(PARITY);
+        partner.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
+        partner.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 500, 0);
+        if (partner.openPort()) {
+            pairHoldPort = partner;
+            logTs("Opened pair partner " + pair + " (com0com hold) before " + primaryPort + ".");
+        }
+    }
+
+    private void closePairHoldQuietly() {
+        SerialPort p = pairHoldPort;
+        pairHoldPort = null;
+        if (p != null && p.isOpen()) {
+            try {
+                p.closePort();
+            } catch (Exception ex) {
+                LOG.log(Level.FINE, "close pair hold", ex);
+            }
+        }
     }
 
     private volatile String lastOpenFailure = "";

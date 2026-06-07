@@ -47,24 +47,28 @@ public class SupervisorController {
     @FXML
     private TextArea logArea;
 
-    private SerialService serialService;
+    private LineOutputService linkService;
 
-    /** Releases native serial resources when the primary stage closes. */
+    /** Releases transport resources when the primary stage closes. */
     public void shutdown() {
-        if (serialService != null) {
-            serialService.disconnectQuietly();
+        if (linkService != null) {
+            linkService.disconnectQuietly();
         }
     }
 
     /**
-     * FXML lifecycle hook — wires logging, ticket-type UX, and attempts serial auto-connect.
+     * FXML lifecycle hook — wires logging, ticket-type UX, and attempts link auto-connect.
      */
     public void initialize() {
         ticketTypeCombo.getItems().setAll(TicketType.values());
         ticketTypeCombo.setValue(TicketType.UTS);
 
-        serialService = new SerialService(this::appendLog);
-        serialService.connect();
+        if (TransportConfig.useTcp()) {
+            linkService = new TcpOutputService(this::appendLog);
+        } else {
+            linkService = new SerialService(this::appendLog);
+        }
+        linkService.connect();
 
         ticketTypeCombo.valueProperty().addListener((obs, oldVal, newVal) -> updatePassengerVisibility(newVal));
         updatePassengerVisibility(ticketTypeCombo.getValue());
@@ -109,9 +113,9 @@ public class SupervisorController {
         appendLog("Packet built:");
         appendLog(packet);
 
-        boolean ok = serialService.sendLine(packet);
+        boolean ok = linkService.sendLine(packet);
         if (ok) {
-            appendLog(serialService.isMockMode()
+            appendLog(linkService.isMockMode()
                     ? "Packet logged successfully (mock mode — no hardware write)."
                     : "Packet sent successfully.");
         }

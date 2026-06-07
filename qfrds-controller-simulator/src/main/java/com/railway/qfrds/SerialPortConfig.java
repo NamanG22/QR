@@ -9,7 +9,7 @@ import com.fazecast.jSerialComm.SerialPortInvalidPortException;
  */
 public final class SerialPortConfig {
 
-    public static final String DEFAULT_PORT_NAME = "COM11";
+    public static final String DEFAULT_PORT_NAME = "COM10";
     private static final String ENV_KEY = "QFRDS_CONTROLLER_PORT";
 
     private SerialPortConfig() {
@@ -58,5 +58,35 @@ public final class SerialPortConfig {
 
     public static String openFailureDetail(SerialPort port) {
         return "";
+    }
+
+    /**
+     * Other end of a com0com pair. Override with {@code QFRDS_PAIR_PORT} if needed.
+     */
+    public static String pairPortName(String primaryPort) {
+        String env = System.getenv("QFRDS_PAIR_PORT");
+        if (env != null && !env.isBlank()) {
+            return env.trim();
+        }
+        if ("COM10".equalsIgnoreCase(primaryPort)) {
+            return "COM11";
+        }
+        if ("COM11".equalsIgnoreCase(primaryPort)) {
+            return "COM10";
+        }
+        if ("COM3".equalsIgnoreCase(primaryPort)) {
+            return "COM4";
+        }
+        if ("COM4".equalsIgnoreCase(primaryPort)) {
+            return "COM3";
+        }
+        return null;
+    }
+
+    public static String linkLabel() {
+        if (TransportConfig.useTcp()) {
+            return "TCP:" + TransportConfig.tcpPort();
+        }
+        return portName();
     }
 }

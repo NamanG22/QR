@@ -3,6 +3,7 @@ package com.railway.qfrds;
 import javafx.application.Platform;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * Central coordinator for the QFRDS demo: bridges RS232 lines → parse → QR synthesis →
@@ -19,7 +20,7 @@ public final class DisplayController {
     private final PassengerDisplayView passengerView;
     private final TicketPacketParser parser = new TicketPacketParser();
     private final QRGeneratorService qrGenerator = new QRGeneratorService();
-    private SerialListenerService serial;
+    private LineInputService input;
 
     public DisplayController(ControllerStatusView statusView, PassengerDisplayView passengerView) {
         this.statusView = Objects.requireNonNull(statusView, "statusView");
@@ -27,24 +28,32 @@ public final class DisplayController {
     }
 
     /**
-     * Wires {@link SerialListenerService} and starts listening immediately (auto-start requirement).
+     * Wires serial or TCP listener and starts immediately (auto-start requirement).
      */
     public void start() {
-        this.serial = new SerialListenerService(
-                this::handleRawLine,
-                msg -> Platform.runLater(() -> statusView.appendLog(msg)),
-                () -> Platform.runLater(statusView::pulseSerialActivity)
-        );
-        serial.start();
+        Consumer<String> logToUi = msg -> Platform.runLater(() -> statusView.appendLog(msg));
+        Runnable pulse = () -> Platform.runLater(statusView::pulseSerialActivity);
+
+        if (TransportConfig.useTcp()) {
+            this.input = new TcpListenerService(
+                    TransportConfig.tcpPort(),
+                    this::handleRawLine,
+                    logToUi,
+                    pulse
+            );
+        } else {
+            this.input = new SerialListenerService(this::handleRawLine, logToUi, pulse);
+        }
+        input.start();
         Platform.runLater(() -> {
-            statusView.setMockMode(serial.isMockMode());
-            statusView.setReconnectCount(serial.getReconnectAttempts());
+            statusView.setLinkLabel(input.linkLabel());
+            statusView.setMockMode(input.isMockMode());
+            statusView.setReconnectCount(input.getReconnectAttempts());
         });
-        // Periodically sync mock/reconnect state from listener (listener updates off FX thread)
         javafx.animation.Timeline sync = new javafx.animation.Timeline(
                 new javafx.animation.KeyFrame(javafx.util.Duration.seconds(1), e -> Platform.runLater(() -> {
-                    statusView.setMockMode(serial.isMockMode());
-                    statusView.setReconnectCount(serial.getReconnectAttempts());
+                    statusView.setMockMode(input.isMockMode());
+                    statusView.setReconnectCount(input.getReconnectAttempts());
                 }))
         );
         sync.setCycleCount(javafx.animation.Animation.INDEFINITE);
@@ -52,8 +61,8 @@ public final class DisplayController {
     }
 
     public void shutdown() {
-        if (serial != null) {
-            serial.stop();
+        if (input != null) {
+            input.stop();
         }
     }
 
@@ -80,8 +89,8 @@ public final class DisplayController {
 
         Platform.runLater(() -> {
             statusView.setLastPacketPreview(truncate(line, 512));
-            statusView.setReconnectCount(serial != null ? serial.getReconnectAttempts() : 0);
-            statusView.setMockMode(serial != null && serial.isMockMode());
+            statusView.setReconnectCount(input != null ? input.getReconnectAttempts() : 0);
+            statusView.setMockMode(input != null && input.isMockMode());
 
             if (resultFinal.getErrorMessage().isPresent()) {
                 statusView.appendLog(LogFormatter.ts("PARSE ERROR: " + resultFinal.getErrorMessage().get()));
