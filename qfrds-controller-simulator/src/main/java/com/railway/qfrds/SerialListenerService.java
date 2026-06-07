@@ -29,7 +29,7 @@ public final class SerialListenerService {
     private static final Logger LOG = Logger.getLogger(SerialListenerService.class.getName());
 
     /** RX side of virtual pair (com0com): supervisor on COM3, this app on COM4. */
-    public static final String DEFAULT_PORT_NAME = "COM11";
+    public static final String DEFAULT_PORT_NAME = "COM4";
     private static final int BAUD = 9600;
     private static final int DATA_BITS = 8;
     private static final int STOP_BITS = SerialPort.ONE_STOP_BIT;
