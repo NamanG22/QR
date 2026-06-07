@@ -12,19 +12,8 @@ import java.time.Instant;
 import java.util.regex.Pattern;
 
 /**
- * Controller for the supervisor form: validates input, orchestrates {@link PacketBuilder}
- * and {@link SerialService}, and mirrors status into the log panel.
- * <p>
- * UI handling notes:
- * </p>
- * <ul>
- *   <li>{@link #initialize()} runs after FXML injection — sets combo defaults, toggles PRS-only fields,
- *       and triggers serial auto-connect so the operator sees link status immediately.</li>
- *   <li>Ticket type drives visibility/managed state for passenger name so UTS layouts stay compact.</li>
- *   <li>Validation uses modal {@link Alert}s (blocking) consistent with kiosk-style operator tooling.</li>
- *   <li>All log lines go through {@link #appendLog(String)} on the FX thread via {@link Platform#runLater}
- *       so {@link SerialService} stays UI-thread agnostic.</li>
- * </ul>
+ * Supervisor form: builds ticket packets and sends them to the controller over TCP (network)
+ * or local serial (same PC + com0com).
  */
 public class SupervisorController {
 
@@ -45,48 +34,59 @@ public class SupervisorController {
     @FXML
     private Label passengerNameLabel;
     @FXML
+    private TextField controllerHostField;
+    @FXML
+    private TextField controllerPortField;
+    @FXML
     private TextArea logArea;
 
     private LineOutputService linkService;
 
-    /** Releases transport resources when the primary stage closes. */
     public void shutdown() {
         if (linkService != null) {
             linkService.disconnectQuietly();
         }
     }
 
-    /**
-     * FXML lifecycle hook — wires logging, ticket-type UX, and attempts link auto-connect.
-     */
     public void initialize() {
         ticketTypeCombo.getItems().setAll(TicketType.values());
         ticketTypeCombo.setValue(TicketType.UTS);
 
-        if (TransportConfig.useTcp()) {
-            linkService = new TcpOutputService(this::appendLog);
-        } else {
-            linkService = new SerialService(this::appendLog);
-        }
-        appendLog("Link mode: " + TransportConfig.modeDescription()
-                + (TransportConfig.useTcp()
-                ? " — controller must also use QFRDS_TRANSPORT=tcp"
-                : " — set QFRDS_TRANSPORT=tcp on BOTH apps to skip com0com"));
-        linkService.connect();
+        String savedHost = firstNonBlank(System.getenv("QFRDS_TCP_HOST"), System.getProperty("qfrds.tcp.host"));
+        controllerHostField.setText(savedHost == null ? "" : savedHost);
+        controllerPortField.setText(String.valueOf(TransportConfig.tcpPort()));
+
+        appendLog("Enter the thin client IP above, click Connect, then Generate Ticket.");
+        appendLog("See NETWORK_SETUP.md in the repo root for firewall and IP help.");
 
         ticketTypeCombo.valueProperty().addListener((obs, oldVal, newVal) -> updatePassengerVisibility(newVal));
         updatePassengerVisibility(ticketTypeCombo.getValue());
     }
 
-    /**
-     * Called from FXML — validates fields, builds packet, sends over serial (or mock).
-     */
+    @FXML
+    private void onConnectLink() {
+        linkService = buildLinkService();
+        appendLog("Connecting to " + linkService.linkLabel() + " …");
+        linkService.connect();
+    }
+
     @FXML
     private void onGenerateTicket() {
         TicketType type = ticketTypeCombo.getValue();
         if (type == null) {
             showAlert(Alert.AlertType.ERROR, "Validation", "Please select a ticket type.");
             return;
+        }
+
+        String host = trimOrEmpty(controllerHostField.getText());
+        if (host.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Controller link",
+                    "Enter the thin client IP address (from ipconfig on the thin client), then click Connect.");
+            return;
+        }
+
+        if (linkService == null || linkService.isMockMode()) {
+            onConnectLink();
         }
 
         String src = trimOrEmpty(sourceField.getText());
@@ -117,15 +117,36 @@ public class SupervisorController {
         appendLog("Packet built:");
         appendLog(packet);
 
-        if (linkService.isMockMode()) {
-            linkService.connect();
+        if (linkService == null) {
+            showAlert(Alert.AlertType.ERROR, "Controller link", "Could not connect. Check IP, firewall, and that controller is running on the thin client.");
+            return;
         }
 
         boolean ok = linkService.sendLine(packet);
         if (ok) {
             appendLog(linkService.isMockMode()
-                    ? "Packet logged successfully (mock mode — no hardware write)."
+                    ? "Send failed — still in mock mode. Click Connect after starting the controller on the thin client."
                     : "Packet sent successfully.");
+        }
+    }
+
+    private LineOutputService buildLinkService() {
+        if (linkService != null) {
+            linkService.disconnectQuietly();
+        }
+        String host = trimOrEmpty(controllerHostField.getText());
+        int port = parsePort(controllerPortField.getText());
+        return new TcpOutputService(this::appendLog, host.isEmpty() ? "127.0.0.1" : host, port);
+    }
+
+    private static int parsePort(String raw) {
+        if (raw == null || raw.isBlank()) {
+            return TransportConfig.tcpPort();
+        }
+        try {
+            return Integer.parseInt(raw.trim());
+        } catch (NumberFormatException ex) {
+            return TransportConfig.tcpPort();
         }
     }
 
@@ -144,9 +165,16 @@ public class SupervisorController {
         return s == null ? "" : s.trim();
     }
 
-    /**
-     * Serial callbacks may originate off the FX thread; marshal UI updates safely.
-     */
+    private static String firstNonBlank(String a, String b) {
+        if (a != null && !a.isBlank()) {
+            return a.trim();
+        }
+        if (b != null && !b.isBlank()) {
+            return b.trim();
+        }
+        return null;
+    }
+
     private void appendLog(String line) {
         Platform.runLater(() -> {
             logArea.appendText(line + "\n");

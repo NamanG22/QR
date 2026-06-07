@@ -28,31 +28,27 @@ public final class DisplayController {
     }
 
     /**
-     * Wires serial or TCP listener and starts immediately (auto-start requirement).
+     * Starts TCP (always, for Windows → thin client) plus local serial when available.
      */
     public void start() {
         Consumer<String> logToUi = msg -> Platform.runLater(() -> statusView.appendLog(msg));
         Runnable pulse = () -> Platform.runLater(statusView::pulseSerialActivity);
 
-        if (TransportConfig.useTcp()) {
-            this.input = new TcpListenerService(
-                    TransportConfig.tcpPort(),
-                    this::handleRawLine,
-                    logToUi,
-                    pulse
-            );
-        } else {
-            this.input = new SerialListenerService(this::handleRawLine, logToUi, pulse);
-        }
+        DualLineInputService dual = new DualLineInputService(this::handleRawLine, logToUi, pulse);
+        this.input = dual;
         input.start();
+
         Platform.runLater(() -> {
-            statusView.setLinkLabel(input.linkLabel());
-            statusView.setMockMode(input.isMockMode());
+            statusView.setLinkLabel("TCP:" + TransportConfig.tcpPort());
+            statusView.setMockMode(!dual.isTcpReady());
             statusView.setReconnectCount(input.getReconnectAttempts());
+            statusView.appendLog(LogFormatter.ts(
+                    "Network ready when TCP:" + TransportConfig.tcpPort() + " is LIVE "
+                            + "(Windows console uses thin client IP + this port)."));
         });
         javafx.animation.Timeline sync = new javafx.animation.Timeline(
                 new javafx.animation.KeyFrame(javafx.util.Duration.seconds(1), e -> Platform.runLater(() -> {
-                    statusView.setMockMode(input.isMockMode());
+                    statusView.setMockMode(!dual.isTcpReady());
                     statusView.setReconnectCount(input.getReconnectAttempts());
                 }))
         );
@@ -90,7 +86,11 @@ public final class DisplayController {
         Platform.runLater(() -> {
             statusView.setLastPacketPreview(truncate(line, 512));
             statusView.setReconnectCount(input != null ? input.getReconnectAttempts() : 0);
-            statusView.setMockMode(input != null && input.isMockMode());
+            if (input instanceof DualLineInputService dual) {
+                statusView.setMockMode(!dual.isTcpReady());
+            } else {
+                statusView.setMockMode(input != null && input.isMockMode());
+            }
 
             if (resultFinal.getErrorMessage().isPresent()) {
                 statusView.appendLog(LogFormatter.ts("PARSE ERROR: " + resultFinal.getErrorMessage().get()));

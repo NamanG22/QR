@@ -183,3 +183,23 @@
 .alert.dialog-pane .content.label {
     -fx-text-fill: #e8ecf7;
 }
+
+.secondary-button {
+    -fx-background-color: #2f3a52;
+    -fx-text-fill: #e8ecf4;
+    -fx-font-weight: bold;
+    -fx-padding: 8 18 8 18;
+    -fx-background-radius: 4;
+    -fx-border-color: #f4d03f;
+    -fx-border-radius: 4;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #3d4a66;
+}
+
+.link-panel {
+    -fx-padding: 8 0 4 0;
+}
