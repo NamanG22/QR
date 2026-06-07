@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  * Serial layer responsibilities:
  * </p>
  * <ul>
- *   <li>Open the configured port (default {@code COM3}) at 9600 8N1 — pair with controller on the other com0com end (e.g. COM4).</li>
+ *   <li>Open the configured port (default {@code COM10}) at 9600 8N1 — pair with controller on the other com0com end (e.g. COM11).</li>
  *   <li>Transmit UTF-8 text terminated by a newline so downstream parsers can frame records.</li>
  *   <li>Fall back to {@linkplain #isMockMode() mock mode} when the port is missing or busy.</li>
  * </ul>
@@ -24,8 +24,8 @@ public final class SerialService {
 
     private static final Logger LOG = Logger.getLogger(SerialService.class.getName());
 
-    /** TX side of virtual pair with QFRDS controller (com0com: pair with e.g. COM4). */
-    public static final String DEFAULT_PORT_NAME = "COM3";
+    /** TX side of virtual pair with QFRDS controller (com0com: pair with e.g. COM11). */
+    public static final String DEFAULT_PORT_NAME = "COM10";
     private static final int BAUD = 9600;
     private static final int DATA_BITS = 8;
     private static final int STOP_BITS = SerialPort.ONE_STOP_BIT;

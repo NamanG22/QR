@@ -1,12 +1,12 @@
 # QFRDS Controller Simulator
 
-JavaFX application that simulates the **Remote Data Acquisition Intelligent Controller** for an Indian Railways **QFRDS** (QR Fare Repeater Display System) demo: listens on **COM4** (paired with supervisor **COM3** via com0com) for UTF‑8 ticket lines from the [Railway Supervisor Console Simulator](../railway-supervisor-console/), parses packets, builds payment QR codes (**ZXing**), and drives **two windows** — engineering status and passenger-facing display.
+JavaFX application that simulates the **Remote Data Acquisition Intelligent Controller** for an Indian Railways **QFRDS** (QR Fare Repeater Display System) demo: listens on **COM11** (paired with supervisor **COM10** via com0com) for UTF‑8 ticket lines from the [Railway Supervisor Console Simulator](../railway-supervisor-console/), parses packets, builds payment QR codes (**ZXing**), and drives **two windows** — engineering status and passenger-facing display.
 
 ## Requirements
 
 - JDK **17**
 - Maven **3.8+**
-- Windows: **COM4** virtual pair to supervisor **COM3** (adjust `SerialListenerService.DEFAULT_PORT_NAME` if your com0com pair uses other numbers)
+- Windows: **COM11** virtual pair to supervisor **COM10** (adjust `SerialListenerService.DEFAULT_PORT_NAME` if your com0com pair uses other numbers; COM3/COM4 when those ports are free)
 
 ## Run
 
@@ -24,9 +24,9 @@ Two windows open:
 
 | Supervisor sends | Controller listens |
 |------------------|-------------------|
-| **COM3** (default) | **COM4** (default) |
+| **COM10** (default) | **COM11** (default) |
 
-Use **com0com** (or hardware null-modem) so **COM3 ↔ COM4** form one pair; bytes written on one appear on the other.
+Use **com0com** (or hardware null-modem) so **COM10 ↔ COM11** form one pair; bytes written on one appear on the other.
 
 Packet format (newline-terminated, UTF‑8):
 
@@ -44,7 +44,7 @@ TXN=<txn>|FARE=<fare>|SRC=<src>|DST=<dst>|TS=<timestamp>[|PNAME=<name>]
 ## Behaviour
 
 - Listener **starts automatically** on launch.
-- If **COM4 is unavailable**, the app stays in **mock listening mode** (logs reconnect attempts; UI works).
+- If **COM11 is unavailable**, the app stays in **mock listening mode** (logs reconnect attempts; UI works).
 - **Auto-reconnect** after disconnect or read failure.
 
 ## Project layout
@@ -52,7 +52,7 @@ TXN=<txn>|FARE=<fare>|SRC=<src>|DST=<dst>|TS=<timestamp>[|PNAME=<name>]
 | Class | Role |
 |-------|------|
 | `MainApp` | Dual-stage launcher |
-| `SerialListenerService` | RS232 COM4 (default), 9600 8N1, line reader, reconnect |
+| `SerialListenerService` | RS232 COM11 (default), 9600 8N1, line reader, reconnect |
 | `TicketPacketParser` | Pipe-separated field parser; ignores unknown keys |
 | `TicketData` | Parsed ticket value object |
 | `QRGeneratorService` | ZXing QR bitmap → JavaFX `WritableImage` |
