@@ -182,12 +182,12 @@ public class ControllerStatusView implements Initializable {
 
     public void setMockMode(boolean mock) {
         if (mockModeLabel != null) {
-            mockModeLabel.setText(mock ? ("MOCK (no " + SerialListenerService.DEFAULT_PORT_NAME + ")") : "LIVE");
+            mockModeLabel.setText(mock ? ("MOCK (no " + SerialPortConfig.portName() + ")") : "LIVE");
             mockModeLabel.getStyleClass().removeAll("mock-on", "mock-off");
             mockModeLabel.getStyleClass().add(mock ? "mock-on" : "mock-off");
         }
         setSerialConnectionSummary(mock
-                ? "DISCONNECTED — retrying " + SerialListenerService.DEFAULT_PORT_NAME
-                : "CONNECTED — " + SerialListenerService.DEFAULT_PORT_NAME + " 9600 8N1");
+                ? "DISCONNECTED — retrying " + SerialPortConfig.portName()
+                : "CONNECTED — " + SerialPortConfig.portName() + " 9600 8N1");
     }
 }

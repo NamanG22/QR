@@ -1,7 +1,6 @@
 package com.railway.qfrds;
 
 import com.fazecast.jSerialComm.SerialPort;
-import com.fazecast.jSerialComm.SerialPortInvalidPortException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,8 +27,8 @@ public final class SerialListenerService {
 
     private static final Logger LOG = Logger.getLogger(SerialListenerService.class.getName());
 
-    /** RX side of virtual pair (com0com): supervisor on COM10, this app on COM11. */
-    public static final String DEFAULT_PORT_NAME = "COM11";
+    /** RX side of virtual pair (com0com): supervisor on COM10, this app on COM11. Override: QFRDS_CONTROLLER_PORT. */
+    public static final String DEFAULT_PORT_NAME = SerialPortConfig.DEFAULT_PORT_NAME;
     private static final int BAUD = 9600;
     private static final int DATA_BITS = 8;
     private static final int STOP_BITS = SerialPort.ONE_STOP_BIT;
@@ -86,7 +85,8 @@ public final class SerialListenerService {
         worker = new Thread(this::runLoop, "qfrds-serial-listener");
         worker.setDaemon(true);
         worker.start();
-        logTs("Serial listener thread started.");
+        logTs("Serial listener thread started — target " + SerialPortConfig.portName()
+                + " (set QFRDS_CONTROLLER_PORT to override).");
     }
 
     /**
@@ -105,13 +105,16 @@ public final class SerialListenerService {
         while (running.get()) {
             if (!openPortIfPossible()) {
                 reconnectAttempts++;
+                if (reconnectAttempts == 1 || reconnectAttempts % 10 == 0) {
+                    logPortDiagnostics();
+                }
                 logTs("COM unavailable — mock listening mode (reconnect attempt " + reconnectAttempts + ").");
                 sleepInterruptible(RECONNECT_MS);
                 continue;
             }
 
             mockMode = false;
-            logTs("RS232 listener active on " + DEFAULT_PORT_NAME + " @ " + BAUD + " 8N1 UTF-8.");
+            logTs("RS232 listener active on " + SerialPortConfig.portName() + " @ " + BAUD + " 8N1 UTF-8.");
 
             try (InputStreamReader isr = new InputStreamReader(
                     Objects.requireNonNull(port).getInputStream(), StandardCharsets.UTF_8);
@@ -149,11 +152,9 @@ public final class SerialListenerService {
     private boolean openPortIfPossible() {
         closePortQuietly();
 
-        final SerialPort candidate;
-        try {
-            candidate = SerialPort.getCommPort(DEFAULT_PORT_NAME);
-        } catch (SerialPortInvalidPortException ex) {
-            LOG.log(Level.FINE, "Port not found", ex);
+        String target = SerialPortConfig.portName();
+        SerialPort candidate = SerialPortConfig.findPort(target);
+        if (candidate == null) {
             return false;
         }
 
@@ -164,11 +165,32 @@ public final class SerialListenerService {
         candidate.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 500, 0);
 
         if (!candidate.openPort()) {
+            lastOpenFailure = SerialPortConfig.openFailureDetail(candidate);
             return false;
         }
+        lastOpenFailure = "";
         port = candidate;
         reconnectAttempts = 0;
         return true;
+    }
+
+    private volatile String lastOpenFailure = "";
+
+    private void logPortDiagnostics() {
+        String target = SerialPortConfig.portName();
+        SerialPort candidate = SerialPortConfig.findPort(target);
+        if (candidate == null) {
+            logTs(target + " not found. Windows ports: " + SerialPortConfig.describeAvailablePorts());
+            return;
+        }
+        String detail = lastOpenFailure.isEmpty()
+                ? SerialPortConfig.openFailureDetail(candidate)
+                : lastOpenFailure;
+        logTs(target + " found as "
+                + candidate.getDescriptivePortName()
+                + " but could not open"
+                + (detail.isEmpty() ? " (port busy or access denied — close other apps, kill java.exe)."
+                : ": " + detail));
     }
 
     private void closePortQuietly() {

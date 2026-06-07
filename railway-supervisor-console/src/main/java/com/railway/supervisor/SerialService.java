@@ -1,7 +1,6 @@
 package com.railway.supervisor;
 
 import com.fazecast.jSerialComm.SerialPort;
-import com.fazecast.jSerialComm.SerialPortInvalidPortException;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
@@ -24,8 +23,8 @@ public final class SerialService {
 
     private static final Logger LOG = Logger.getLogger(SerialService.class.getName());
 
-    /** TX side of virtual pair with QFRDS controller (com0com: pair with e.g. COM11). */
-    public static final String DEFAULT_PORT_NAME = "COM10";
+    /** TX side of virtual pair with QFRDS controller (com0com: pair with e.g. COM11). Override: QFRDS_SUPERVISOR_PORT. */
+    public static final String DEFAULT_PORT_NAME = SerialPortConfig.DEFAULT_PORT_NAME;
     private static final int BAUD = 9600;
     private static final int DATA_BITS = 8;
     private static final int STOP_BITS = SerialPort.ONE_STOP_BIT;
@@ -57,13 +56,12 @@ public final class SerialService {
     public void connect() {
         disconnectQuietly();
 
-        final SerialPort candidate;
-        try {
-            candidate = SerialPort.getCommPort(DEFAULT_PORT_NAME);
-        } catch (SerialPortInvalidPortException ex) {
+        String target = SerialPortConfig.portName();
+        SerialPort candidate = SerialPortConfig.findPort(target);
+        if (candidate == null) {
             mockMode = true;
-            LOG.log(Level.FINE, "Unknown serial port", ex);
-            log("Serial connection failed: port not available (" + DEFAULT_PORT_NAME + ").");
+            log("Serial connection failed: " + target + " not found.");
+            log("Windows ports: " + SerialPortConfig.describeAvailablePorts());
             log("Running in mock mode — packets will be logged only.");
             return;
         }
@@ -78,17 +76,23 @@ public final class SerialService {
         try {
             if (!candidate.openPort()) {
                 mockMode = true;
-                log("Serial connection failed: could not open " + DEFAULT_PORT_NAME);
+                String detail = SerialPortConfig.openFailureDetail(candidate);
+                log("Serial connection failed: could not open " + target
+                        + (detail.isEmpty() ? "" : " — " + detail));
+                log("Port type: " + candidate.getDescriptivePortName());
+                log("Windows ports: " + SerialPortConfig.describeAvailablePorts());
                 log("Running in mock mode — packets will be logged only.");
                 return;
             }
             port = candidate;
             mockMode = false;
-            log("Connected to " + DEFAULT_PORT_NAME + " (" + BAUD + " 8N1, UTF-8 + newline).");
+            log("Connected to " + target + " (" + candidate.getDescriptivePortName()
+                    + ", " + BAUD + " 8N1, UTF-8 + newline).");
         } catch (Exception ex) {
             mockMode = true;
             LOG.log(Level.WARNING, "Serial open failed", ex);
             log("Serial connection failed: " + ex.getMessage());
+            log("Windows ports: " + SerialPortConfig.describeAvailablePorts());
             log("Running in mock mode — packets will be logged only.");
         }
     }
