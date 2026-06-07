@@ -1,7 +1,8 @@
 package com.railway.supervisor;
 
 /**
- * Mock transport selection: RS232 (default) or TCP when {@code QFRDS_TRANSPORT=tcp}.
+ * Mock transport selection: RS232 (default) or TCP when {@code QFRDS_TRANSPORT=tcp}
+ * or {@code -Dqfrds.transport=tcp}.
  */
 public final class TransportConfig {
 
@@ -12,21 +13,26 @@ public final class TransportConfig {
     }
 
     public static boolean useTcp() {
-        String mode = System.getenv("QFRDS_TRANSPORT");
-        return mode != null && mode.trim().equalsIgnoreCase("tcp");
+        return "tcp".equalsIgnoreCase(readMode());
+    }
+
+    public static String modeDescription() {
+        return useTcp()
+                ? "TCP (" + tcpHost() + ":" + tcpPort() + ")"
+                : "SERIAL (" + SerialPortConfig.portName() + ")";
     }
 
     public static String tcpHost() {
-        String env = System.getenv("QFRDS_TCP_HOST");
-        if (env == null || env.isBlank()) {
+        String env = firstNonBlank(System.getenv("QFRDS_TCP_HOST"), System.getProperty("qfrds.tcp.host"));
+        if (env == null) {
             return DEFAULT_TCP_HOST;
         }
         return env.trim();
     }
 
     public static int tcpPort() {
-        String env = System.getenv("QFRDS_TCP_PORT");
-        if (env == null || env.isBlank()) {
+        String env = firstNonBlank(System.getenv("QFRDS_TCP_PORT"), System.getProperty("qfrds.tcp.port"));
+        if (env == null) {
             return DEFAULT_TCP_PORT;
         }
         try {
@@ -34,5 +40,20 @@ public final class TransportConfig {
         } catch (NumberFormatException ex) {
             return DEFAULT_TCP_PORT;
         }
+    }
+
+    private static String readMode() {
+        String mode = firstNonBlank(System.getenv("QFRDS_TRANSPORT"), System.getProperty("qfrds.transport"));
+        return mode == null ? "serial" : mode.trim();
+    }
+
+    private static String firstNonBlank(String a, String b) {
+        if (a != null && !a.isBlank()) {
+            return a.trim();
+        }
+        if (b != null && !b.isBlank()) {
+            return b.trim();
+        }
+        return null;
     }
 }

@@ -89,6 +89,7 @@ public final class SerialService implements LineOutputService {
                         + (detail.isEmpty() ? "" : " — " + detail));
                 log("Port type: " + candidate.getDescriptivePortName());
                 log("Windows ports: " + SerialPortConfig.describeAvailablePorts());
+                log("Tip: use TCP on BOTH apps — set QFRDS_TRANSPORT=tcp (or mvn -Dqfrds.transport=tcp javafx:run).");
                 log("Running in mock mode — packets will be logged only.");
                 return;
             }

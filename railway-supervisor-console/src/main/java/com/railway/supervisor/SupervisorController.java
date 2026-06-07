@@ -68,6 +68,10 @@ public class SupervisorController {
         } else {
             linkService = new SerialService(this::appendLog);
         }
+        appendLog("Link mode: " + TransportConfig.modeDescription()
+                + (TransportConfig.useTcp()
+                ? " — controller must also use QFRDS_TRANSPORT=tcp"
+                : " — set QFRDS_TRANSPORT=tcp on BOTH apps to skip com0com"));
         linkService.connect();
 
         ticketTypeCombo.valueProperty().addListener((obs, oldVal, newVal) -> updatePassengerVisibility(newVal));
@@ -112,6 +116,10 @@ public class SupervisorController {
 
         appendLog("Packet built:");
         appendLog(packet);
+
+        if (linkService.isMockMode()) {
+            linkService.connect();
+        }
 
         boolean ok = linkService.sendLine(packet);
         if (ok) {

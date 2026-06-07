@@ -74,7 +74,11 @@ public final class TcpOutputService implements LineOutputService {
         byte[] bytes = (payload + "\n").getBytes(StandardCharsets.UTF_8);
 
         if (mockMode || out == null) {
+            connect();
+        }
+        if (mockMode || out == null) {
             log("[mock] Would send " + bytes.length + " bytes over TCP.");
+            log("Hint: start controller first with QFRDS_TRANSPORT=tcp on the same port.");
             return true;
         }
 
