@@ -28,7 +28,16 @@ public class MainApp extends Application {
     private DisplayController orchestrator;
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
+    public void start(Stage primaryStage) {
+        try {
+            startApp(primaryStage);
+        } catch (Throwable error) {
+            Launcher.logFatal("MainApp.start failed", error);
+            Platform.exit();
+        }
+    }
+
+    private void startApp(Stage primaryStage) throws IOException {
         FXMLLoader statusLoader = new FXMLLoader(Objects.requireNonNull(
                 MainApp.class.getResource("/fxml/controller_status.fxml")));
 
@@ -133,6 +142,6 @@ public class MainApp extends Application {
     }
 
     public static void main(String[] args) {
-        launch(args);
+        Launcher.main(args);
     }
 }

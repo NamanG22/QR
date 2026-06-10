@@ -41,7 +41,13 @@ mvn clean verify -Pwindows-jpackage -DskipTests
 
 Uses classpath jpackage (not jlink) because ZXing is a non-modular jar and cannot be linked with `jlink`.
 
-Entry point: `com.railway.qfrds.MainApp`
+Entry point: `com.railway.qfrds.Launcher` (starts `MainApp`).
+
+If **QFRDS.exe** exits immediately, open `%LOCALAPPDATA%\QFRDS\startup.log` for the error. Rebuild with a visible console:
+
+```bat
+mvn clean verify -Pwindows-jpackage -DskipTests -Djpackage.win.console=true
+```
 
 ### Requirements on the build machine
 
