@@ -8,17 +8,44 @@ JavaFX application that simulates the **Remote Data Acquisition Intelligent Cont
 - Maven **3.8+**
 - Windows: **COM11** virtual pair to supervisor **COM10** (adjust `SerialListenerService.DEFAULT_PORT_NAME` if your com0com pair uses other numbers; COM3/COM4 when those ports are free)
 
-## Run
+## Run (development)
 
 ```bash
 cd qfrds-controller-simulator
 mvn clean javafx:run
 ```
 
-Two windows open:
+Launches the passenger display in kiosk fullscreen (engineering status runs headless in memory). Hidden operator exit: **Ctrl+Shift+Q**.
 
-1. **Engineering** — serial/mock status, parse log, LEDs, CRIS (simulated), reconnect counter.
-2. **Passenger display** — branding, fare, route, QR, “Scan QR to Pay”, last updated. Press **F11** for fullscreen.
+## Windows standalone deployment (jpackage)
+
+Build a portable **QFRDS.exe** with bundled **JRE 17** and **JavaFX 21** on **Windows 10** (must use a Windows machine with **JDK 17+** — jpackage is platform-specific):
+
+```bat
+cd qfrds-controller-simulator
+build-windows.bat
+```
+
+Or manually:
+
+```bat
+mvn clean package -Pwindows-jpackage -DskipTests
+```
+
+**Output:** `target\dist\QFRDS\QFRDS.exe` (plus runtime files in the same folder — copy the whole `QFRDS` directory to the target PC).
+
+### What the build does
+
+1. **`javafx:jlink`** — custom runtime image at `target\qfrds-runtime` (JRE + JavaFX + app modules)
+2. **`jpackage:jpackage`** — wraps that runtime into `target\dist\QFRDS\` with launcher **QFRDS.exe**
+
+Entry point: `com.railway.qfrds.MainApp`
+
+### Requirements on the build machine
+
+- Windows 10
+- JDK **17** or **21** full JDK (not JRE-only) with `jpackage` on `PATH`
+- WiX Toolset **3.x** optional (only needed for `.msi` / single-file `.exe` *installers*; `APP_IMAGE` does not require WiX)
 
 ## Wiring with the Supervisor simulator
 
@@ -62,6 +89,9 @@ TXN=<txn>|FARE=<fare>|SRC=<src>|DST=<dst>|TS=<timestamp>[|PNAME=<name>]
 
 CSS: `styles/industrial_dashboard.css`, `styles/passenger_display.css`.
 
-## Packaging note
+## Packaging
 
-Prefer `mvn javafx:run` for JavaFX module classpath. Fat-jar deployment needs explicit JavaFX `--module-path` setup.
+| Command | Output |
+|---------|--------|
+| `mvn javafx:run` | Dev launch (module path) |
+| `mvn package -Pwindows-jpackage` | Standalone `target\dist\QFRDS\QFRDS.exe` (Windows build machine only) |
