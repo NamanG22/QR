@@ -36,12 +36,12 @@ mvn clean verify -Pwindows-jpackage -DskipTests
 
 ### What the build does
 
-1. **Download JavaFX jmods** (Windows x64) from Gluon
+1. **Stage JavaFX Windows jars** from Maven Central into `target\javafx-jmods\`
 2. **`jlink`** — builds `target\qfrds-runtime\` (JDK 17 + JavaFX modules)
 3. **Stage app jars** — `target\jpackage-input\` (app + ZXing + jSerialComm)
 4. **`jpackage`** — wraps runtime + app into `target\dist\QFRDS\QFRDS.exe`
 
-Uses pre-built `jlink` runtime (not `--add-modules` inside jpackage) because jlink requires JavaFX **jmods**, not Maven jars.
+No external download — JavaFX comes from Maven Central (`org.openjfx:*:win` jars, which `jlink` accepts).
 
 Entry point: `com.railway.qfrds.Launcher` (starts `MainApp`).
 

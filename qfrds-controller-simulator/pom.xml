@@ -24,8 +24,6 @@
         <jpackage.input.dir>${project.build.directory}/jpackage-input</jpackage.input.dir>
         <jpackage.runtime.dir>${project.build.directory}/qfrds-runtime</jpackage.runtime.dir>
         <jpackage.dist.dir>${project.build.directory}/dist</jpackage.dist.dir>
-        <javafx.jmods.url>https://download2.gluonhq.com/openjfx/${javafx.version}/openjfx-${javafx.version}_jmods-windows_x64_bin.zip</javafx.jmods.url>
-        <javafx.jmods.zip>${project.build.directory}/javafx-jmods.zip</javafx.jmods.zip>
         <javafx.jmods.dir>${project.build.directory}/javafx-jmods</javafx.jmods.dir>
         <!-- Set true once to surface launch errors in a console window on Windows -->
         <jpackage.win.console>false</jpackage.win.console>
@@ -91,6 +89,9 @@
     <profiles>
         <profile>
             <id>windows-jpackage</id>
+            <properties>
+                <javafx.platform>win</javafx.platform>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
@@ -116,55 +117,47 @@
                         </executions>
                     </plugin>
                     <plugin>
-                        <groupId>com.googlecode.maven-download-plugin</groupId>
-                        <artifactId>download-maven-plugin</artifactId>
-                        <version>1.9.0</version>
-                        <executions>
-                            <execution>
-                                <id>fetch-javafx-jmods</id>
-                                <phase>prepare-package</phase>
-                                <goals>
-                                    <goal>wget</goal>
-                                </goals>
-                                <configuration>
-                                    <url>${javafx.jmods.url}</url>
-                                    <outputFileName>javafx-jmods.zip</outputFileName>
-                                    <outputDirectory>${project.build.directory}</outputDirectory>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <version>3.1.0</version>
-                        <executions>
-                            <execution>
-                                <id>unzip-javafx-jmods</id>
-                                <phase>prepare-package</phase>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                                <configuration>
-                                    <target>
-                                        <delete dir="${javafx.jmods.dir}" quiet="true"/>
-                                        <delete dir="${project.build.directory}/javafx-jmods-unpack" quiet="true"/>
-                                        <mkdir dir="${project.build.directory}/javafx-jmods-unpack"/>
-                                        <mkdir dir="${javafx.jmods.dir}"/>
-                                        <unzip src="${javafx.jmods.zip}" dest="${project.build.directory}/javafx-jmods-unpack"/>
-                                        <copy todir="${javafx.jmods.dir}" flatten="true">
-                                            <fileset dir="${project.build.directory}/javafx-jmods-unpack" includes="**/*.jmod"/>
-                                        </copy>
-                                    </target>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-dependency-plugin</artifactId>
                         <version>3.8.1</version>
                         <executions>
+                            <execution>
+                                <id>stage-javafx-for-jlink</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.openjfx</groupId>
+                                            <artifactId>javafx-base</artifactId>
+                                            <version>${javafx.version}</version>
+                                            <classifier>${javafx.platform}</classifier>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>org.openjfx</groupId>
+                                            <artifactId>javafx-graphics</artifactId>
+                                            <version>${javafx.version}</version>
+                                            <classifier>${javafx.platform}</classifier>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>org.openjfx</groupId>
+                                            <artifactId>javafx-controls</artifactId>
+                                            <version>${javafx.version}</version>
+                                            <classifier>${javafx.platform}</classifier>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>org.openjfx</groupId>
+                                            <artifactId>javafx-fxml</artifactId>
+                                            <version>${javafx.version}</version>
+                                            <classifier>${javafx.platform}</classifier>
+                                        </artifactItem>
+                                    </artifactItems>
+                                    <outputDirectory>${javafx.jmods.dir}</outputDirectory>
+                                    <stripVersion>true</stripVersion>
+                                </configuration>
+                            </execution>
                             <execution>
                                 <id>stage-jpackage-classpath-deps</id>
                                 <phase>package</phase>
