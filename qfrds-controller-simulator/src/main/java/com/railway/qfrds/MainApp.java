@@ -10,12 +10,14 @@ import javafx.scene.text.Font;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.util.Objects;
 
 /**
- * Launches two windows: engineering controller status and passenger-facing repeater display.
+ * Launches the passenger-facing repeater display in exclusive fullscreen kiosk mode.
+ * Engineering status view stays in memory (not shown) for {@link DisplayController} logging/state.
  * RS232 listener starts automatically via {@link DisplayController#start()}.
  */
 public class MainApp extends Application {
@@ -32,7 +34,7 @@ public class MainApp extends Application {
             14
         );
 
-        Parent statusRoot = statusLoader.load();
+        statusLoader.load();
         ControllerStatusView statusView = statusLoader.getController();
 
         FXMLLoader passengerLoader = new FXMLLoader(Objects.requireNonNull(
@@ -43,44 +45,31 @@ public class MainApp extends Application {
         orchestrator = new DisplayController(statusView, passengerView);
         orchestrator.start();
 
-        Scene statusScene = new Scene(statusRoot, 920, 740);
-        statusScene.getStylesheets().add(Objects.requireNonNull(
-                MainApp.class.getResource("/styles/industrial_dashboard.css")).toExternalForm());
+        primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.setTitle("QFRDS Passenger Display");
+        primaryStage.setResizable(false);
+        primaryStage.setAlwaysOnTop(true);
+        primaryStage.setFullScreenExitKeyCombination(null);
 
-        primaryStage.setTitle("QFRDS Controller Simulator — Engineering");
-        primaryStage.setScene(statusScene);
-        primaryStage.setMinWidth(800);
-        primaryStage.setMinHeight(640);
-        primaryStage.setOnCloseRequest(e -> {
-            orchestrator.shutdown();
-            Platform.exit();
-        });
-        primaryStage.show();
-
-        Stage passengerStage = new Stage();
         Scene passengerScene = new Scene(passengerRoot, 1024, 768);
         passengerScene.setFill(Color.WHITE);
         passengerScene.getStylesheets().add(Objects.requireNonNull(
                 MainApp.class.getResource("/styles/passenger_display.css")).toExternalForm());
-        passengerStage.setTitle("QFRDS Passenger Display");
-        passengerStage.setScene(passengerScene);
-        passengerStage.setMinWidth(1024);
-        passengerStage.setMinHeight(768);
-        passengerStage.setMaxWidth(1024);
-        passengerStage.setMaxHeight(768);
-        passengerStage.setResizable(false);
+        primaryStage.setScene(passengerScene);
+
         passengerScene.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
-            if (e.getCode() == KeyCode.F11) {
-                passengerStage.setFullScreen(!passengerStage.isFullScreen());
+            if (e.getCode() == KeyCode.ESCAPE) {
                 e.consume();
             }
         });
-        passengerStage.show();
 
-        primaryStage.setX(80);
-        primaryStage.setY(60);
-        passengerStage.setX(primaryStage.getX() + primaryStage.getWidth() + 20);
-        passengerStage.setY(primaryStage.getY());
+        primaryStage.setOnCloseRequest(e -> {
+            orchestrator.shutdown();
+            Platform.exit();
+        });
+
+        primaryStage.setFullScreen(true);
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
