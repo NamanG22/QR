@@ -29,15 +29,17 @@ build-windows.bat
 Or manually:
 
 ```bat
-mvn clean package -Pwindows-jpackage -DskipTests
+mvn clean verify -Pwindows-jpackage -DskipTests
 ```
 
 **Output:** `target\dist\QFRDS\QFRDS.exe` (plus runtime files in the same folder — copy the whole `QFRDS` directory to the target PC).
 
 ### What the build does
 
-1. **`javafx:jlink`** — custom runtime image at `target\qfrds-runtime` (JRE + JavaFX + app modules)
-2. **`jpackage:jpackage`** — wraps that runtime into `target\dist\QFRDS\` with launcher **QFRDS.exe**
+1. **`package`** — compiles the app and stages `target\jpackage-input\` (app jar + JavaFX + ZXing + jSerialComm)
+2. **`jpackage:jpackage`** — bundles a private JRE and JavaFX into `target\dist\QFRDS\` with launcher **QFRDS.exe**
+
+Uses classpath jpackage (not jlink) because ZXing is a non-modular jar and cannot be linked with `jlink`.
 
 Entry point: `com.railway.qfrds.MainApp`
 
@@ -94,4 +96,4 @@ CSS: `styles/industrial_dashboard.css`, `styles/passenger_display.css`.
 | Command | Output |
 |---------|--------|
 | `mvn javafx:run` | Dev launch (module path) |
-| `mvn package -Pwindows-jpackage` | Standalone `target\dist\QFRDS\QFRDS.exe` (Windows build machine only) |
+| `mvn verify -Pwindows-jpackage` | Standalone `target\dist\QFRDS\QFRDS.exe` (Windows build machine only) |
