@@ -36,10 +36,12 @@ mvn clean verify -Pwindows-jpackage -DskipTests
 
 ### What the build does
 
-1. **`package`** — compiles the app and stages `target\jpackage-input\` (app jar + JavaFX + ZXing + jSerialComm)
-2. **`jpackage:jpackage`** — bundles a private JRE and JavaFX into `target\dist\QFRDS\` with launcher **QFRDS.exe**
+1. **Download JavaFX jmods** (Windows x64) from Gluon
+2. **`jlink`** — builds `target\qfrds-runtime\` (JDK 17 + JavaFX modules)
+3. **Stage app jars** — `target\jpackage-input\` (app + ZXing + jSerialComm)
+4. **`jpackage`** — wraps runtime + app into `target\dist\QFRDS\QFRDS.exe`
 
-Uses classpath jpackage (not jlink) because ZXing is a non-modular jar and cannot be linked with `jlink`.
+Uses pre-built `jlink` runtime (not `--add-modules` inside jpackage) because jlink requires JavaFX **jmods**, not Maven jars.
 
 Entry point: `com.railway.qfrds.Launcher` (starts `MainApp`).
 
