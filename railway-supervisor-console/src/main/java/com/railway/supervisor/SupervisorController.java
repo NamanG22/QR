@@ -12,8 +12,11 @@ import java.time.Instant;
 import java.util.regex.Pattern;
 
 /**
- * Supervisor form: builds ticket packets and sends them to the controller over TCP (network)
- * or local serial (same PC + com0com).
+ * Supervisor form: builds ticket packets and sends them to the controller over RS232.
+ * <p>
+ * Development: USB-to-serial adapter on the console PC (select its COM port in the UI).
+ * Production: direct RS232 from the CRIS terminal to the controller RS232 input.
+ * </p>
  */
 public class SupervisorController {
 
@@ -34,17 +37,15 @@ public class SupervisorController {
     @FXML
     private Label passengerNameLabel;
     @FXML
-    private TextField controllerHostField;
-    @FXML
-    private TextField controllerPortField;
+    private TextField serialPortField;
     @FXML
     private TextArea logArea;
 
-    private LineOutputService linkService;
+    private SerialService serialService;
 
     public void shutdown() {
-        if (linkService != null) {
-            linkService.disconnectQuietly();
+        if (serialService != null) {
+            serialService.disconnectQuietly();
         }
     }
 
@@ -52,12 +53,24 @@ public class SupervisorController {
         ticketTypeCombo.getItems().setAll(TicketType.values());
         ticketTypeCombo.setValue(TicketType.UTS);
 
-        String savedHost = firstNonBlank(System.getenv("QFRDS_TCP_HOST"), System.getProperty("qfrds.tcp.host"));
-        controllerHostField.setText(savedHost == null ? "" : savedHost);
-        controllerPortField.setText(String.valueOf(TransportConfig.tcpPort()));
+        String savedPort = firstNonBlank(
+                System.getenv("QFRDS_SUPERVISOR_PORT"),
+                System.getProperty("qfrds.supervisor.port"));
+        if (savedPort != null) {
+            serialPortField.setText(savedPort);
+        } else {
+            String port = SerialPortConfig.portName();
+            serialPortField.setText(port);
+            String detected = SerialPortConfig.detectUsbSerialPort();
+            if (detected != null && detected.equalsIgnoreCase(port)) {
+                appendLog("Auto-detected USB-serial port: " + port);
+            }
+        }
 
-        appendLog("Enter the thin client IP above, click Connect, then Generate Ticket.");
-        appendLog("See NETWORK_SETUP.md in the repo root for firewall and IP help.");
+        serialService = buildSerialService();
+        appendLog("Click Connect, then Generate Ticket.");
+        appendLog("Controller listens on RS232 — set QFRDS_CONTROLLER_PORT on the thin client if needed.");
+        appendLog("See SERIAL_SETUP.md in the repo root for wiring and port help.");
 
         ticketTypeCombo.valueProperty().addListener((obs, oldVal, newVal) -> updatePassengerVisibility(newVal));
         updatePassengerVisibility(ticketTypeCombo.getValue());
@@ -65,9 +78,9 @@ public class SupervisorController {
 
     @FXML
     private void onConnectLink() {
-        linkService = buildLinkService();
-        appendLog("Connecting to " + linkService.linkLabel() + " …");
-        linkService.connect();
+        serialService = buildSerialService();
+        appendLog("Connecting to " + serialService.linkLabel() + " …");
+        serialService.connect();
     }
 
     @FXML
@@ -78,14 +91,14 @@ public class SupervisorController {
             return;
         }
 
-        String host = trimOrEmpty(controllerHostField.getText());
-        if (host.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Controller link",
-                    "Enter the thin client IP address (from ipconfig on the thin client), then click Connect.");
+        String port = trimOrEmpty(serialPortField.getText());
+        if (port.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Serial link",
+                    "Enter the USB-serial COM port (Device Manager → Ports), then click Connect.");
             return;
         }
 
-        if (linkService == null || linkService.isMockMode()) {
+        if (serialService == null || serialService.isMockMode()) {
             onConnectLink();
         }
 
@@ -117,37 +130,26 @@ public class SupervisorController {
         appendLog("Packet built:");
         appendLog(packet);
 
-        if (linkService == null) {
-            showAlert(Alert.AlertType.ERROR, "Controller link", "Could not connect. Check IP, firewall, and that controller is running on the thin client.");
+        if (serialService == null) {
+            showAlert(Alert.AlertType.ERROR, "Serial link",
+                    "Could not open the COM port. Check Device Manager and that the controller RS232 cable is connected.");
             return;
         }
 
-        boolean ok = linkService.sendLine(packet);
+        boolean ok = serialService.sendLine(packet);
         if (ok) {
-            appendLog(linkService.isMockMode()
-                    ? "Send failed — still in mock mode. Click Connect after starting the controller on the thin client."
-                    : "Packet sent successfully.");
+            appendLog(serialService.isMockMode()
+                    ? "Send failed — still in mock mode. Click Connect after plugging in the USB-serial adapter."
+                    : "Packet sent successfully over RS232.");
         }
     }
 
-    private LineOutputService buildLinkService() {
-        if (linkService != null) {
-            linkService.disconnectQuietly();
+    private SerialService buildSerialService() {
+        if (serialService != null) {
+            serialService.disconnectQuietly();
         }
-        String host = trimOrEmpty(controllerHostField.getText());
-        int port = parsePort(controllerPortField.getText());
-        return new TcpOutputService(this::appendLog, host.isEmpty() ? "127.0.0.1" : host, port);
-    }
-
-    private static int parsePort(String raw) {
-        if (raw == null || raw.isBlank()) {
-            return TransportConfig.tcpPort();
-        }
-        try {
-            return Integer.parseInt(raw.trim());
-        } catch (NumberFormatException ex) {
-            return TransportConfig.tcpPort();
-        }
+        String port = trimOrEmpty(serialPortField.getText());
+        return new SerialService(this::appendLog, port.isEmpty() ? null : port);
     }
 
     private void updatePassengerVisibility(TicketType type) {

@@ -1,12 +1,20 @@
 # Railway Supervisor Console Simulator
 
-JavaFX desktop demo that mimics an Indian Railways PRS/UTS supervisor terminal for a **QR Fare Repeater Display System** proof-of-concept. It builds pipe-delimited ticket packets and sends them over **serial COM10** by default (9600 8N1, UTF-8 text + newline) via **jSerialComm**, paired with the QFRDS controller on **COM11** (com0com). If the port is unavailable, the app runs in **mock mode** and logs packets only.
+JavaFX desktop demo that mimics an Indian Railways PRS/UTS supervisor terminal for a **QR Fare Repeater Display System** proof-of-concept. It builds pipe-delimited ticket packets and sends them over **RS232** (9600 8N1, UTF-8 text + newline) via **jSerialComm**.
+
+**Lab:** USB-to-serial adapter on the console PC — select its COM port in the UI.  
+**Production:** direct RS232 from the CRIS terminal to the controller.
+
+If the port is unavailable, the app runs in **mock mode** and logs packets only.
+
+See **`SERIAL_SETUP.md`** in the repo root for wiring and troubleshooting.
 
 ## Requirements
 
 - JDK **17**
 - Maven **3.8+**
-- Windows with **COM10** virtual pair to controller **COM11** (or adjust `SerialService.DEFAULT_PORT_NAME`; use COM3/COM4 if those are free on your machine)
+- USB-serial adapter (lab) or RS232 port (production)
+- Paired controller app on the thin client (`qfrds-controller-simulator`)
 
 ## Run
 
@@ -15,24 +23,19 @@ cd railway-supervisor-console
 mvn clean javafx:run
 ```
 
-Alternative after compile:
+Optional default port:
 
 ```bash
-mvn clean compile
-mvn javafx:run
+QFRDS_SUPERVISOR_PORT=COM5 mvn clean javafx:run
 ```
-
-## Package note
-
-Running from a plain `java -jar` fat JAR requires extra JavaFX module configuration on the classpath/module path. Prefer **`mvn javafx:run`** for development demos.
 
 ## Project layout
 
 | Path | Purpose |
 |------|---------|
 | `MainApp` | JavaFX entry; loads FXML and CSS |
-| `SupervisorController` | Form validation, alerts, logging, send action |
-| `SerialService` | jSerialComm: COM10 (default), 9600 8N1, UTF-8 + LF |
+| `SupervisorController` | Form validation, serial connect, logging, send action |
+| `SerialService` | jSerialComm TX: configurable COM port, 9600 8N1, UTF-8 + LF |
 | `TicketData` | Immutable ticket fields |
 | `PacketBuilder` | `TYPE|SRC|DST|FARE|TXN|TS` (+ `PNAME` for PRS) |
 

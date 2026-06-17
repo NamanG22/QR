@@ -4,8 +4,8 @@ import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortInvalidPortException;
 
 /**
- * Resolves the controller serial port from {@code QFRDS_CONTROLLER_PORT} or the coded default,
- * and helps log what Windows actually exposes to jSerialComm.
+ * Resolves the controller RS232 RX port from {@code QFRDS_CONTROLLER_PORT} or the coded default.
+ * Production: onboard RS232. Lab: may be a USB-serial adapter on the thin client if no native port.
  */
 public final class SerialPortConfig {
 
@@ -40,7 +40,7 @@ public final class SerialPortConfig {
     public static String describeAvailablePorts() {
         SerialPort[] ports = SerialPort.getCommPorts();
         if (ports.length == 0) {
-            return "(none detected — install com0com and create a pair, e.g. COM10 ↔ COM11)";
+            return "(none detected — connect RS232 cable or set QFRDS_CONTROLLER_PORT to the correct COM port)";
         }
         StringBuilder sb = new StringBuilder();
         for (SerialPort p : ports) {

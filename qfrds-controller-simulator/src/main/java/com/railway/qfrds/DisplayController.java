@@ -3,7 +3,6 @@ package com.railway.qfrds;
 import javafx.application.Platform;
 
 import java.util.Objects;
-import java.util.function.Consumer;
 
 /**
  * Central coordinator for the QFRDS demo: bridges RS232 lines → parse → QR synthesis →
@@ -20,7 +19,7 @@ public final class DisplayController {
     private final PassengerDisplayView passengerView;
     private final TicketPacketParser parser = new TicketPacketParser();
     private final QRGeneratorService qrGenerator = new QRGeneratorService();
-    private LineInputService input;
+    private SerialListenerService serial;
 
     public DisplayController(ControllerStatusView statusView, PassengerDisplayView passengerView) {
         this.statusView = Objects.requireNonNull(statusView, "statusView");
@@ -28,28 +27,27 @@ public final class DisplayController {
     }
 
     /**
-     * Starts TCP (always, for Windows → thin client) plus local serial when available.
+     * Starts the RS232 listener on the controller serial port (production RS232 or lab USB-serial pair).
      */
     public void start() {
-        Consumer<String> logToUi = msg -> Platform.runLater(() -> statusView.appendLog(msg));
-        Runnable pulse = () -> Platform.runLater(statusView::pulseSerialActivity);
-
-        DualLineInputService dual = new DualLineInputService(this::handleRawLine, logToUi, pulse);
-        this.input = dual;
-        input.start();
-
+        this.serial = new SerialListenerService(
+                this::handleRawLine,
+                msg -> Platform.runLater(() -> statusView.appendLog(msg)),
+                () -> Platform.runLater(statusView::pulseSerialActivity)
+        );
+        serial.start();
         Platform.runLater(() -> {
-            statusView.setLinkLabel("TCP:" + TransportConfig.tcpPort());
-            statusView.setMockMode(!dual.isTcpReady());
-            statusView.setReconnectCount(input.getReconnectAttempts());
+            statusView.setLinkLabel(SerialPortConfig.portName());
+            statusView.setMockMode(serial.isMockMode());
+            statusView.setReconnectCount(serial.getReconnectAttempts());
             statusView.appendLog(LogFormatter.ts(
-                    "Network ready when TCP:" + TransportConfig.tcpPort() + " is LIVE "
-                            + "(Windows console uses thin client IP + this port)."));
+                    "RS232 listener on " + SerialPortConfig.portName()
+                            + " — console sends via USB-serial or direct RS232."));
         });
         javafx.animation.Timeline sync = new javafx.animation.Timeline(
                 new javafx.animation.KeyFrame(javafx.util.Duration.seconds(1), e -> Platform.runLater(() -> {
-                    statusView.setMockMode(!dual.isTcpReady());
-                    statusView.setReconnectCount(input.getReconnectAttempts());
+                    statusView.setMockMode(serial.isMockMode());
+                    statusView.setReconnectCount(serial.getReconnectAttempts());
                 }))
         );
         sync.setCycleCount(javafx.animation.Animation.INDEFINITE);
@@ -57,8 +55,8 @@ public final class DisplayController {
     }
 
     public void shutdown() {
-        if (input != null) {
-            input.stop();
+        if (serial != null) {
+            serial.stop();
         }
     }
 
@@ -85,12 +83,8 @@ public final class DisplayController {
 
         Platform.runLater(() -> {
             statusView.setLastPacketPreview(truncate(line, 512));
-            statusView.setReconnectCount(input != null ? input.getReconnectAttempts() : 0);
-            if (input instanceof DualLineInputService dual) {
-                statusView.setMockMode(!dual.isTcpReady());
-            } else {
-                statusView.setMockMode(input != null && input.isMockMode());
-            }
+            statusView.setReconnectCount(serial != null ? serial.getReconnectAttempts() : 0);
+            statusView.setMockMode(serial != null && serial.isMockMode());
 
             if (resultFinal.getErrorMessage().isPresent()) {
                 statusView.appendLog(LogFormatter.ts("PARSE ERROR: " + resultFinal.getErrorMessage().get()));

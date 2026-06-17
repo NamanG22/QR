@@ -84,24 +84,17 @@
                     <columnConstraints>
                         <ColumnConstraints hgrow="NEVER" minWidth="120.0"/>
                         <ColumnConstraints hgrow="ALWAYS"/>
-                        <ColumnConstraints hgrow="NEVER" minWidth="70.0"/>
                         <ColumnConstraints hgrow="NEVER" minWidth="90.0"/>
                     </columnConstraints>
-                    <Label styleClass="field-label" text="Controller link" GridPane.columnIndex="0"
+                    <Label styleClass="field-label" text="Serial port" GridPane.columnIndex="0"
                            GridPane.rowIndex="0"/>
-                    <TextField fx:id="controllerHostField" promptText="Thin client IP e.g. 192.168.1.50"
+                    <TextField fx:id="serialPortField" promptText="e.g. COM5 (DTECH USB-Serial)"
                                GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-                    <Label styleClass="field-label" text="Port" GridPane.columnIndex="2"
-                           GridPane.rowIndex="0"/>
-                    <TextField fx:id="controllerPortField" promptText="9000" maxWidth="80.0"
-                               GridPane.columnIndex="3" GridPane.rowIndex="0"/>
-                    <HBox spacing="12.0" GridPane.columnIndex="1" GridPane.columnSpan="3"
-                          GridPane.rowIndex="1">
-                        <Button mnemonicParsing="false" onAction="#onConnectLink" styleClass="secondary-button"
-                                text="Connect"/>
-                        <Label styleClass="hint-label"
-                               text="Windows → thin client over LAN · TCP port 9000 on controller · no com0com"/>
-                    </HBox>
+                    <Button mnemonicParsing="false" onAction="#onConnectLink" styleClass="secondary-button"
+                            text="Connect" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                    <Label styleClass="hint-label" text="9600 8N1 · console TX via USB-serial · controller RX on RS232 · UTF-8 + LF"
+                           wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="2"
+                           GridPane.rowIndex="1"/>
                 </GridPane>
 
                 <HBox alignment="CENTER_LEFT" spacing="12.0">
@@ -115,7 +108,7 @@
                 <padding>
                     <Insets bottom="16.0" left="20.0" right="20.0" top="12.0"/>
                 </padding>
-                <Label styleClass="log-title" text="Link log · packets &amp; status"/>
+                <Label styleClass="log-title" text="Serial log · packets &amp; status"/>
                 <TextArea fx:id="logArea" editable="false" focusTraversable="false" minHeight="120.0"
                           prefRowCount="8" wrapText="true" VBox.vgrow="ALWAYS"/>
             </VBox>

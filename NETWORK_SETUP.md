@@ -1,4 +1,8 @@
-# Windows → Thin Client (Network Demo)
+# Windows → Thin Client (Network Demo) — archived
+
+> **Current `main` uses RS232/USB serial.** See **`SERIAL_SETUP.md`** for the active wiring guide.
+>
+> This document describes the **wireless TCP** demo. That code is preserved on branch **`backup/wireless-tcp-20260617`**.
 
 Use this when the **supervisor console runs on your Windows PC** and the **controller + passenger display runs on the HP thin client**. No com0com, no env vars.
 

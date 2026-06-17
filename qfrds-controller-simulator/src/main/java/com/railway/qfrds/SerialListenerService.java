@@ -13,21 +13,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * RS232 listener for the fare repeater controller path: opens the configured port (default {@code COM11}),
- * reads UTF-8 text lines
- * terminated by newline, and dispatches each complete line to the application layer.
+ * RS232 listener for the fare repeater controller: opens the configured port (default {@code COM10}),
+ * reads UTF-8 text lines terminated by newline, and dispatches each complete line to the application layer.
  * <p>
- * A dedicated daemon thread performs blocking reads. If the port drops or cannot be opened,
- * the service backs off and retries (auto-reconnect). When the port is unavailable at startup,
- * {@linkplain #isMockMode() mock mode} is active: no bytes are read, but the reconnect loop keeps
- * attempting so plugging in a device later succeeds without restart.
+ * Production: direct RS232 from the CRIS/supervisor terminal. Lab: USB-serial on the console PC wired
+ * to the controller RS232 input (null-modem or straight-through per your cable).
  * </p>
  */
 public final class SerialListenerService implements LineInputService {
 
     private static final Logger LOG = Logger.getLogger(SerialListenerService.class.getName());
 
-    /** RX side of com0com pair (default COM10; supervisor on COM11). Override: QFRDS_CONTROLLER_PORT. */
+    /** Controller RS232 RX port (default COM10). Override: QFRDS_CONTROLLER_PORT. */
     public static final String DEFAULT_PORT_NAME = SerialPortConfig.DEFAULT_PORT_NAME;
 
     private volatile SerialPort pairHoldPort;

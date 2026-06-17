@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  * Serial layer responsibilities:
  * </p>
  * <ul>
- *   <li>Open the configured port (default {@code COM10}) at 9600 8N1 — pair with controller on the other com0com end (e.g. COM11).</li>
+ *   <li>Open the configured port (default {@code COM11}) at 9600 8N1 — USB-serial TX in lab, CRIS RS232 in production.</li>
  *   <li>Transmit UTF-8 text terminated by a newline so downstream parsers can frame records.</li>
  *   <li>Fall back to {@linkplain #isMockMode() mock mode} when the port is missing or busy.</li>
  * </ul>
@@ -23,7 +23,7 @@ public final class SerialService implements LineOutputService {
 
     private static final Logger LOG = Logger.getLogger(SerialService.class.getName());
 
-    /** TX side of com0com pair (default COM11; controller on COM10). Override: QFRDS_SUPERVISOR_PORT. */
+    /** Supervisor TX port — USB-serial in lab (default COM11). Override: QFRDS_SUPERVISOR_PORT. */
     public static final String DEFAULT_PORT_NAME = SerialPortConfig.DEFAULT_PORT_NAME;
     private static final int BAUD = 9600;
     private static final int DATA_BITS = 8;
@@ -31,6 +31,7 @@ public final class SerialService implements LineOutputService {
     private static final int PARITY = SerialPort.NO_PARITY;
 
     private final Consumer<String> logSink;
+    private final String portName;
     private SerialPort port;
     private boolean mockMode;
 
@@ -38,7 +39,17 @@ public final class SerialService implements LineOutputService {
      * @param logSink receives human-readable lines for the UI log {@link javafx.scene.control.TextArea}
      */
     public SerialService(Consumer<String> logSink) {
+        this(logSink, null);
+    }
+
+    /**
+     * @param portNameOverride USB-serial COM port from the UI; falls back to {@link SerialPortConfig#portName()}
+     */
+    public SerialService(Consumer<String> logSink, String portNameOverride) {
         this.logSink = Objects.requireNonNull(logSink, "logSink");
+        this.portName = (portNameOverride != null && !portNameOverride.isBlank())
+                ? portNameOverride.trim()
+                : SerialPortConfig.portName();
     }
 
     @Override
@@ -52,7 +63,7 @@ public final class SerialService implements LineOutputService {
 
     @Override
     public String linkLabel() {
-        return SerialPortConfig.portName();
+        return portName;
     }
 
     /**
@@ -63,7 +74,7 @@ public final class SerialService implements LineOutputService {
     public void connect() {
         disconnectQuietly();
 
-        String target = SerialPortConfig.portName();
+        String target = portName;
         SerialPort candidate = SerialPortConfig.findPort(target);
         if (candidate == null) {
             mockMode = true;
@@ -89,7 +100,7 @@ public final class SerialService implements LineOutputService {
                         + (detail.isEmpty() ? "" : " — " + detail));
                 log("Port type: " + candidate.getDescriptivePortName());
                 log("Windows ports: " + SerialPortConfig.describeAvailablePorts());
-                log("Tip: use TCP on BOTH apps — set QFRDS_TRANSPORT=tcp (or mvn -Dqfrds.transport=tcp javafx:run).");
+                log("Tip: plug in the USB-serial adapter and pick its COM port in Device Manager.");
                 log("Running in mock mode — packets will be logged only.");
                 return;
             }
