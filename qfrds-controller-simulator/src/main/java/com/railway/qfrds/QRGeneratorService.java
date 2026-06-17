@@ -15,12 +15,11 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Encodes a compact payment / verification string as a QR matrix and rasterises it to a
- * JavaFX {@link WritableImage} for the passenger display.
+ * Encodes ticket data as a scannable QR matrix (ZXing) for the passenger display.
  * <p>
- * QR payload (UTF-8 text) format:
- * {@code TXN=...|FARE=...|SRC=...|DST=...|TS=...} and for PRS {@code |PNAME=...}.
- * This is independent of the wire packet format so the public QR carries only payment-relevant fields.
+ * When {@link UpiQrConfig} is set ({@code QFRDS_UPI_VPA}), the QR is a real UPI payment link
+ * ({@code upi://pay?...}) with amount from the ticket fare. Otherwise falls back to the demo
+ * pipe-delimited text payload.
  * </p>
  */
 public final class QRGeneratorService {
@@ -30,10 +29,17 @@ public final class QRGeneratorService {
     private final QRCodeWriter writer = new QRCodeWriter();
 
     /**
-     * Builds the QR text payload from parsed ticket data (same canonical format every time).
+     * Builds the QR text payload: UPI payment URI when configured, else demo verification text.
      */
     public String buildQrPayload(TicketData ticket) {
         Objects.requireNonNull(ticket, "ticket");
+        if (UpiQrConfig.isConfigured()) {
+            return UpiQrConfig.buildPaymentUri(ticket);
+        }
+        return buildDemoPayload(ticket);
+    }
+
+    private static String buildDemoPayload(TicketData ticket) {
         StringBuilder sb = new StringBuilder(128);
         sb.append("TXN=").append(ticket.getTransactionId());
         sb.append("|FARE=").append(ticket.getFare());

@@ -41,6 +41,13 @@ public final class DisplayController {
             statusView.setLinkLabel(serial.linkLabel());
             statusView.setMockMode(serial.isMockMode());
             statusView.setReconnectCount(serial.getReconnectAttempts());
+            if (UpiQrConfig.isConfigured()) {
+                statusView.appendLog(LogFormatter.ts(
+                        "UPI QR enabled — VPA " + UpiQrConfig.vpa() + " (" + UpiQrConfig.payeeName() + ")"));
+            } else {
+                statusView.appendLog(LogFormatter.ts(
+                        "UPI QR not set — using demo text QR (set QFRDS_UPI_VPA on thin client)"));
+            }
             statusView.appendLog(LogFormatter.ts(
                     SerialPortConfig.useExplicitPort()
                             ? "RS232 listener on " + SerialPortConfig.explicitPortName()
