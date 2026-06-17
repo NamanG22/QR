@@ -140,6 +140,8 @@ public class PassengerDisplayView implements Initializable {
 
     @FXML
     private Label footerLastUpdated;
+    @FXML
+    private Label footerLinkStatus;
 
     private final ObservableList<PaxRow> prsPaxRows = FXCollections.observableArrayList();
 
@@ -150,6 +152,13 @@ public class PassengerDisplayView implements Initializable {
         Tooltip.install(prsLogoPlaceholder, new Tooltip("Indian Railways Logo"));
         initPassengerTable();
         clearAll();
+        setLinkStatus("—", false, 0, "starting");
+    }
+
+    /** RS232 health shown on the passenger screen (engineering dashboard is hidden in kiosk mode). */
+    public void setLinkStatus(String port, boolean live, int packetsReceived, String hint) {
+        String state = live ? "LIVE" : "WAITING";
+        footerLinkStatus.setText("RS232 " + port + " · " + state + " · rx=" + packetsReceived + " · " + hint);
     }
 
     /**

@@ -20,7 +20,47 @@ public final class SerialPortConfig {
         if (env != null && !env.isBlank()) {
             return env.trim();
         }
+        String detected = detectUsbSerialPort();
+        if (detected != null) {
+            return detected;
+        }
+        String sole = detectSingleAvailablePort();
+        if (sole != null) {
+            return sole;
+        }
         return DEFAULT_PORT_NAME;
+    }
+
+    /** First COM port whose description looks like a USB-serial or RS232 adapter. */
+    public static String detectUsbSerialPort() {
+        for (SerialPort p : SerialPort.getCommPorts()) {
+            String desc = p.getDescriptivePortName();
+            if (desc != null && looksLikeSerialAdapter(desc)) {
+                return p.getSystemPortName();
+            }
+        }
+        return null;
+    }
+
+    /** When the machine exposes exactly one serial port, use it (common on thin clients). */
+    public static String detectSingleAvailablePort() {
+        SerialPort[] ports = SerialPort.getCommPorts();
+        if (ports.length == 1) {
+            return ports[0].getSystemPortName();
+        }
+        return null;
+    }
+
+    private static boolean looksLikeSerialAdapter(String descriptiveName) {
+        String lower = descriptiveName.toLowerCase();
+        return lower.contains("usb")
+                || lower.contains("serial")
+                || lower.contains("dtech")
+                || lower.contains("ftdi")
+                || lower.contains("prolific")
+                || lower.contains("ch340")
+                || lower.contains("cp210")
+                || lower.contains("rs232");
     }
 
     public static SerialPort findPort(String portName) {
@@ -61,24 +101,12 @@ public final class SerialPortConfig {
     }
 
     /**
-     * Other end of a com0com pair. Override with {@code QFRDS_PAIR_PORT} if needed.
+     * com0com partner port — only used when {@code QFRDS_PAIR_PORT} is set explicitly.
      */
     public static String pairPortName(String primaryPort) {
         String env = System.getenv("QFRDS_PAIR_PORT");
         if (env != null && !env.isBlank()) {
             return env.trim();
-        }
-        if ("COM10".equalsIgnoreCase(primaryPort)) {
-            return "COM11";
-        }
-        if ("COM11".equalsIgnoreCase(primaryPort)) {
-            return "COM10";
-        }
-        if ("COM3".equalsIgnoreCase(primaryPort)) {
-            return "COM4";
-        }
-        if ("COM4".equalsIgnoreCase(primaryPort)) {
-            return "COM3";
         }
         return null;
     }

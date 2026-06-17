@@ -85,9 +85,26 @@ No physical cable required.
 |--------|-----|
 | Console: `COMx not found` | USB adapter not plugged in; check Device Manager |
 | Console: `could not open COMx` | Port in use by another app; close PuTTY/HyperTerminal |
-| Controller MOCK, no packets | Wrong `QFRDS_CONTROLLER_PORT`; cable not seated |
+| Console connected, wire TX blinks, **display unchanged** | Controller is on the **wrong COM port** — check footer on passenger screen (`WAITING` = not listening). On thin client: Device Manager → Ports → set `QFRDS_CONTROLLER_PORT` to the RS232/USB port the cable is plugged into |
+| Footer shows `rx=0` after Generate | TX/RX swapped on cable, or controller COM wrong — try null-modem adapter or swap TX/RX wires |
+| Footer shows `rx=1+` but no ticket | Parse error — open `%LOCALAPPDATA%\QFRDS\serial.log` on thin client |
+| Controller MOCK / WAITING | `QFRDS_CONTROLLER_PORT` wrong or port busy — see `serial.log` for detected ports |
 | Garbled display | Baud mismatch — both sides must be 9600 8N1 |
 | Need wireless demo again | `git checkout backup/wireless-tcp-20260617` |
+
+### Diagnose on the thin client
+
+Passenger display footer shows: `RS232 COMx · LIVE · rx=N · …`
+
+- **`WAITING`** — app could not open the COM port; set the correct port:
+  ```powershell
+  $env:QFRDS_CONTROLLER_PORT = "COM3"   # use your thin-client port from Device Manager
+  mvn clean javafx:run
+  ```
+- **`LIVE` but `rx=0`** after Generate on console — cable/wiring issue (data not reaching the thin client COM port).
+- **`rx=1+`** — bytes received; display should update. If not, check `serial.log`.
+
+Log file: `%LOCALAPPDATA%\QFRDS\serial.log` (lists available ports at startup and each received line).
 
 ## Packet format
 

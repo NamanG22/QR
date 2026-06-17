@@ -20,6 +20,7 @@ public final class DisplayController {
     private final TicketPacketParser parser = new TicketPacketParser();
     private final QRGeneratorService qrGenerator = new QRGeneratorService();
     private SerialListenerService serial;
+    private int packetsReceived;
 
     public DisplayController(ControllerStatusView statusView, PassengerDisplayView passengerView) {
         this.statusView = Objects.requireNonNull(statusView, "statusView");
@@ -43,11 +44,13 @@ public final class DisplayController {
             statusView.appendLog(LogFormatter.ts(
                     "RS232 listener on " + SerialPortConfig.portName()
                             + " — console sends via USB-serial or direct RS232."));
+            refreshPassengerLinkStatus();
         });
         javafx.animation.Timeline sync = new javafx.animation.Timeline(
                 new javafx.animation.KeyFrame(javafx.util.Duration.seconds(1), e -> Platform.runLater(() -> {
                     statusView.setMockMode(serial.isMockMode());
                     statusView.setReconnectCount(serial.getReconnectAttempts());
+                    refreshPassengerLinkStatus();
                 }))
         );
         sync.setCycleCount(javafx.animation.Animation.INDEFINITE);
@@ -64,6 +67,7 @@ public final class DisplayController {
      * Invoked from the serial daemon thread for each newline-delimited UTF-8 packet.
      */
     private void handleRawLine(String line) {
+        packetsReceived++;
         TicketPacketParser.ParseResult result = parser.parse(line);
 
         String qrPayloadForStatus = "";
@@ -85,6 +89,7 @@ public final class DisplayController {
             statusView.setLastPacketPreview(truncate(line, 512));
             statusView.setReconnectCount(serial != null ? serial.getReconnectAttempts() : 0);
             statusView.setMockMode(serial != null && serial.isMockMode());
+            refreshPassengerLinkStatus();
 
             if (resultFinal.getErrorMessage().isPresent()) {
                 statusView.appendLog(LogFormatter.ts("PARSE ERROR: " + resultFinal.getErrorMessage().get()));
@@ -112,6 +117,15 @@ public final class DisplayController {
             statusView.pulseQrOkLed();
             statusView.pulseDisplayPipelineLed();
         });
+    }
+
+    private void refreshPassengerLinkStatus() {
+        String port = SerialPortConfig.portName();
+        boolean live = serial != null && !serial.isMockMode();
+        String hint = live
+                ? (packetsReceived > 0 ? "receiving" : "listening")
+                : "no COM — set QFRDS_CONTROLLER_PORT on thin client";
+        passengerView.setLinkStatus(port, live, packetsReceived, hint);
     }
 
     private static String truncate(String s, int max) {

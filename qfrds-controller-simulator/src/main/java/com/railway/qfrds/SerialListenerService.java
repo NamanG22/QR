@@ -92,6 +92,7 @@ public final class SerialListenerService implements LineInputService {
         worker = new Thread(this::runLoop, "qfrds-serial-listener");
         worker.setDaemon(true);
         worker.start();
+        SerialDiagLog.write("Available ports: " + SerialPortConfig.describeAvailablePorts());
         logTs("Serial listener thread started — target " + SerialPortConfig.portName()
                 + " (set QFRDS_CONTROLLER_PORT to override).");
     }
@@ -124,6 +125,7 @@ public final class SerialListenerService implements LineInputService {
 
             mockMode = false;
             logTs("RS232 listener active on " + SerialPortConfig.portName() + " @ " + BAUD + " 8N1 UTF-8.");
+            SerialDiagLog.write("Listening on " + SerialPortConfig.portName());
 
             try (InputStreamReader isr = new InputStreamReader(
                     Objects.requireNonNull(port).getInputStream(), StandardCharsets.UTF_8);
@@ -136,6 +138,7 @@ public final class SerialListenerService implements LineInputService {
                         logTs("Serial stream closed — will reconnect.");
                         break;
                     }
+                    SerialDiagLog.write("RX " + line.length() + " chars: " + truncate(line, 200));
                     if (heartbeatCallback != null) {
                         try {
                             heartbeatCallback.run();
@@ -180,13 +183,15 @@ public final class SerialListenerService implements LineInputService {
             lastOpenFailure = "openPort returned false";
             return false;
         }
+        candidate.setDTR();
+        candidate.setRTS();
         lastOpenFailure = "";
         port = candidate;
         reconnectAttempts = 0;
         return true;
     }
 
-    /** Some com0com CNCB ports stay busy until the paired CNCA port is opened first. */
+    /** com0com only — opens {@code QFRDS_PAIR_PORT} when set so the paired virtual port is not busy. */
     private void openPairHoldIfNeeded(String primaryPort) {
         String pair = SerialPortConfig.pairPortName(primaryPort);
         if (pair == null || pair.equalsIgnoreCase(primaryPort)) {
@@ -265,5 +270,12 @@ public final class SerialListenerService implements LineInputService {
 
     private void logTs(String message) {
         log(LogFormatter.ts(message));
+    }
+
+    private static String truncate(String s, int max) {
+        if (s == null) {
+            return "";
+        }
+        return s.length() <= max ? s : s.substring(0, max) + "…";
     }
 }

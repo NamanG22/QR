@@ -442,6 +442,8 @@
             <padding>
                 <Insets bottom="6.0" left="10.0" right="10.0" top="4.0"/>
             </padding>
+            <Label fx:id="footerLinkStatus" styleClass="footer-note" text="RS232 —"/>
+            <Region prefWidth="12.0"/>
             <Label fx:id="footerLastUpdated" styleClass="footer-note" text="Last updated: —"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Label styleClass="footer-note" text="QFRDS display · F11 fullscreen"/>

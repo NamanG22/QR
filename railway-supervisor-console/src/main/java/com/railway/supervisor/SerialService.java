@@ -106,6 +106,8 @@ public final class SerialService implements LineOutputService {
             }
             port = candidate;
             mockMode = false;
+            port.setDTR();
+            port.setRTS();
             log("Connected to " + target + " (" + candidate.getDescriptivePortName()
                     + ", " + BAUD + " 8N1, UTF-8 + newline).");
         } catch (Exception ex) {
@@ -124,7 +126,7 @@ public final class SerialService implements LineOutputService {
     @Override
     public boolean sendLine(String payload) {
         Objects.requireNonNull(payload, "payload");
-        byte[] bytes = (payload + "\n").getBytes(StandardCharsets.UTF_8);
+        byte[] bytes = (payload + "\r\n").getBytes(StandardCharsets.UTF_8);
 
         if (mockMode || port == null || !port.isOpen()) {
             log("[mock] Would send " + bytes.length + " bytes on serial.");
