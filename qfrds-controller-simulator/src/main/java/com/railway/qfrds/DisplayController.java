@@ -19,7 +19,7 @@ public final class DisplayController {
     private final PassengerDisplayView passengerView;
     private final TicketPacketParser parser = new TicketPacketParser();
     private final QRGeneratorService qrGenerator = new QRGeneratorService();
-    private SerialListenerService serial;
+    private MultiSerialListenerService serial;
     private int packetsReceived;
 
     public DisplayController(ControllerStatusView statusView, PassengerDisplayView passengerView) {
@@ -31,19 +31,20 @@ public final class DisplayController {
      * Starts the RS232 listener on the controller serial port (production RS232 or lab USB-serial pair).
      */
     public void start() {
-        this.serial = new SerialListenerService(
+        this.serial = new MultiSerialListenerService(
                 this::handleRawLine,
                 msg -> Platform.runLater(() -> statusView.appendLog(msg)),
                 () -> Platform.runLater(statusView::pulseSerialActivity)
         );
         serial.start();
         Platform.runLater(() -> {
-            statusView.setLinkLabel(SerialPortConfig.portName());
+            statusView.setLinkLabel(serial.linkLabel());
             statusView.setMockMode(serial.isMockMode());
             statusView.setReconnectCount(serial.getReconnectAttempts());
             statusView.appendLog(LogFormatter.ts(
-                    "RS232 listener on " + SerialPortConfig.portName()
-                            + " — console sends via USB-serial or direct RS232."));
+                    SerialPortConfig.useExplicitPort()
+                            ? "RS232 listener on " + SerialPortConfig.explicitPortName()
+                            : "RS232 auto-listen on all COM ports — " + SerialPortConfig.describeAvailablePorts()));
             refreshPassengerLinkStatus();
         });
         javafx.animation.Timeline sync = new javafx.animation.Timeline(
@@ -120,11 +121,18 @@ public final class DisplayController {
     }
 
     private void refreshPassengerLinkStatus() {
-        String port = SerialPortConfig.portName();
+        String port = serial != null ? serial.linkLabel() : "—";
         boolean live = serial != null && !serial.isMockMode();
-        String hint = live
-                ? (packetsReceived > 0 ? "receiving" : "listening")
-                : "no COM — set QFRDS_CONTROLLER_PORT on thin client";
+        String hint;
+        if (serial != null && !live) {
+            hint = serial.statusHint();
+        } else if (live && packetsReceived > 0) {
+            hint = "receiving on " + port;
+        } else if (live) {
+            hint = "listening on " + port;
+        } else {
+            hint = "starting";
+        }
         passengerView.setLinkStatus(port, live, packetsReceived, hint);
     }
 

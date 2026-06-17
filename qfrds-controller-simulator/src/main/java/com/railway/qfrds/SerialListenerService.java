@@ -24,8 +24,8 @@ public final class SerialListenerService implements LineInputService {
 
     private static final Logger LOG = Logger.getLogger(SerialListenerService.class.getName());
 
-    /** Controller RS232 RX port (default COM10). Override: QFRDS_CONTROLLER_PORT. */
-    public static final String DEFAULT_PORT_NAME = SerialPortConfig.DEFAULT_PORT_NAME;
+    /** Preferred onboard RS232 port on thin clients (override with QFRDS_CONTROLLER_PORT). */
+    public static final String DEFAULT_PORT_NAME = "COM1";
 
     private volatile SerialPort pairHoldPort;
     private static final int BAUD = 9600;

@@ -9,16 +9,60 @@ import com.fazecast.jSerialComm.SerialPortInvalidPortException;
  */
 public final class SerialPortConfig {
 
-    public static final String DEFAULT_PORT_NAME = "COM10";
+    public static final String DEFAULT_PORT_NAME = "COM1";
     private static final String ENV_KEY = "QFRDS_CONTROLLER_PORT";
 
     private SerialPortConfig() {
     }
 
-    public static String portName() {
+    public static boolean useExplicitPort() {
         String env = System.getenv(ENV_KEY);
-        if (env != null && !env.isBlank()) {
-            return env.trim();
+        return env != null && !env.isBlank();
+    }
+
+    public static String explicitPortName() {
+        return System.getenv(ENV_KEY).trim();
+    }
+
+    /**
+     * Ports to open: one explicit port from env, or every port Windows exposes (lab auto mode).
+     */
+    public static String[] portsToListen() {
+        if (useExplicitPort()) {
+            return new String[] { explicitPortName() };
+        }
+        SerialPort[] ports = SerialPort.getCommPorts();
+        if (ports.length == 0) {
+            return new String[] { DEFAULT_PORT_NAME };
+        }
+        String[] names = new String[ports.length];
+        for (int i = 0; i < ports.length; i++) {
+            names[i] = ports[i].getSystemPortName();
+        }
+        java.util.Arrays.sort(names, SerialPortConfig::compareComPortNames);
+        return names;
+    }
+
+    /** COM1 before COM2 before COM10, etc. */
+    private static int compareComPortNames(String a, String b) {
+        return Integer.compare(comPortNumber(a), comPortNumber(b));
+    }
+
+    private static int comPortNumber(String portName) {
+        if (portName == null) {
+            return Integer.MAX_VALUE;
+        }
+        String digits = portName.replaceAll("(?i)^COM", "").trim();
+        try {
+            return Integer.parseInt(digits);
+        } catch (NumberFormatException ex) {
+            return Integer.MAX_VALUE;
+        }
+    }
+
+    public static String portName() {
+        if (useExplicitPort()) {
+            return explicitPortName();
         }
         String detected = detectUsbSerialPort();
         if (detected != null) {
@@ -27,6 +71,10 @@ public final class SerialPortConfig {
         String sole = detectSingleAvailablePort();
         if (sole != null) {
             return sole;
+        }
+        SerialPort[] ports = SerialPort.getCommPorts();
+        if (ports.length > 0) {
+            return "AUTO(" + ports.length + ")";
         }
         return DEFAULT_PORT_NAME;
     }
@@ -55,6 +103,7 @@ public final class SerialPortConfig {
         String lower = descriptiveName.toLowerCase();
         return lower.contains("usb")
                 || lower.contains("serial")
+                || lower.contains("communication")
                 || lower.contains("dtech")
                 || lower.contains("ftdi")
                 || lower.contains("prolific")

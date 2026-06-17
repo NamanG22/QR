@@ -10,7 +10,7 @@ The wireless TCP path is preserved on branch **`backup/wireless-tcp-20260617`** 
 | Side | Hardware | Software |
 |------|----------|----------|
 | **Supervisor console** (Windows PC) | USB-to-RS232 adapter | Select its COM port in the console UI (e.g. `COM5`) |
-| **Controller** (thin client) | RS232 input (or USB-serial if no native port) | Listens on `COM10` by default |
+| **Controller** (thin client) | RS232 or USB-serial adapter | Auto-listens on **all** COM ports (or set `QFRDS_CONTROLLER_PORT`) |
 
 Connect TX/RX/GND per your cable (null-modem or straight-through). Both ends: **9600 baud, 8N1, UTF-8 text + newline**.
 
@@ -24,7 +24,9 @@ Connect TX/RX/GND per your cable (null-modem or straight-through). Both ends: **
 mode
 ```
 
-Or check Device Manager for the RS232 / USB-serial port (default listener: `COM10`).
+Or check Device Manager for the RS232 / USB-serial port.
+
+**If Device Manager shows no COM ports on the thin client**, Windows cannot read the serial wire — add a **USB-serial adapter on the thin client** (cable: console USB TX → RS232 wire → thin-client USB RX).
 
 ## 2. Start the controller (thin client)
 
@@ -33,20 +35,16 @@ cd qfrds-controller-simulator
 mvn clean javafx:run
 ```
 
-Optional — if RS232 is not on `COM10`:
+Default: listens on **every COM port** Windows reports. Footer should show `LIVE · listening on COM1, COM3` (your ports).
+
+Optional — pin one port in production:
 
 ```powershell
 $env:QFRDS_CONTROLLER_PORT = "COM3"
 mvn clean javafx:run
 ```
 
-Engineering log should show:
-
-```text
-RS232 listener active on COM10 @ 9600 8N1 UTF-8.
-```
-
-Status badge: **LIVE** when the port is open.
+Footer should show **`LIVE`** (not `WAITING`).
 
 ## 3. Start the supervisor (console PC)
 
@@ -76,7 +74,7 @@ No physical cable required.
 | Variable | App | Purpose |
 |----------|-----|---------|
 | `QFRDS_SUPERVISOR_PORT` | Console | Default COM port in the UI |
-| `QFRDS_CONTROLLER_PORT` | Controller | RS232 listen port (default `COM10`) |
+| `QFRDS_CONTROLLER_PORT` | Controller | Pin one listen port; if unset, listens on **all** COM ports |
 | `QFRDS_PAIR_PORT` | Controller | com0com partner port (same-PC test only) |
 
 ## Troubleshooting
@@ -88,7 +86,8 @@ No physical cable required.
 | Console connected, wire TX blinks, **display unchanged** | Controller is on the **wrong COM port** — check footer on passenger screen (`WAITING` = not listening). On thin client: Device Manager → Ports → set `QFRDS_CONTROLLER_PORT` to the RS232/USB port the cable is plugged into |
 | Footer shows `rx=0` after Generate | TX/RX swapped on cable, or controller COM wrong — try null-modem adapter or swap TX/RX wires |
 | Footer shows `rx=1+` but no ticket | Parse error — open `%LOCALAPPDATA%\QFRDS\serial.log` on thin client |
-| Controller MOCK / WAITING | `QFRDS_CONTROLLER_PORT` wrong or port busy — see `serial.log` for detected ports |
+| Footer `WAITING · no COM in Device Manager` | Thin client has **zero** COM ports — plug USB-serial adapter on thin client |
+| Footer `WAITING · cannot open any port` | Ports exist but busy — close other apps using COM ports |
 | Garbled display | Baud mismatch — both sides must be 9600 8N1 |
 | Need wireless demo again | `git checkout backup/wireless-tcp-20260617` |
 
