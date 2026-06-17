@@ -4,16 +4,13 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 /**
- * UPI payment QR settings from environment (not committed to git).
- * <p>
- * Set on the thin client before starting the controller:
- * </p>
- * <pre>
- * QFRDS_UPI_VPA=yourname@paytm
- * QFRDS_UPI_PAYEE_NAME=Your Name
- * </pre>
+ * UPI payment QR settings. Defaults are hardcoded for the demo; override with
+ * {@code QFRDS_UPI_VPA} / {@code QFRDS_UPI_PAYEE_NAME} if needed.
  */
 public final class UpiQrConfig {
+
+    private static final String DEFAULT_VPA = "9289704566@ptsbi";
+    private static final String DEFAULT_PAYEE_NAME = "Naman Garg";
 
     private static final String ENV_VPA = "QFRDS_UPI_VPA";
     private static final String ENV_PAYEE_NAME = "QFRDS_UPI_PAYEE_NAME";
@@ -28,12 +25,17 @@ public final class UpiQrConfig {
     }
 
     public static String vpa() {
-        return firstNonBlank(System.getenv(ENV_VPA), System.getProperty("qfrds.upi.vpa"));
+        return firstNonBlank(
+                System.getenv(ENV_VPA),
+                System.getProperty("qfrds.upi.vpa"),
+                DEFAULT_VPA);
     }
 
     public static String payeeName() {
-        String name = firstNonBlank(System.getenv(ENV_PAYEE_NAME), System.getProperty("qfrds.upi.payeeName"));
-        return name == null ? "QFRDS" : name;
+        return firstNonBlank(
+                System.getenv(ENV_PAYEE_NAME),
+                System.getProperty("qfrds.upi.payeeName"),
+                DEFAULT_PAYEE_NAME);
     }
 
     /** When set, QR always uses this amount instead of the ticket fare. */
@@ -78,12 +80,11 @@ public final class UpiQrConfig {
         return URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
 
-    private static String firstNonBlank(String a, String b) {
-        if (a != null && !a.isBlank()) {
-            return a.trim();
-        }
-        if (b != null && !b.isBlank()) {
-            return b.trim();
+    private static String firstNonBlank(String... values) {
+        for (String v : values) {
+            if (v != null && !v.isBlank()) {
+                return v.trim();
+            }
         }
         return null;
     }

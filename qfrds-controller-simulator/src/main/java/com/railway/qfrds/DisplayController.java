@@ -46,7 +46,7 @@ public final class DisplayController {
                         "UPI QR enabled — VPA " + UpiQrConfig.vpa() + " (" + UpiQrConfig.payeeName() + ")"));
             } else {
                 statusView.appendLog(LogFormatter.ts(
-                        "UPI QR not set — using demo text QR (set QFRDS_UPI_VPA on thin client)"));
+                        "UPI QR not set — using demo text QR"));
             }
             statusView.appendLog(LogFormatter.ts(
                     SerialPortConfig.useExplicitPort()
