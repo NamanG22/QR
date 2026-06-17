@@ -2,9 +2,7 @@ package com.railway.qfrds;
 
 import com.fazecast.jSerialComm.SerialPort;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +15,8 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
- * Listens on one or more COM ports. When {@code QFRDS_CONTROLLER_PORT} is unset, opens
- * <strong>every</strong> port Windows reports so lab wiring does not depend on guessing COM10.
+ * Stable RS232 listener — one port by default ({@code COM1}), blocking reads, no false reconnects
+ * on idle timeout.
  */
 public final class MultiSerialListenerService implements LineInputService {
 
@@ -28,7 +26,8 @@ public final class MultiSerialListenerService implements LineInputService {
     private static final int DATA_BITS = 8;
     private static final int STOP_BITS = SerialPort.ONE_STOP_BIT;
     private static final int PARITY = SerialPort.NO_PARITY;
-    private static final long RECONNECT_MS = 2_000;
+    private static final long RECONNECT_MS = 3_000;
+    private static final int READ_BUF_SIZE = 512;
 
     private final Consumer<String> lineConsumer;
     private final Consumer<String> logSink;
@@ -37,7 +36,11 @@ public final class MultiSerialListenerService implements LineInputService {
     private final AtomicBoolean running = new AtomicBoolean(false);
     private final CopyOnWriteArrayList<PortSession> openSessions = new CopyOnWriteArrayList<>();
     private final List<Thread> workers = new ArrayList<>();
+    private final List<String> targetPorts = new ArrayList<>();
+
     private volatile int reconnectAttempts;
+    private volatile boolean everHadSession;
+    private volatile long lastRxNanos;
 
     public MultiSerialListenerService(
             Consumer<String> lineConsumer,
@@ -57,13 +60,12 @@ public final class MultiSerialListenerService implements LineInputService {
         String discovered = SerialPortConfig.describeAvailablePorts();
         SerialDiagLog.write("Available ports: " + discovered);
 
-        if (SerialPortConfig.useExplicitPort()) {
-            logTs("Serial listener — explicit port " + SerialPortConfig.explicitPortName());
-        } else {
-            logTs("Serial listener — auto mode on all ports: " + discovered);
-        }
-
         for (String portName : SerialPortConfig.portsToListen()) {
+            targetPorts.add(portName);
+        }
+        logTs("Serial listener — port(s): " + String.join(", ", targetPorts));
+
+        for (String portName : targetPorts) {
             Thread worker = new Thread(() -> runPortLoop(portName), "qfrds-serial-" + portName);
             worker.setDaemon(true);
             workers.add(worker);
@@ -86,7 +88,17 @@ public final class MultiSerialListenerService implements LineInputService {
 
     @Override
     public boolean isMockMode() {
-        return openSessions.isEmpty();
+        return !isLinkLive() && !isReconnecting();
+    }
+
+    /** True while at least one COM port is open and reading. */
+    public boolean isLinkLive() {
+        return !openSessions.isEmpty();
+    }
+
+    /** True after first successful open — avoids footer flicker during short reconnect gaps. */
+    public boolean isReconnecting() {
+        return everHadSession && openSessions.isEmpty() && running.get();
     }
 
     @Override
@@ -96,29 +108,38 @@ public final class MultiSerialListenerService implements LineInputService {
 
     @Override
     public String linkLabel() {
-        if (openSessions.isEmpty()) {
-            return SerialPortConfig.useExplicitPort()
-                    ? SerialPortConfig.explicitPortName()
-                    : "AUTO";
+        if (!openSessions.isEmpty()) {
+            return openSessions.stream()
+                    .map(PortSession::portName)
+                    .collect(Collectors.joining(", "));
         }
-        return openSessions.stream()
-                .map(PortSession::portName)
-                .collect(Collectors.joining(", "));
+        if (!targetPorts.isEmpty()) {
+            return String.join(", ", targetPorts);
+        }
+        return SerialPortConfig.DEFAULT_PORT_NAME;
     }
 
-    /** Footer hint text for the passenger display. */
     public String statusHint() {
-        if (!openSessions.isEmpty()) {
-            return "listening on " + linkLabel();
+        if (isLinkLive()) {
+            return packetsReceivedRecently()
+                    ? "receiving on " + linkLabel()
+                    : "listening on " + linkLabel();
+        }
+        if (isReconnecting()) {
+            return "reconnecting to " + linkLabel() + "…";
         }
         String found = SerialPortConfig.describeAvailablePorts();
         if (found.startsWith("(none")) {
-            return "no COM in Device Manager — plug RS232/USB adapter into thin client";
+            return "no COM in Device Manager";
         }
-        if (SerialPortConfig.useExplicitPort()) {
-            return "cannot open " + SerialPortConfig.explicitPortName() + " — found: " + found;
+        return "waiting for " + linkLabel();
+    }
+
+    private boolean packetsReceivedRecently() {
+        if (lastRxNanos == 0) {
+            return false;
         }
-        return "cannot open any port — found: " + found;
+        return System.nanoTime() - lastRxNanos < 30_000_000_000L;
     }
 
     private void runPortLoop(String portName) {
@@ -126,39 +147,22 @@ public final class MultiSerialListenerService implements LineInputService {
             PortSession session = openSession(portName);
             if (session == null) {
                 reconnectAttempts++;
-                if (reconnectAttempts == 1 || reconnectAttempts % 10 == 0) {
-                    logTs(portName + " unavailable — " + statusHint());
+                if (reconnectAttempts == 1 || reconnectAttempts % 15 == 0) {
+                    logTs(portName + " unavailable (attempt " + reconnectAttempts + ")");
                 }
                 sleepInterruptible(RECONNECT_MS);
                 continue;
             }
 
             openSessions.add(session);
+            everHadSession = true;
             reconnectAttempts = 0;
             logTs("RS232 listener active on " + portName + " @ " + BAUD + " 8N1 UTF-8.");
             SerialDiagLog.write("Listening on " + portName);
 
-            try (InputStreamReader isr = new InputStreamReader(session.port.getInputStream(), StandardCharsets.UTF_8);
-                 BufferedReader reader = new BufferedReader(isr)) {
-
-                String line;
-                while (running.get() && session.port.isOpen()) {
-                    line = reader.readLine();
-                    if (line == null) {
-                        logTs(portName + " stream closed — will reconnect.");
-                        break;
-                    }
-                    SerialDiagLog.write(portName + " RX " + line.length() + " chars: " + truncate(line, 200));
-                    if (heartbeatCallback != null) {
-                        try {
-                            heartbeatCallback.run();
-                        } catch (Exception ex) {
-                            LOG.log(Level.FINE, "heartbeat callback failed", ex);
-                        }
-                    }
-                    lineConsumer.accept(line);
-                }
-            } catch (IOException ex) {
+            try {
+                readLines(session);
+            } catch (Exception ex) {
                 LOG.log(Level.INFO, "Serial read error on " + portName, ex);
                 logTs(portName + " read error: " + ex.getMessage() + " — reconnecting.");
             } finally {
@@ -169,6 +173,57 @@ public final class MultiSerialListenerService implements LineInputService {
                 }
             }
         }
+    }
+
+    /**
+     * Blocking byte read + manual newline framing — avoids BufferedReader returning null on
+     * semi-blocking timeouts (which caused false disconnects and missed packets).
+     */
+    private void readLines(PortSession session) throws Exception {
+        SerialPort port = session.port;
+        byte[] buf = new byte[READ_BUF_SIZE];
+        ByteArrayOutputStream lineBuf = new ByteArrayOutputStream(256);
+
+        while (running.get() && port.isOpen()) {
+            int n = port.readBytes(buf, buf.length);
+            if (n < 0) {
+                logTs(session.portName + " stream ended — will reconnect.");
+                break;
+            }
+            if (n == 0) {
+                continue;
+            }
+
+            for (int i = 0; i < n; i++) {
+                byte b = buf[i];
+                if (b == '\n') {
+                    dispatchLine(session.portName, lineBuf);
+                    lineBuf.reset();
+                } else if (b != '\r') {
+                    lineBuf.write(b);
+                }
+            }
+        }
+    }
+
+    private void dispatchLine(String portName, ByteArrayOutputStream lineBuf) {
+        if (lineBuf.size() == 0) {
+            return;
+        }
+        String line = lineBuf.toString(StandardCharsets.UTF_8).trim();
+        if (line.isEmpty()) {
+            return;
+        }
+        lastRxNanos = System.nanoTime();
+        SerialDiagLog.write(portName + " RX " + line.length() + " chars: " + truncate(line, 200));
+        if (heartbeatCallback != null) {
+            try {
+                heartbeatCallback.run();
+            } catch (Exception ex) {
+                LOG.log(Level.FINE, "heartbeat callback failed", ex);
+            }
+        }
+        lineConsumer.accept(line);
     }
 
     private PortSession openSession(String portName) {
@@ -182,7 +237,8 @@ public final class MultiSerialListenerService implements LineInputService {
         candidate.setNumStopBits(STOP_BITS);
         candidate.setParity(PARITY);
         candidate.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
-        candidate.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 500, 0);
+        // Block until a byte arrives — do not use read timeout (idle port is normal).
+        candidate.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 0, 0);
 
         if (!candidate.openPort()) {
             SerialDiagLog.write("Could not open " + portName + " (" + candidate.getDescriptivePortName() + ")");

@@ -139,6 +139,7 @@ public final class SerialService implements LineOutputService {
                 log("Packet send incomplete: wrote " + written + "/" + bytes.length + " bytes.");
                 return false;
             }
+            port.flushIOBuffers();
             return true;
         } catch (Exception ex) {
             LOG.log(Level.WARNING, "Serial write failed", ex);

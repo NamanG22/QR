@@ -25,22 +25,31 @@ public final class SerialPortConfig {
     }
 
     /**
-     * Ports to open: one explicit port from env, or every port Windows exposes (lab auto mode).
+     * Ports to open: explicit env port, or {@link #DEFAULT_PORT_NAME} only (stable single-port RX).
+     * Set {@code QFRDS_LISTEN_ALL_PORTS=true} to probe every COM port (lab only).
      */
     public static String[] portsToListen() {
         if (useExplicitPort()) {
             return new String[] { explicitPortName() };
         }
-        SerialPort[] ports = SerialPort.getCommPorts();
-        if (ports.length == 0) {
-            return new String[] { DEFAULT_PORT_NAME };
+        if (listenOnAllPorts()) {
+            SerialPort[] ports = SerialPort.getCommPorts();
+            if (ports.length == 0) {
+                return new String[] { DEFAULT_PORT_NAME };
+            }
+            String[] names = new String[ports.length];
+            for (int i = 0; i < ports.length; i++) {
+                names[i] = ports[i].getSystemPortName();
+            }
+            java.util.Arrays.sort(names, SerialPortConfig::compareComPortNames);
+            return names;
         }
-        String[] names = new String[ports.length];
-        for (int i = 0; i < ports.length; i++) {
-            names[i] = ports[i].getSystemPortName();
-        }
-        java.util.Arrays.sort(names, SerialPortConfig::compareComPortNames);
-        return names;
+        return new String[] { DEFAULT_PORT_NAME };
+    }
+
+    private static boolean listenOnAllPorts() {
+        String flag = System.getenv("QFRDS_LISTEN_ALL_PORTS");
+        return flag != null && "true".equalsIgnoreCase(flag.trim());
     }
 
     /** COM1 before COM2 before COM10, etc. */

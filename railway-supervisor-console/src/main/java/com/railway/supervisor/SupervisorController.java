@@ -68,7 +68,9 @@ public class SupervisorController {
         }
 
         serialService = buildSerialService();
-        appendLog("Click Connect, then Generate Ticket.");
+        appendLog("Connecting to " + serialService.linkLabel() + " …");
+        serialService.connect();
+        appendLog("Click Generate Ticket when connected.");
         appendLog("Controller listens on RS232 — set QFRDS_CONTROLLER_PORT on the thin client if needed.");
         appendLog("See SERIAL_SETUP.md in the repo root for wiring and port help.");
 
@@ -78,7 +80,17 @@ public class SupervisorController {
 
     @FXML
     private void onConnectLink() {
-        serialService = buildSerialService();
+        String port = trimOrEmpty(serialPortField.getText());
+        if (serialService != null
+                && port.equals(serialService.linkLabel())
+                && !serialService.isMockMode()) {
+            appendLog("Already connected to " + port + ".");
+            return;
+        }
+        if (serialService != null) {
+            serialService.disconnectQuietly();
+        }
+        serialService = new SerialService(this::appendLog, port.isEmpty() ? null : port);
         appendLog("Connecting to " + serialService.linkLabel() + " …");
         serialService.connect();
     }
@@ -99,7 +111,12 @@ public class SupervisorController {
         }
 
         if (serialService == null || serialService.isMockMode()) {
-            onConnectLink();
+            if (serialService == null) {
+                serialService = buildSerialService();
+            }
+            if (serialService.isMockMode()) {
+                serialService.connect();
+            }
         }
 
         String src = trimOrEmpty(sourceField.getText());
@@ -145,9 +162,6 @@ public class SupervisorController {
     }
 
     private SerialService buildSerialService() {
-        if (serialService != null) {
-            serialService.disconnectQuietly();
-        }
         String port = trimOrEmpty(serialPortField.getText());
         return new SerialService(this::appendLog, port.isEmpty() ? null : port);
     }

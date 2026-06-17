@@ -129,18 +129,10 @@ public final class DisplayController {
 
     private void refreshPassengerLinkStatus() {
         String port = serial != null ? serial.linkLabel() : "—";
-        boolean live = serial != null && !serial.isMockMode();
-        String hint;
-        if (serial != null && !live) {
-            hint = serial.statusHint();
-        } else if (live && packetsReceived > 0) {
-            hint = "receiving on " + port;
-        } else if (live) {
-            hint = "listening on " + port;
-        } else {
-            hint = "starting";
-        }
-        passengerView.setLinkStatus(port, live, packetsReceived, hint);
+        boolean live = serial != null && serial.isLinkLive();
+        boolean reconnecting = serial != null && serial.isReconnecting();
+        String hint = serial != null ? serial.statusHint() : "starting";
+        passengerView.setLinkStatus(port, live, reconnecting, packetsReceived, hint);
     }
 
     private static String truncate(String s, int max) {
