@@ -9,21 +9,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Wraps jSerialComm access for the supervisor console.
- * <p>
- * Serial layer responsibilities:
- * </p>
- * <ul>
- *   <li>Open the configured port (default {@code COM11}) at 9600 8N1 — USB-serial TX in lab, CRIS RS232 in production.</li>
- *   <li>Transmit UTF-8 text terminated by a newline so downstream parsers can frame records.</li>
- *   <li>Fall back to {@linkplain #isMockMode() mock mode} when the port is missing or busy.</li>
- * </ul>
+ * Wraps jSerialComm access for the supervisor console — keeps the port open and writes complete
+ * packets in one synchronized operation with flush.
  */
 public final class SerialService implements LineOutputService {
 
     private static final Logger LOG = Logger.getLogger(SerialService.class.getName());
 
-    /** Supervisor TX port — USB-serial in lab (default COM11). Override: QFRDS_SUPERVISOR_PORT. */
     public static final String DEFAULT_PORT_NAME = SerialPortConfig.DEFAULT_PORT_NAME;
     private static final int BAUD = 9600;
     private static final int DATA_BITS = 8;
@@ -32,19 +24,14 @@ public final class SerialService implements LineOutputService {
 
     private final Consumer<String> logSink;
     private final String portName;
+    private final Object writeLock = new Object();
     private SerialPort port;
     private boolean mockMode;
 
-    /**
-     * @param logSink receives human-readable lines for the UI log {@link javafx.scene.control.TextArea}
-     */
     public SerialService(Consumer<String> logSink) {
         this(logSink, null);
     }
 
-    /**
-     * @param portNameOverride USB-serial COM port from the UI; falls back to {@link SerialPortConfig#portName()}
-     */
     public SerialService(Consumer<String> logSink, String portNameOverride) {
         this.logSink = Objects.requireNonNull(logSink, "logSink");
         this.portName = (portNameOverride != null && !portNameOverride.isBlank())
@@ -66,13 +53,18 @@ public final class SerialService implements LineOutputService {
         return portName;
     }
 
-    /**
-     * Attempts to open {@link SerialPortConfig#portName()}. On failure the service stays in mock mode
-     * so the demo UI remains usable without hardware.
-     */
     @Override
     public void connect() {
-        disconnectQuietly();
+        synchronized (writeLock) {
+            if (port != null && port.isOpen() && !mockMode) {
+                return;
+            }
+            openPortInternal();
+        }
+    }
+
+    private void openPortInternal() {
+        closePortOnly();
 
         String target = portName;
         SerialPort candidate = SerialPortConfig.findPort(target);
@@ -80,7 +72,6 @@ public final class SerialService implements LineOutputService {
             mockMode = true;
             log("Serial connection failed: " + target + " not found.");
             log("Windows ports: " + SerialPortConfig.describeAvailablePorts());
-            log("Running in mock mode — packets will be logged only.");
             return;
         }
 
@@ -89,19 +80,13 @@ public final class SerialService implements LineOutputService {
         candidate.setNumStopBits(STOP_BITS);
         candidate.setParity(PARITY);
         candidate.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
-        // Blocking write with bounded wait avoids indefinite hangs on full UART buffers.
-        candidate.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 2000);
+        candidate.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 5_000);
 
         try {
             if (!candidate.openPort()) {
                 mockMode = true;
-                String detail = SerialPortConfig.openFailureDetail(candidate);
-                log("Serial connection failed: could not open " + target
-                        + (detail.isEmpty() ? "" : " — " + detail));
-                log("Port type: " + candidate.getDescriptivePortName());
+                log("Serial connection failed: could not open " + target);
                 log("Windows ports: " + SerialPortConfig.describeAvailablePorts());
-                log("Tip: plug in the USB-serial adapter and pick its COM port in Device Manager.");
-                log("Running in mock mode — packets will be logged only.");
                 return;
             }
             port = candidate;
@@ -109,55 +94,75 @@ public final class SerialService implements LineOutputService {
             port.setDTR();
             port.setRTS();
             log("Connected to " + target + " (" + candidate.getDescriptivePortName()
-                    + ", " + BAUD + " 8N1, UTF-8 + newline).");
+                    + ", " + BAUD + " 8N1). Port stays open for all sends.");
         } catch (Exception ex) {
             mockMode = true;
             LOG.log(Level.WARNING, "Serial open failed", ex);
             log("Serial connection failed: " + ex.getMessage());
-            log("Windows ports: " + SerialPortConfig.describeAvailablePorts());
-            log("Running in mock mode — packets will be logged only.");
         }
     }
 
-    /**
-     * Sends {@code payload} as UTF-8 bytes followed by {@code \n}. In mock mode, nothing is written
-     * to hardware; callers should still log success for demo continuity.
-     */
     @Override
     public boolean sendLine(String payload) {
         Objects.requireNonNull(payload, "payload");
         byte[] bytes = (payload + "\r\n").getBytes(StandardCharsets.UTF_8);
 
-        if (mockMode || port == null || !port.isOpen()) {
-            log("[mock] Would send " + bytes.length + " bytes on serial.");
-            return true;
-        }
-
-        try {
-            int written = port.writeBytes(bytes, bytes.length);
-            if (written != bytes.length) {
-                log("Packet send incomplete: wrote " + written + "/" + bytes.length + " bytes.");
+        synchronized (writeLock) {
+            if (mockMode || port == null || !port.isOpen()) {
+                openPortInternal();
+            }
+            if (mockMode || port == null || !port.isOpen()) {
+                log("[mock] Would send " + bytes.length + " bytes on serial.");
                 return false;
             }
-            port.flushIOBuffers();
-            return true;
-        } catch (Exception ex) {
-            LOG.log(Level.WARNING, "Serial write failed", ex);
-            log("Packet send failed: " + ex.getMessage());
-            return false;
+
+            try {
+                port.setDTR();
+                port.setRTS();
+                if (!writeAll(bytes)) {
+                    log("Packet send incomplete on " + portName + ".");
+                    return false;
+                }
+                port.flushIOBuffers();
+                return true;
+            } catch (Exception ex) {
+                LOG.log(Level.WARNING, "Serial write failed", ex);
+                log("Packet send failed: " + ex.getMessage());
+                mockMode = true;
+                closePortOnly();
+                return false;
+            }
         }
+    }
+
+    private boolean writeAll(byte[] bytes) {
+        int offset = 0;
+        while (offset < bytes.length) {
+            int written = port.writeBytes(bytes, bytes.length - offset, offset);
+            if (written <= 0) {
+                return false;
+            }
+            offset += written;
+        }
+        return true;
     }
 
     @Override
     public void disconnectQuietly() {
+        synchronized (writeLock) {
+            closePortOnly();
+        }
+    }
+
+    private void closePortOnly() {
         if (port != null && port.isOpen()) {
             try {
                 port.closePort();
-                log("Disconnected from serial port.");
             } catch (Exception ex) {
                 LOG.log(Level.FINE, "Error closing port", ex);
             }
         }
         port = null;
+        mockMode = true;
     }
 }

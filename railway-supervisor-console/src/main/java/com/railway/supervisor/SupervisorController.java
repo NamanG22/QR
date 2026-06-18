@@ -155,9 +155,9 @@ public class SupervisorController {
 
         boolean ok = serialService.sendLine(packet);
         if (ok) {
-            appendLog(serialService.isMockMode()
-                    ? "Send failed — still in mock mode. Click Connect after plugging in the USB-serial adapter."
-                    : "Packet sent successfully over RS232.");
+            appendLog("Packet sent successfully over RS232.");
+        } else {
+            appendLog("Send failed — check COM port and cable, then click Connect.");
         }
     }
 

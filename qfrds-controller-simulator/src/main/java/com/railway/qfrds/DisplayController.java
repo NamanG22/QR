@@ -51,7 +51,7 @@ public final class DisplayController {
             statusView.appendLog(LogFormatter.ts(
                     SerialPortConfig.useExplicitPort()
                             ? "RS232 listener on " + SerialPortConfig.explicitPortName()
-                            : "RS232 auto-listen on all COM ports — " + SerialPortConfig.describeAvailablePorts()));
+                            : "RS232 listener on " + SerialPortConfig.DEFAULT_PORT_NAME));
             refreshPassengerLinkStatus();
         });
         javafx.animation.Timeline sync = new javafx.animation.Timeline(
@@ -72,59 +72,48 @@ public final class DisplayController {
     }
 
     /**
-     * Invoked from the serial daemon thread for each newline-delimited UTF-8 packet.
+     * Invoked from the jSerialComm listener thread — parse quickly, UI + QR on FX thread.
      */
     private void handleRawLine(String line) {
         packetsReceived++;
         TicketPacketParser.ParseResult result = parser.parse(line);
+        Platform.runLater(() -> applyPacketToUi(line, result));
+    }
 
-        String qrPayloadForStatus = "";
-        TicketData ticket = null;
-        QRGeneratorService.OptionalImageResult qrImage = QRGeneratorService.OptionalImageResult.fail("skipped");
+    private void applyPacketToUi(String line, TicketPacketParser.ParseResult result) {
+        statusView.setLastPacketPreview(truncate(line, 512));
+        statusView.setReconnectCount(serial != null ? serial.getReconnectAttempts() : 0);
+        statusView.setMockMode(serial != null && serial.isMockMode());
+        refreshPassengerLinkStatus();
 
-        if (result.getData().isPresent()) {
-            ticket = result.getData().get();
-            qrPayloadForStatus = qrGenerator.buildQrPayload(ticket);
-            qrImage = qrGenerator.renderQrImage(qrPayloadForStatus);
+        if (result.getErrorMessage().isPresent()) {
+            statusView.appendLog(LogFormatter.ts("PARSE ERROR: " + result.getErrorMessage().get()));
+            statusView.setQrGenerationStatus("FAILED");
+            statusView.setDetectedTicketType("—");
+            statusView.pulseErrorLed();
+            return;
         }
 
-        TicketPacketParser.ParseResult resultFinal = result;
-        TicketData ticketFinal = ticket;
-        QRGeneratorService.OptionalImageResult qrImageFinal = qrImage;
-        String qrPayloadFinal = qrPayloadForStatus;
+        TicketData t = result.getData().orElseThrow();
+        statusView.setDetectedTicketType(t.getTicketType().name());
+        statusView.appendLog(LogFormatter.ts("Packet parsed OK — TYPE=" + t.getTicketType()));
 
-        Platform.runLater(() -> {
-            statusView.setLastPacketPreview(truncate(line, 512));
-            statusView.setReconnectCount(serial != null ? serial.getReconnectAttempts() : 0);
-            statusView.setMockMode(serial != null && serial.isMockMode());
-            refreshPassengerLinkStatus();
+        String qrPayload = qrGenerator.buildQrPayload(t);
+        QRGeneratorService.OptionalImageResult qrImage = qrGenerator.renderQrImage(qrPayload);
 
-            if (resultFinal.getErrorMessage().isPresent()) {
-                statusView.appendLog(LogFormatter.ts("PARSE ERROR: " + resultFinal.getErrorMessage().get()));
-                statusView.setQrGenerationStatus("FAILED");
-                statusView.setDetectedTicketType("—");
-                statusView.pulseErrorLed();
-                return;
-            }
+        if (!qrImage.isSuccess()) {
+            statusView.setQrGenerationStatus("FAILED: " + qrImage.getError());
+            statusView.appendLog(LogFormatter.ts("QR encode error: " + qrImage.getError()));
+            passengerView.applyTicketUpdate(t, null);
+            statusView.pulseQrWarningLed();
+            return;
+        }
 
-            TicketData t = Objects.requireNonNull(ticketFinal);
-            statusView.setDetectedTicketType(t.getTicketType().name());
-            statusView.appendLog(LogFormatter.ts("Packet parsed OK — TYPE=" + t.getTicketType()));
-
-            if (!qrImageFinal.isSuccess()) {
-                statusView.setQrGenerationStatus("FAILED: " + qrImageFinal.getError());
-                statusView.appendLog(LogFormatter.ts("QR encode error: " + qrImageFinal.getError()));
-                passengerView.applyTicketUpdate(t, null);
-                statusView.pulseQrWarningLed();
-                return;
-            }
-
-            statusView.setQrGenerationStatus("OK");
-            statusView.appendLog(LogFormatter.ts("QR payload: " + truncate(qrPayloadFinal, 300)));
-            passengerView.applyTicketUpdate(t, qrImageFinal.getImage());
-            statusView.pulseQrOkLed();
-            statusView.pulseDisplayPipelineLed();
-        });
+        statusView.setQrGenerationStatus("OK");
+        statusView.appendLog(LogFormatter.ts("QR payload: " + truncate(qrPayload, 300)));
+        passengerView.applyTicketUpdate(t, qrImage.getImage());
+        statusView.pulseQrOkLed();
+        statusView.pulseDisplayPipelineLed();
     }
 
     private void refreshPassengerLinkStatus() {
