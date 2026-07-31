@@ -256,7 +256,7 @@ public class PassengerDisplayView implements Initializable {
         prsPaxTable.getColumns().add(colAge);
         prsPaxTable.getColumns().add(colStatus);
         prsPaxTable.setItems(prsPaxRows);
-        prsPaxTable.setFixedCellSize(24);
+        prsPaxTable.setFixedCellSize(26);
         prsPaxTable.setPlaceholder(new Label(""));
     }
 

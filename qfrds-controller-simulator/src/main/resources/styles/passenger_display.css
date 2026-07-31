@@ -301,58 +301,123 @@
     -fx-text-fill: #ffffff;
 }
 
-/* ====== PRS payment column ====== */
+/* ====== PRS payment column (legacy — kept for HTML previews) ====== */
 .prs-payment-col {
     -fx-background-color: #ffffff;
-    -fx-border-color: #2a2a2a;
+    -fx-border-color: #000000;
     -fx-border-width: 1;
     -fx-padding: 8;
 }
 
 .payment-banner-prs {
-    -fx-font-family: "Rozha One", "Noto Serif", "Times New Roman", serif;
-    -fx-font-size: 14px;
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
+    -fx-font-size: 20px;
     -fx-font-weight: 700;
-    -fx-text-fill: #5a0a14;
+    -fx-text-fill: #470000;
     -fx-text-alignment: center;
 }
 
-/* ====== PRS passenger table — match same monochrome ticket aesthetic ====== */
+/* ====== PRS board — Tailwind-style (matches UTS pv-* system) ====== */
+.pv-prs-logo-frame {
+    -fx-padding: 4 8 4 0;
+}
+
+.pv-prs-logo-fallback {
+    -fx-background-color: #470000;
+    -fx-background-radius: 200;
+    -fx-border-color: #2a0000;
+    -fx-border-radius: 200;
+    -fx-border-width: 2;
+    -fx-padding: 4;
+    -fx-min-width: 72;
+    -fx-min-height: 72;
+    -fx-pref-width: 72;
+    -fx-pref-height: 72;
+    -fx-max-width: 72;
+    -fx-max-height: 72;
+}
+
+.pv-prs-logo-arc {
+    -fx-font-size: 7px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "Inter", "Arial", sans-serif;
+}
+
+.pv-prs-logo-emblem {
+    -fx-font-size: 22px;
+    -fx-text-fill: #ffffff;
+}
+
+.pv-prs-logo-hi {
+    -fx-font-size: 9px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "Tiro Devanagari Hindi", "Noto Sans Devanagari", "Mangal", sans-serif;
+}
+
+.pv-prs-table-wrap {
+    -fx-background-color: transparent;
+}
+
+.pv-prs-payment {
+    -fx-padding: 8;
+}
+
+/* ====== PRS passenger table — UTS-aligned monochrome grid ====== */
 .prs-pax-table {
-    -fx-background-color: #1a1a1a;
-    -fx-border-color: #2a2a2a;
+    -fx-background-color: #000000;
+    -fx-border-color: #000000;
     -fx-border-width: 1;
-    -fx-table-cell-border-color: transparent;
+    -fx-table-cell-border-color: #333333;
 }
 
 .prs-pax-table .column-header-background {
-    -fx-background-color: #5a0a14;
+    -fx-background-color: #470000;
 }
 
 .prs-pax-table .column-header,
-.prs-pax-table .label {
+.prs-pax-table .column-header .label {
     -fx-text-fill: #ffffff;
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
     -fx-font-weight: 700;
-    -fx-font-size: 11px;
+    -fx-font-size: 13px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 4 8 4 8;
 }
 
 .prs-pax-table .table-cell {
-    -fx-background-color: #1a1a1a;
+    -fx-background-color: #000000;
     -fx-text-fill: #ffffff;
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
     -fx-font-weight: 700;
-    -fx-font-size: 12px;
-    -fx-padding: 2 6 2 6;
+    -fx-font-size: 13px;
+    -fx-padding: 3 8 3 8;
     -fx-border-color: transparent;
 }
 
 .prs-pax-table .table-row-cell {
-    -fx-cell-size: 24px;
+    -fx-cell-size: 26px;
+    -fx-background-color: #000000;
+}
+
+.prs-pax-table .table-row-cell:odd {
+    -fx-background-color: #1a1a1a;
+}
+
+.prs-pax-table .table-row-cell:odd .table-cell {
+    -fx-background-color: #1a1a1a;
 }
 
 .prs-pax-table:focused .table-row-cell:filled:focused:selected,
 .prs-pax-table .table-row-cell:filled:selected {
-    -fx-background-color: #1a1a1a;
+    -fx-background-color: #470000;
     -fx-text-fill: #ffffff;
+}
+
+.prs-pax-table:focused .table-row-cell:filled:focused:selected .table-cell,
+.prs-pax-table .table-row-cell:filled:selected .table-cell {
+    -fx-background-color: #470000;
 }
 
 /* ====== footer ====== */

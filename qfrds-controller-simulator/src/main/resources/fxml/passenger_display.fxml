@@ -249,190 +249,225 @@
             <!-- ========================================================== -->
             <!-- ============           PRS BOARD              ============ -->
             <!-- ========================================================== -->
-            <BorderPane fx:id="prsBoard" managed="false" styleClass="tan-board" visible="false">
-                <padding>
-                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-                </padding>
-                <top>
-                    <GridPane styleClass="rdso-header-bar" minHeight="200.0" prefHeight="200.0">
-                        <columnConstraints>
-                            <ColumnConstraints percentWidth="90.0" hgrow="ALWAYS"/>
-                            <ColumnConstraints percentWidth="10.0" hgrow="NEVER"/>
-                        </columnConstraints>
-                        <rowConstraints>
-                            <RowConstraints percentHeight="100.0" vgrow="ALWAYS"/>
-                        </rowConstraints>
+            <!-- PRS: same Tailwind-style system as UTS (pv-*), PRS-specific fields preserved -->
+            <BorderPane fx:id="prsBoard" managed="false" styleClass="pv-uts-board" visible="false">
+                <center>
+                    <VBox spacing="8.0" styleClass="pv-uts-canvas" BorderPane.alignment="TOP_LEFT">
+                        <padding>
+                            <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
+                        </padding>
 
-                        <GridPane GridPane.columnIndex="0" GridPane.rowIndex="0"
-                                  maxWidth="Infinity" maxHeight="Infinity">
-                            <columnConstraints>
-                                <ColumnConstraints percentWidth="100.0" hgrow="ALWAYS"/>
-                            </columnConstraints>
-                            <rowConstraints>
-                                <RowConstraints percentHeight="60.0" vgrow="ALWAYS"/>
-                                <RowConstraints percentHeight="40.0" vgrow="ALWAYS"/>
-                            </rowConstraints>
-
-                            <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="rdso-id-strip"
-                                  GridPane.columnIndex="0" GridPane.rowIndex="0">
-                                <HBox alignment="CENTER" spacing="0.0" styleClass="id-cell">
-                                    <Label styleClass="id-cell-label" text="Operator Code"/>
-                                </HBox>
-                                <HBox alignment="CENTER" spacing="0.0" styleClass="id-cell-value">
-                                    <Label fx:id="prsOperatorCode" styleClass="id-cell-value-text" text="CLIENT"/>
-                                </HBox>
+                        <!-- header: Operator Code strip + logo + title -->
+                        <VBox styleClass="pv-card-white" VBox.vgrow="NEVER">
+                            <HBox alignment="TOP_LEFT" spacing="8.0" styleClass="pv-header-strip-row">
+                                <VBox alignment="TOP_CENTER" prefWidth="140.0" minWidth="120.0"
+                                      styleClass="pv-strip-cell" maxWidth="160.0">
+                                    <Label styleClass="pv-strip-label" text="Operator Code"/>
+                                    <Region styleClass="pv-line-black" prefHeight="2.0" maxWidth="Infinity"/>
+                                    <Label fx:id="prsOperatorCode" styleClass="pv-strip-value" text="CLIENT"/>
+                                </VBox>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <StackPane alignment="CENTER" styleClass="pv-prs-logo-frame">
+                                    <ImageView fx:id="prsLogoPlaceholder" fitHeight="72.0" fitWidth="72.0"
+                                               preserveRatio="true" smooth="true"/>
+                                    <VBox alignment="CENTER" spacing="0.0" styleClass="pv-prs-logo-fallback">
+                                        <Label styleClass="pv-prs-logo-arc" text="INDIAN"/>
+                                        <Label styleClass="pv-prs-logo-arc" text="RAILWAYS"/>
+                                        <Label styleClass="pv-prs-logo-emblem" text="🚂"/>
+                                        <Label styleClass="pv-prs-logo-hi" text="भारतीय रेल"/>
+                                    </VBox>
+                                </StackPane>
                             </HBox>
+                            <Label styleClass="pv-title-ticket" text="Ticket Information"/>
+                        </VBox>
 
-                            <StackPane alignment="CENTER_LEFT"
-                                       GridPane.columnIndex="0" GridPane.rowIndex="1">
-                                <Label styleClass="rdso-main-title" text="Ticket Information"/>
+                        <!-- From | To -->
+                        <GridPane hgap="4.0" styleClass="pv-row,pv-grid-tight" VBox.vgrow="NEVER">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="10.0" hgrow="SOMETIMES"/>
+                                <ColumnConstraints percentWidth="40.0" hgrow="SOMETIMES"/>
+                                <ColumnConstraints percentWidth="10.0" hgrow="SOMETIMES"/>
+                                <ColumnConstraints percentWidth="40.0" hgrow="SOMETIMES"/>
+                            </columnConstraints>
+                            <VBox styleClass="pv-label-block" alignment="TOP_LEFT" GridPane.columnIndex="0"
+                                  GridPane.rowIndex="0">
+                                <Label styleClass="pv-label-en-lg" text="From"/>
+                                <Label styleClass="pv-label-hi-lg" text="कहाँ से"/>
+                            </VBox>
+                            <StackPane styleClass="pv-value-block" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label fx:id="prsFrom" styleClass="pv-value-text" text="" wrapText="true"/>
+                            </StackPane>
+                            <VBox styleClass="pv-label-block" alignment="TOP_LEFT" GridPane.columnIndex="2"
+                                  GridPane.rowIndex="0">
+                                <Label styleClass="pv-label-en-lg" text="To"/>
+                                <Label styleClass="pv-label-hi-lg" text="कहाँ तक"/>
+                            </VBox>
+                            <StackPane styleClass="pv-value-block" GridPane.columnIndex="3" GridPane.rowIndex="0">
+                                <Label fx:id="prsTo" styleClass="pv-value-text" text="" wrapText="true"/>
                             </StackPane>
                         </GridPane>
 
-                        <StackPane styleClass="rdso-logo-frame"
-                                   GridPane.columnIndex="1" GridPane.rowIndex="0"
-                                   GridPane.halignment="CENTER" GridPane.valignment="CENTER"
-                                   maxWidth="Infinity" maxHeight="Infinity">
-                            <ImageView fx:id="prsLogoPlaceholder" fitHeight="92.0" fitWidth="92.0"
-                                       preserveRatio="true" smooth="true"/>
-                            <VBox alignment="CENTER" spacing="0.0" styleClass="rdso-logo-fallback">
-                                <Label styleClass="logo-arc-top" text="INDIAN"/>
-                                <Label styleClass="logo-arc-top" text="RAILWAYS"/>
-                                <Label styleClass="logo-emblem" text="🚂"/>
-                                <Label styleClass="logo-arc-bottom" text="भारतीय रेल"/>
+                        <!-- Train No. | Quota -->
+                        <GridPane hgap="4.0" styleClass="pv-row,pv-grid-tight" VBox.vgrow="NEVER">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="10.0" hgrow="SOMETIMES"/>
+                                <ColumnConstraints percentWidth="40.0" hgrow="SOMETIMES"/>
+                                <ColumnConstraints percentWidth="10.0" hgrow="SOMETIMES"/>
+                                <ColumnConstraints percentWidth="40.0" hgrow="SOMETIMES"/>
+                            </columnConstraints>
+                            <VBox styleClass="pv-label-block" alignment="TOP_LEFT" GridPane.columnIndex="0"
+                                  GridPane.rowIndex="0">
+                                <Label styleClass="pv-label-en-lg" text="Train No."/>
+                                <Label styleClass="pv-label-hi-lg" text="गाड़ी सं."/>
                             </VBox>
-                        </StackPane>
-                    </GridPane>
-                </top>
-                <center>
-                    <HBox spacing="0.0" BorderPane.alignment="TOP_LEFT">
-                        <VBox spacing="0.0" HBox.hgrow="ALWAYS" minWidth="0.0" styleClass="rdso-body">
-                            <HBox spacing="0.0" styleClass="rdso-row">
-                                <HBox HBox.hgrow="ALWAYS" minWidth="0.0" spacing="0.0">
-                                    <VBox styleClass="label-cell" prefWidth="100.0"
-                                          minWidth="100.0" maxWidth="100.0">
-                                        <Label styleClass="label-en" text="From"/>
-                                        <Label styleClass="label-hi" text="कहाँ से"/>
-                                    </VBox>
-                                    <StackPane HBox.hgrow="ALWAYS" minWidth="0.0"
-                                               styleClass="value-cell,value-cell-tall">
-                                        <Label fx:id="prsFrom" styleClass="value-station" text="" wrapText="true"/>
-                                    </StackPane>
-                                </HBox>
-                                <HBox HBox.hgrow="ALWAYS" minWidth="0.0" spacing="0.0">
-                                    <VBox styleClass="label-cell" prefWidth="80.0"
-                                          minWidth="80.0" maxWidth="80.0">
-                                        <Label styleClass="label-en" text="To"/>
-                                        <Label styleClass="label-hi" text="कहाँ तक"/>
-                                    </VBox>
-                                    <StackPane HBox.hgrow="ALWAYS" minWidth="0.0"
-                                               styleClass="value-cell value-cell-tall">
-                                        <Label fx:id="prsTo" styleClass="value-station" text="" wrapText="true"/>
-                                    </StackPane>
-                                </HBox>
-                            </HBox>
-                            <HBox spacing="0.0" styleClass="rdso-row">
-                                <VBox styleClass="label-cell" prefWidth="100.0"
-                                      minWidth="100.0" maxWidth="100.0">
-                                    <Label styleClass="label-en" text="Train No."/>
-                                    <Label styleClass="label-hi" text="गाड़ी सं."/>
+                            <StackPane styleClass="pv-value-block" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label fx:id="prsTrainNo" styleClass="pv-value-text-lg" text=""/>
+                            </StackPane>
+                            <VBox styleClass="pv-label-block" alignment="TOP_LEFT" GridPane.columnIndex="2"
+                                  GridPane.rowIndex="0">
+                                <Label styleClass="pv-label-en-lg" text="Quota"/>
+                                <Label styleClass="pv-label-hi-lg" text="कोटा"/>
+                            </VBox>
+                            <StackPane styleClass="pv-value-block" GridPane.columnIndex="3" GridPane.rowIndex="0">
+                                <Label fx:id="prsQuota" styleClass="pv-value-text-lg" text="GN"/>
+                            </StackPane>
+                        </GridPane>
+
+                        <!-- Date + Pax | Class + Fare -->
+                        <HBox spacing="4.0" styleClass="pv-row" VBox.vgrow="NEVER">
+                            <GridPane hgap="4.0" HBox.hgrow="ALWAYS" minWidth="0.0" styleClass="pv-grid-tight">
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="20.0" hgrow="SOMETIMES"/>
+                                    <ColumnConstraints percentWidth="40.0" hgrow="SOMETIMES"/>
+                                    <ColumnConstraints percentWidth="20.0" hgrow="SOMETIMES"/>
+                                    <ColumnConstraints percentWidth="20.0" hgrow="SOMETIMES"/>
+                                </columnConstraints>
+                                <VBox styleClass="pv-label-block" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                    <Label styleClass="pv-label-en-lg" text="Date"/>
+                                    <Label styleClass="pv-label-hi-lg" text="दिनांक"/>
                                 </VBox>
-                                <StackPane HBox.hgrow="ALWAYS" minWidth="0.0" styleClass="value-cell">
-                                    <Label fx:id="prsTrainNo" styleClass="value-mono" text=""/>
+                                <StackPane styleClass="pv-value-block,pv-value-pad-sm" GridPane.columnIndex="1"
+                                           GridPane.rowIndex="0">
+                                    <Label fx:id="prsDate" styleClass="pv-value-text-lg" text=""/>
                                 </StackPane>
-                                <VBox styleClass="label-cell" prefWidth="80.0"
-                                      minWidth="80.0" maxWidth="80.0">
-                                    <Label styleClass="label-en" text="Quota"/>
-                                    <Label styleClass="label-hi" text="कोटा"/>
+                                <VBox alignment="CENTER" styleClass="pv-label-block,pv-label-stack"
+                                       GridPane.columnIndex="2" GridPane.rowIndex="0">
+                                    <Label styleClass="pv-label-en-lg" text="Pax"/>
+                                    <Region styleClass="pv-line-black" prefHeight="2.0" maxWidth="Infinity"/>
+                                    <Label styleClass="pv-label-hi-lg" text="यात्री"/>
                                 </VBox>
-                                <StackPane HBox.hgrow="ALWAYS" minWidth="0.0" styleClass="value-cell">
-                                    <Label fx:id="prsQuota" styleClass="value-mono" text="GN"/>
+                                <StackPane styleClass="pv-value-block,pv-value-pad-sm" GridPane.columnIndex="3"
+                                           GridPane.rowIndex="0">
+                                    <Label fx:id="prsTotalPax" styleClass="pv-value-text-lg" text=""/>
                                 </StackPane>
-                            </HBox>
-                            <HBox spacing="0.0" styleClass="rdso-row">
-                                <VBox styleClass="label-cell" prefWidth="100.0"
-                                      minWidth="100.0" maxWidth="100.0">
-                                    <Label styleClass="label-en" text="Date"/>
-                                    <Label styleClass="label-hi" text="दिनांक"/>
+                            </GridPane>
+                            <GridPane hgap="4.0" HBox.hgrow="ALWAYS" minWidth="0.0" styleClass="pv-grid-tight">
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="19.5" hgrow="SOMETIMES"/>
+                                    <ColumnConstraints percentWidth="19.5" hgrow="SOMETIMES"/>
+                                    <ColumnConstraints percentWidth="61.0" hgrow="SOMETIMES"/>
+                                </columnConstraints>
+                                <VBox alignment="CENTER" styleClass="pv-class-stack" GridPane.columnIndex="0"
+                                       GridPane.rowIndex="0">
+                                    <Label styleClass="pv-value-text-lg" text="Class"/>
+                                    <Region styleClass="pv-line-gray100" prefHeight="2.0" maxWidth="Infinity"/>
+                                    <Label fx:id="prsClass" styleClass="pv-class-inner" text=""/>
                                 </VBox>
-                                <StackPane HBox.hgrow="ALWAYS" minWidth="0.0" styleClass="value-cell">
-                                    <Label fx:id="prsDate" styleClass="value-mono" text=""/>
+                                <VBox styleClass="pv-label-block,pv-label-px" GridPane.columnIndex="1"
+                                       GridPane.rowIndex="0">
+                                    <Label styleClass="pv-label-en-lg" text="Fare"/>
+                                    <Label styleClass="pv-label-hi-lg" text="किराया"/>
+                                </VBox>
+                                <StackPane styleClass="pv-fare-maroon" GridPane.columnIndex="2"
+                                           GridPane.rowIndex="0">
+                                    <Label fx:id="prsFare" styleClass="pv-fare-amount" text=""/>
                                 </StackPane>
-                                <VBox styleClass="label-cell" prefWidth="80.0"
-                                      minWidth="80.0" maxWidth="80.0">
-                                    <Label styleClass="label-en" text="Pax"/>
-                                    <Label styleClass="label-hi" text="यात्री"/>
-                                </VBox>
-                                <StackPane prefWidth="56.0" minWidth="56.0" maxWidth="56.0" styleClass="value-cell">
-                                    <Label fx:id="prsTotalPax" styleClass="value-mono" text=""/>
-                                </StackPane>
-                                <VBox styleClass="label-cell" prefWidth="70.0"
-                                      minWidth="70.0" maxWidth="70.0">
-                                    <Label styleClass="label-en" text="Class"/>
-                                </VBox>
-                                <StackPane prefWidth="56.0" minWidth="56.0" maxWidth="56.0" styleClass="value-cell">
-                                    <Label fx:id="prsClass" styleClass="value-mono" text=""/>
-                                </StackPane>
-                                <VBox styleClass="label-cell" prefWidth="84.0"
-                                      minWidth="84.0" maxWidth="84.0">
-                                    <Label styleClass="label-en" text="Fare"/>
-                                    <Label styleClass="label-hi" text="किराया"/>
-                                </VBox>
-                                <StackPane HBox.hgrow="ALWAYS" minWidth="0.0"
-                                           styleClass="value-cell value-cell-fare">
-                                    <Label fx:id="prsFare" styleClass="value-fare" text=""/>
-                                </StackPane>
-                            </HBox>
-                            <HBox spacing="0.0" styleClass="rdso-row">
-                                <VBox styleClass="label-cell" prefWidth="130.0"
-                                      minWidth="130.0" maxWidth="130.0">
-                                    <Label styleClass="label-en" text="Boarding Pt."/>
-                                    <Label styleClass="label-hi" text="चढ़ने का स्थान"/>
-                                </VBox>
-                                <StackPane HBox.hgrow="ALWAYS" minWidth="0.0" styleClass="value-cell">
-                                    <Label fx:id="prsBoarding" styleClass="value-mono" text=""/>
-                                </StackPane>
-                                <VBox styleClass="label-cell" prefWidth="140.0"
-                                      minWidth="140.0" maxWidth="140.0">
-                                    <Label styleClass="label-en" text="Reservation Up To"/>
-                                    <Label styleClass="label-hi" text="आरक्षण तक"/>
-                                </VBox>
-                                <StackPane HBox.hgrow="ALWAYS" minWidth="0.0" styleClass="value-cell">
-                                    <Label fx:id="prsResUpto" styleClass="value-mono" text=""/>
-                                </StackPane>
-                            </HBox>
-                            <TableView fx:id="prsPaxTable" prefHeight="160.0" styleClass="prs-pax-table"
-                                       VBox.vgrow="NEVER"/>
-                            <Region styleClass="rdso-row-gap"/>
-                            <HBox alignment="CENTER_LEFT" spacing="0.0" styleClass="rdso-row,rdso-row-tall">
-                                <VBox styleClass="label-cell" prefWidth="140.0"
-                                      minWidth="140.0" maxWidth="140.0">
-                                    <Label styleClass="label-en" text="Operator"/>
-                                    <Label styleClass="label-en" text="Name"/>
-                                </VBox>
-                                <StackPane HBox.hgrow="ALWAYS" minWidth="0.0" styleClass="value-cell">
-                                    <Label fx:id="prsOperatorName" styleClass="value-mono" text=""/>
-                                </StackPane>
-                                <VBox alignment="CENTER" spacing="2.0" styleClass="railway-cell"
-                                      prefWidth="200.0" minWidth="200.0" maxWidth="200.0">
-                                    <Label styleClass="railway-en" text="North Eastern Railway"/>
-                                    <Label styleClass="railway-hi" text="वाराणसी मंडल"/>
-                                </VBox>
-                            </HBox>
-                        </VBox>
-                        <VBox alignment="TOP_CENTER" spacing="6.0" prefWidth="148.0" styleClass="prs-payment-col">
-                            <Label styleClass="payment-banner-prs" text="PAYMENT MODE"/>
-                            <StackPane prefHeight="130.0" prefWidth="130.0">
-                                <StackPane fx:id="prsQrPlaceholder">
-                                    <Rectangle arcHeight="0.0" arcWidth="0.0" height="130.0"
-                                               styleClass="qr-placeholder-rect" width="130.0"/>
+                            </GridPane>
+                        </HBox>
+
+                        <!-- Boarding Pt. | Reservation Up To -->
+                        <GridPane hgap="4.0" styleClass="pv-row,pv-grid-tight" VBox.vgrow="NEVER">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="14.0" hgrow="SOMETIMES"/>
+                                <ColumnConstraints percentWidth="36.0" hgrow="SOMETIMES"/>
+                                <ColumnConstraints percentWidth="14.0" hgrow="SOMETIMES"/>
+                                <ColumnConstraints percentWidth="36.0" hgrow="SOMETIMES"/>
+                            </columnConstraints>
+                            <VBox styleClass="pv-label-block" alignment="TOP_LEFT" GridPane.columnIndex="0"
+                                  GridPane.rowIndex="0">
+                                <Label styleClass="pv-label-en-lg" text="Boarding Pt."/>
+                                <Label styleClass="pv-label-hi-lg" text="चढ़ने का स्थान"/>
+                            </VBox>
+                            <StackPane styleClass="pv-value-block" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label fx:id="prsBoarding" styleClass="pv-value-text-lg" text=""/>
+                            </StackPane>
+                            <VBox styleClass="pv-label-block" alignment="TOP_LEFT" GridPane.columnIndex="2"
+                                  GridPane.rowIndex="0">
+                                <Label styleClass="pv-label-en-lg" text="Reservation Up To"/>
+                                <Label styleClass="pv-label-hi-lg" text="आरक्षण तक"/>
+                            </VBox>
+                            <StackPane styleClass="pv-value-block" GridPane.columnIndex="3" GridPane.rowIndex="0">
+                                <Label fx:id="prsResUpto" styleClass="pv-value-text-lg" text=""/>
+                            </StackPane>
+                        </GridPane>
+
+                        <!-- passenger table (70%) + payment / QR (30%) -->
+                        <GridPane hgap="4.0" styleClass="pv-row,pv-middle-row" VBox.vgrow="ALWAYS">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="70.0" hgrow="ALWAYS"/>
+                                <ColumnConstraints percentWidth="30.0" hgrow="ALWAYS"/>
+                            </columnConstraints>
+                            <VBox spacing="4.0" styleClass="pv-prs-table-wrap" GridPane.columnIndex="0"
+                                  GridPane.rowIndex="0" maxWidth="Infinity">
+                                <padding>
+                                    <Insets bottom="8.0" top="8.0"/>
+                                </padding>
+                                <TableView fx:id="prsPaxTable" prefHeight="180.0" maxHeight="Infinity"
+                                           styleClass="prs-pax-table" VBox.vgrow="ALWAYS"/>
+                            </VBox>
+                            <VBox alignment="TOP_CENTER" spacing="8.0" styleClass="pv-side-white,pv-prs-payment"
+                                  GridPane.columnIndex="1" GridPane.rowIndex="0" maxWidth="Infinity">
+                                <Label styleClass="pv-label-en-xl" text="Pay Mode"/>
+                                <StackPane fx:id="prsQrPlaceholder" styleClass="qr-frame pv-qr-in-panel"
+                                           prefHeight="120.0" prefWidth="120.0">
+                                    <Rectangle arcHeight="0.0" arcWidth="0.0" height="120.0"
+                                               styleClass="qr-placeholder-rect" width="120.0"/>
                                     <Label styleClass="qr-placeholder-label" text="UPI-QR"/>
                                 </StackPane>
-                                <ImageView fx:id="prsQrImage" fitHeight="126.0" fitWidth="126.0" managed="false"
+                                <ImageView fx:id="prsQrImage" fitHeight="116.0" fitWidth="116.0" managed="false"
                                            preserveRatio="true" smooth="true" visible="false"/>
-                            </StackPane>
-                        </VBox>
-                    </HBox>
+                            </VBox>
+                        </GridPane>
+
+                        <!-- Operator row -->
+                        <GridPane hgap="4.0" styleClass="pv-row" VBox.vgrow="NEVER">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="70.0" hgrow="ALWAYS"/>
+                                <ColumnConstraints percentWidth="30.0" hgrow="ALWAYS"/>
+                            </columnConstraints>
+                            <GridPane hgap="4.0" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                                      maxWidth="Infinity" styleClass="pv-grid-tight">
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="25.0" hgrow="SOMETIMES"/>
+                                    <ColumnConstraints percentWidth="75.0" hgrow="SOMETIMES"/>
+                                </columnConstraints>
+                                <VBox alignment="CENTER" styleClass="pv-label-block,pv-op-label"
+                                      GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                    <Label styleClass="pv-label-en-xl" text="Operator"/>
+                                    <Label styleClass="pv-label-en-xl" text="Name"/>
+                                </VBox>
+                                <StackPane styleClass="pv-black-fill" alignment="CENTER_LEFT"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                    <Label fx:id="prsOperatorName" styleClass="pv-value-text" text=""/>
+                                </StackPane>
+                            </GridPane>
+                            <VBox alignment="CENTER" styleClass="pv-railway-box" GridPane.columnIndex="1"
+                                  GridPane.rowIndex="0" maxWidth="Infinity">
+                                <Label styleClass="pv-railway-en" text="North Eastern Railway"/>
+                                <Label styleClass="pv-railway-hi" text="वाराणसी मंडल"/>
+                            </VBox>
+                        </GridPane>
+                    </VBox>
                 </center>
             </BorderPane>
         </StackPane>
