@@ -204,12 +204,12 @@
                             <VBox alignment="CENTER" styleClass="pv-side-white" GridPane.columnIndex="1"
                                   GridPane.rowIndex="0" maxWidth="Infinity">
                                 <StackPane fx:id="utsQrPlaceholder" styleClass="qr-frame pv-qr-in-panel"
-                                           prefHeight="120.0" prefWidth="120.0">
-                                    <Rectangle arcHeight="0.0" arcWidth="0.0" height="120.0"
-                                               styleClass="qr-placeholder-rect" width="120.0"/>
+                                           prefHeight="140.0" prefWidth="140.0">
+                                    <Rectangle arcHeight="0.0" arcWidth="0.0" height="140.0"
+                                               styleClass="qr-placeholder-rect" width="140.0"/>
                                     <Label styleClass="qr-placeholder-label" text="QR CODE"/>
                                 </StackPane>
-                                <ImageView fx:id="utsQrImage" fitHeight="116.0" fitWidth="116.0" managed="false"
+                                <ImageView fx:id="utsQrImage" fitHeight="136.0" fitWidth="136.0" managed="false"
                                            preserveRatio="true" smooth="true" visible="false"/>
                             </VBox>
                         </GridPane>
@@ -429,12 +429,12 @@
                                   GridPane.columnIndex="1" GridPane.rowIndex="0" maxWidth="Infinity">
                                 <Label styleClass="pv-label-en-xl" text="Pay Mode"/>
                                 <StackPane fx:id="prsQrPlaceholder" styleClass="qr-frame pv-qr-in-panel"
-                                           prefHeight="120.0" prefWidth="120.0">
-                                    <Rectangle arcHeight="0.0" arcWidth="0.0" height="120.0"
-                                               styleClass="qr-placeholder-rect" width="120.0"/>
+                                           prefHeight="140.0" prefWidth="140.0">
+                                    <Rectangle arcHeight="0.0" arcWidth="0.0" height="140.0"
+                                               styleClass="qr-placeholder-rect" width="140.0"/>
                                     <Label styleClass="qr-placeholder-label" text="UPI-QR"/>
                                 </StackPane>
-                                <ImageView fx:id="prsQrImage" fitHeight="116.0" fitWidth="116.0" managed="false"
+                                <ImageView fx:id="prsQrImage" fitHeight="136.0" fitWidth="136.0" managed="false"
                                            preserveRatio="true" smooth="true" visible="false"/>
                             </VBox>
                         </GridPane>
