@@ -50,6 +50,21 @@
     -fx-background-color: transparent;
 }
 
+.form-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-padding: 0;
+    -fx-min-height: 0;
+}
+
+.form-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.form-scroll > .scroll-bar:vertical {
+    -fx-pref-width: 12px;
+}
+
 .field-label {
     -fx-text-fill: #c8d2ec;
     -fx-font-weight: 600;

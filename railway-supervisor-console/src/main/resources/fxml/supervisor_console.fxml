@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
@@ -31,10 +32,12 @@
     </top>
     <center>
         <SplitPane dividerPositions="0.62" orientation="VERTICAL" styleClass="console-split">
-            <VBox spacing="14.0" styleClass="main-panel">
-                <padding>
-                    <Insets bottom="16.0" left="20.0" right="20.0" top="16.0"/>
-                </padding>
+            <ScrollPane fitToWidth="true" hbarPolicy="AS_NEEDED" minHeight="0.0" pannable="true"
+                        styleClass="form-scroll" vbarPolicy="AS_NEEDED">
+                <VBox spacing="14.0" styleClass="main-panel">
+                    <padding>
+                        <Insets bottom="16.0" left="20.0" right="20.0" top="16.0"/>
+                    </padding>
                 <GridPane hgap="12.0" maxHeight="Infinity" vgap="12.0" VBox.vgrow="NEVER">
                     <columnConstraints>
                         <ColumnConstraints hgrow="NEVER" maxWidth="140.0" minWidth="120.0"/>
@@ -180,7 +183,8 @@
                             text="Send Cancellation Refund"/>
                     <Region HBox.hgrow="ALWAYS"/>
                 </HBox>
-            </VBox>
+                </VBox>
+            </ScrollPane>
 
             <VBox spacing="8.0" styleClass="log-panel">
                 <padding>
