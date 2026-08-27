@@ -398,7 +398,30 @@ public class SupervisorController {
                     "Cancellation refund amount must be 1–5 numeric digits (e.g. 790).");
             return;
         }
-        sendOne(PacketBuilder.cancellationRefund(refund), "Cancellation refund (code 14) sent.");
+        String classPacked = ClassField.pack(classCombo.getValue()).orElse(null);
+        if (classPacked == null) {
+            showAlert(Alert.AlertType.ERROR, "Validation", "Class must be I or II.");
+            return;
+        }
+        String txnTypePacked = TxnTypeField.pack(txnTypeCombo.getValue()).orElse(null);
+        if (txnTypePacked == null) {
+            showAlert(Alert.AlertType.ERROR, "Validation", "Select a transaction type.");
+            return;
+        }
+        java.util.List<String> frames = PacketBuilder.cancellationRefund(refund, classPacked, txnTypePacked);
+        boolean ok = true;
+        for (String frame : frames) {
+            appendLog("Frame: " + frame);
+            if (!serialService.sendLine(frame)) {
+                ok = false;
+                break;
+            }
+        }
+        if (ok) {
+            appendLog("Cancellation refund (code 09/12/14) sent.");
+        } else {
+            appendLog("Send failed — check COM port and cable, then click Connect.");
+        }
     }
 
     private SerialService buildSerialService() {

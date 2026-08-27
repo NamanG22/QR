@@ -29,8 +29,17 @@ public final class PacketBuilder {
         return CommandFrame.wrap(CommandSet.CLEAR_CODE, "");
     }
 
-    public static String cancellationRefund(CancellationRefund refund) {
-        return CommandFrame.wrap(CommandSet.REFUND_CODE, refund.pack());
+    public static List<String> cancellationRefund(CancellationRefund refund, String travelClass, String txnType) {
+        Objects.requireNonNull(refund, "refund");
+        List<String> frames = new ArrayList<>();
+        if (travelClass != null && !travelClass.isBlank()) {
+            frames.add(CommandFrame.wrap(CommandSet.CLASS_CODE, travelClass.trim()));
+        }
+        if (txnType != null && !txnType.isBlank()) {
+            frames.add(CommandFrame.wrap(CommandSet.TXN_TYPE_CODE, txnType.trim()));
+        }
+        frames.add(CommandFrame.wrap(CommandSet.REFUND_CODE, refund.pack()));
+        return frames;
     }
 
     /**

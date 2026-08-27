@@ -178,9 +178,10 @@ public final class DisplayController {
         }
         if (kind == TicketPacketParser.Kind.REFUND) {
             CancellationRefund refund = CancellationRefund.unpack(result.getTwoDigit().orElseThrow()).orElseThrow();
-            utsTicket = TicketData.blankUts()
-                    .withTravelClass(refund.getCode())
-                    .withTxnType(refund.getType())
+            // Code 14 is CANC+RFND+amount. CANC is the transaction type; RFND is not a txn code
+            // and must not be shown as INVALID. Class stays I/II from command 09, not CANC.
+            utsTicket = utsTicket
+                    .withTxnType(CommandSet.REFUND_CODE_VALUE)
                     .withFare(refund.getAmount());
             statusView.setDetectedTicketType("UTS");
             statusView.appendLog(LogFormatter.ts(
