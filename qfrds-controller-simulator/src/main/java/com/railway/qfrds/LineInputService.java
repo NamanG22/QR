@@ -1,7 +1,7 @@
 package com.railway.qfrds;
 
 /**
- * Newline-delimited UTF-8 packet source (RS232).
+ * {@code $...^} command-frame source (RS232).
  */
 public interface LineInputService {
 

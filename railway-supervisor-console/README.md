@@ -1,6 +1,6 @@
 # Railway Supervisor Console Simulator
 
-JavaFX desktop app that mimics an Indian Railways PRS/UTS supervisor terminal for a **QR Fare Repeater Display System**. It builds pipe-delimited ticket packets and sends them over **RS232** (9600 8N1, UTF-8 text + newline) via **jSerialComm**.
+JavaFX desktop app that mimics an Indian Railways PRS/UTS supervisor terminal for a **QR Fare Repeater Display System**. It builds `$<code><Length><Data>^` ticket command frames and sends them over **RS232** (9600 8N1, UTF-8) via **jSerialComm**.
 
 **Lab:** USB-to-serial adapter on the console PC — select its COM port in the UI.  
 **Production:** direct RS232 from the CRIS terminal to the controller.
@@ -35,9 +35,9 @@ QFRDS_SUPERVISOR_PORT=COM5 mvn clean javafx:run
 |------|---------|
 | `MainApp` | JavaFX entry; loads FXML and CSS |
 | `SupervisorController` | Form validation, serial connect, logging, send action |
-| `SerialService` | jSerialComm TX: configurable COM port, 9600 8N1, UTF-8 + LF |
+| `SerialService` | jSerialComm TX: configurable COM port, 9600 8N1, UTF-8 `$...^` frames |
 | `TicketData` | Immutable ticket fields |
-| `PacketBuilder` | `TYPE|SRC|DST|FARE|TXN|TS` (+ `PNAME` for PRS) |
+| `PacketBuilder` | UTS `$<code><Length><Data>^` command sequence; PRS still uses a wrapped field payload |
 
 Styles: `src/main/resources/styles/railway-terminal.css`  
 UI: `src/main/resources/fxml/supervisor_console.fxml`

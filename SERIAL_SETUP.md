@@ -10,7 +10,7 @@ For lab work on two PCs, use **USB-serial on the console PC** wired to **RS232 o
 | **Supervisor console** (Windows PC) | USB-to-RS232 adapter | Select its COM port in the console UI (e.g. `COM5`) |
 | **Controller** (thin client) | RS232 or USB-serial adapter | Auto-listens on **all** COM ports (or set `QFRDS_CONTROLLER_PORT`) |
 
-Connect TX/RX/GND per your cable (null-modem or straight-through). Both ends: **9600 baud, 8N1, UTF-8 text + newline**.
+Connect TX/RX/GND per your cable (null-modem or straight-through). Both ends: **9600 baud, 8N1**, UTF-8 command frames `$<code><Length><Data>^`.
 
 ## 1. Find COM ports
 
@@ -103,9 +103,39 @@ Log file: `%LOCALAPPDATA%\QFRDS\serial.log` (lists available ports at startup an
 
 ## Packet format
 
-Newline-terminated UTF-8:
+Production UTS frame (no trailing newline): `$` + 2-digit code + Length + Data + `^`.
+There is **no** colon between code, length, and data. Colon separates fields **inside Data**, and Data ends with `:`. `Length` is the UTF-8 byte length of `Data^` (Data plus EOT).
 
 ```text
-TYPE=UTS|SRC=NDLS|DST=AGC|FARE=120|TXN=TX123|TS=2026-05-09 12:30:00
-TYPE=PRS|SRC=NDLS|DST=MUM|FARE=2450|TXN=TX555|TS=2026-05-09 12:30:00|PNAME=Rahul
+$007thUts:^
+$0126NDLS:NEW DELHI:NEW DELHI:^
+$03406:^
+$073E:^
+$1206PLAT:^
+$1303:^
+$1534MUKESH KUMAR GARHWAL:NDLS99:99:3:^
+$2122SBI PAYMENT GATE WAY:^
 ```
+
+| Code | Meaning | Notes |
+|------|---------|--------|
+| 00 | Thin Client UTS | `$007thUts:^` |
+| 01 / 02 / 17–20 | Station | `code:english:hindi` — variable length, not space-padded. 17–20 reserved |
+| 03 | Date (day) | `$03406:^` (data `06:`) |
+| 07 | Type of Train | `$073E:^`. Display: O=ORD, E=M/E, S=SUP, T=MMT, C=COM, R=RAJ, D=SHT, M=RMT, H=DHI, J=JAN, P=PRM |
+| 12 | Transaction Type | `$1206PLAT:^`. Unknown codes display **INVALID** |
+| 13 | Clear display | `$1303:^` — clears every field on the board |
+| 09 | Class | `I` or `II` |
+| 14 | Cancellation Refund | `CANC` + `RFND` + 5-digit amount |
+| 15 | Operator details | `$1534MUKESH KUMAR GARHWAL:NDLS99:99:3:^` (`name:terminal:window:shift:`) |
+| 21 | Payment gateway | `$2122SBI PAYMENT GATE WAY:^` |
+| 22 | QR Code for payment | UPI string, **no** trailing colon; length is three digits (e.g. `201`) |
+
+Transaction codes: SPLC, PLAT, NI, CANC, ST, BPT, SF, JRNY, CARD, MMQT, RRTT, PART.
+
+Refund amount `790` is padded to `00790`.
+
+Code 22 is sent when the supervisor QR field is filled. QR Data must not contain SOT `$` or EOT `^` (colons in `upi://` are allowed).
+
+Cancellation refund (amount 790): `$1415CANCRFND00790:^`
+

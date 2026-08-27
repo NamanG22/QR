@@ -105,7 +105,7 @@ public final class SerialService implements LineOutputService {
     @Override
     public boolean sendLine(String payload) {
         Objects.requireNonNull(payload, "payload");
-        byte[] bytes = (payload + "\r\n").getBytes(StandardCharsets.UTF_8);
+        byte[] bytes = payload.getBytes(StandardCharsets.UTF_8);
 
         synchronized (writeLock) {
             if (mockMode || port == null || !port.isOpen()) {

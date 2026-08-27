@@ -47,6 +47,14 @@
                         <RowConstraints minHeight="32.0" valignment="CENTER"/>
                         <RowConstraints minHeight="32.0" valignment="CENTER"/>
                         <RowConstraints minHeight="32.0" valignment="CENTER"/>
+                        <RowConstraints minHeight="32.0" valignment="CENTER"/>
+                        <RowConstraints minHeight="32.0" valignment="CENTER"/>
+                        <RowConstraints minHeight="32.0" valignment="CENTER"/>
+                        <RowConstraints minHeight="32.0" valignment="CENTER"/>
+                        <RowConstraints minHeight="32.0" valignment="CENTER"/>
+                        <RowConstraints minHeight="32.0" valignment="CENTER"/>
+                        <RowConstraints minHeight="32.0" valignment="CENTER"/>
+                        <RowConstraints minHeight="32.0" valignment="CENTER"/>
                     </rowConstraints>
 
                     <Label styleClass="field-label" text="Ticket Type" GridPane.columnIndex="0"
@@ -56,28 +64,94 @@
 
                     <Label styleClass="field-label" text="Source Station" GridPane.columnIndex="0"
                            GridPane.rowIndex="1"/>
-                    <TextField fx:id="sourceField" promptText="e.g. NDLS" GridPane.columnIndex="1"
-                               GridPane.rowIndex="1"/>
+                    <HBox fx:id="sourceStationBox" alignment="CENTER_LEFT" spacing="8.0"
+                          GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <TextField fx:id="sourceField" prefWidth="72.0" promptText="Code"/>
+                        <TextField fx:id="sourceEngField" HBox.hgrow="ALWAYS" promptText="English name (16)"/>
+                        <TextField fx:id="sourceHindiField" HBox.hgrow="ALWAYS" promptText="Hindi name (16)"/>
+                    </HBox>
 
                     <Label styleClass="field-label" text="Destination Station" GridPane.columnIndex="0"
                            GridPane.rowIndex="2"/>
-                    <TextField fx:id="destinationField" promptText="e.g. BCT" GridPane.columnIndex="1"
-                               GridPane.rowIndex="2"/>
+                    <HBox fx:id="destStationBox" alignment="CENTER_LEFT" spacing="8.0"
+                          GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <TextField fx:id="destinationField" prefWidth="72.0" promptText="Code"/>
+                        <TextField fx:id="destEngField" HBox.hgrow="ALWAYS" promptText="English name (16)"/>
+                        <TextField fx:id="destHindiField" HBox.hgrow="ALWAYS" promptText="Hindi name (16)"/>
+                    </HBox>
+
+                    <Label fx:id="dateLabel" styleClass="field-label" text="Date / Month" GridPane.columnIndex="0"
+                           GridPane.rowIndex="3"/>
+                    <HBox fx:id="dateBox" alignment="CENTER_LEFT" spacing="8.0"
+                          GridPane.columnIndex="1" GridPane.rowIndex="3">
+                        <TextField fx:id="dayField" prefWidth="64.0" promptText="DD"/>
+                        <TextField fx:id="monthField" prefWidth="64.0" promptText="MM"/>
+                    </HBox>
+
+                    <Label fx:id="adultChildLabel" styleClass="field-label" text="Adult / Child"
+                           GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                    <HBox fx:id="adultChildBox" alignment="CENTER_LEFT" spacing="8.0"
+                          GridPane.columnIndex="1" GridPane.rowIndex="4">
+                        <TextField fx:id="adultField" prefWidth="64.0" promptText="Adult"/>
+                        <TextField fx:id="childField" prefWidth="64.0" promptText="Child"/>
+                    </HBox>
+
+                    <Label fx:id="trainTypeLabel" styleClass="field-label" text="Type of Train"
+                           GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                    <ComboBox fx:id="trainTypeCombo" maxWidth="Infinity" GridPane.columnIndex="1"
+                              GridPane.rowIndex="5"/>
+
+                    <Label fx:id="classTxnLabel" styleClass="field-label" text="Class / Txn Type"
+                           GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+                    <HBox fx:id="classTxnBox" alignment="CENTER_LEFT" spacing="8.0"
+                          GridPane.columnIndex="1" GridPane.rowIndex="6">
+                        <ComboBox fx:id="classCombo" prefWidth="80.0"/>
+                        <ComboBox fx:id="txnTypeCombo" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                    </HBox>
 
                     <Label styleClass="field-label" text="Fare (Rs)" GridPane.columnIndex="0"
-                           GridPane.rowIndex="3"/>
-                    <TextField fx:id="fareField" promptText="Numeric amount" GridPane.columnIndex="1"
-                               GridPane.rowIndex="3"/>
+                           GridPane.rowIndex="7"/>
+                    <TextField fx:id="fareField" promptText="Up to 5 digits" GridPane.columnIndex="1"
+                               GridPane.rowIndex="7"/>
+
+                    <Label fx:id="refundLabel" styleClass="field-label" text="Cancel Refund"
+                           GridPane.columnIndex="0" GridPane.rowIndex="8"/>
+                    <HBox fx:id="refundBox" alignment="CENTER_LEFT" spacing="8.0"
+                          GridPane.columnIndex="1" GridPane.rowIndex="8">
+                        <TextField fx:id="refundAmountField" promptText="Amount (e.g. 790)"/>
+                    </HBox>
+
+                    <Label fx:id="operatorLabel" styleClass="field-label" text="Operator"
+                           GridPane.columnIndex="0" GridPane.rowIndex="9"/>
+                    <TextField fx:id="operatorField" promptText="Name (25 chars)"
+                               GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+
+                    <Label fx:id="terminalLabel" styleClass="field-label" text="Terminal / Win / Shift"
+                           GridPane.columnIndex="0" GridPane.rowIndex="10"/>
+                    <HBox fx:id="terminalBox" alignment="CENTER_LEFT" spacing="8.0"
+                          GridPane.columnIndex="1" GridPane.rowIndex="10">
+                        <TextField fx:id="terminalField" prefWidth="88.0" promptText="NDLS99"/>
+                        <TextField fx:id="windowField" prefWidth="64.0" promptText="105"/>
+                        <TextField fx:id="shiftField" prefWidth="48.0" promptText="3"/>
+                    </HBox>
+
+                    <Label fx:id="paymentLabel" styleClass="field-label" text="Pay GW / QR"
+                           GridPane.columnIndex="0" GridPane.rowIndex="11"/>
+                    <HBox fx:id="paymentBox" alignment="CENTER_LEFT" spacing="8.0"
+                          GridPane.columnIndex="1" GridPane.rowIndex="11">
+                        <TextField fx:id="paymentGwField" prefWidth="120.0" promptText="Payment GW"/>
+                        <TextField fx:id="qrPayloadField" HBox.hgrow="ALWAYS" promptText="QR payload (code 22, optional)"/>
+                    </HBox>
 
                     <Label styleClass="field-label" text="Transaction ID" GridPane.columnIndex="0"
-                           GridPane.rowIndex="4"/>
+                           GridPane.rowIndex="12"/>
                     <TextField fx:id="transactionField" promptText="Unique transaction reference"
-                               GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                               GridPane.columnIndex="1" GridPane.rowIndex="12"/>
 
                     <Label fx:id="passengerNameLabel" styleClass="field-label" text="Passenger Name"
-                           GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                           GridPane.columnIndex="0" GridPane.rowIndex="13"/>
                     <TextField fx:id="passengerNameField" promptText="Required for PRS"
-                               GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                               GridPane.columnIndex="1" GridPane.rowIndex="13"/>
                 </GridPane>
 
                 <GridPane hgap="12.0" vgap="8.0" styleClass="link-panel">
@@ -92,7 +166,7 @@
                                GridPane.columnIndex="1" GridPane.rowIndex="0"/>
                     <Button mnemonicParsing="false" onAction="#onConnectLink" styleClass="secondary-button"
                             text="Connect" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
-                    <Label styleClass="hint-label" text="9600 8N1 · console TX via USB-serial · controller RX on RS232 · UTF-8 + LF"
+                    <Label styleClass="hint-label" text="9600 8N1 · console TX via USB-serial · controller RX on RS232 · $CodeLengthData^"
                            wrapText="true" GridPane.columnIndex="1" GridPane.columnSpan="2"
                            GridPane.rowIndex="1"/>
                 </GridPane>
@@ -100,6 +174,10 @@
                 <HBox alignment="CENTER_LEFT" spacing="12.0">
                     <Button mnemonicParsing="false" onAction="#onGenerateTicket" styleClass="primary-button"
                             text="Generate Ticket"/>
+                    <Button mnemonicParsing="false" onAction="#onClearDisplay" styleClass="secondary-button"
+                            text="Clear Display"/>
+                    <Button mnemonicParsing="false" onAction="#onCancellationRefund" styleClass="secondary-button"
+                            text="Send Cancellation Refund"/>
                     <Region HBox.hgrow="ALWAYS"/>
                 </HBox>
             </VBox>

@@ -1,7 +1,7 @@
 package com.railway.supervisor;
 
 /**
- * Sends newline-delimited UTF-8 packets to the controller over RS232.
+ * Sends {@code $<code><Length><Data>^} UTF-8 command frames to the controller over RS232.
  */
 public interface LineOutputService {
 

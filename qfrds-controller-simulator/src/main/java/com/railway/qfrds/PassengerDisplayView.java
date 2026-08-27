@@ -179,19 +179,28 @@ public class PassengerDisplayView implements Initializable {
     }
 
     private void fillUts(TicketData t, WritableImage qrImage) {
-        utsTerminalId.setText(compactTerminalId(t.getTransactionId()));
-        utsWindowNo.setText("1");
-        utsFrom.setText(t.getSourceStation());
-        utsTo.setText(t.getDestinationStation());
-        utsDate.setText(formatDateLine(t.getTimestampRaw()));
-        utsAdult.setText("1");
-        utsChild.setText("0");
-        utsClass.setText("II");
+        utsTerminalId.setText(t.getOperator()
+                .map(OperatorSession::getTerminalId)
+                .filter(s -> !s.isBlank())
+                .orElseGet(() -> compactTerminalId(t.getTransactionId())));
+        utsWindowNo.setText(t.getOperator()
+                .map(OperatorSession::windowDisplay)
+                .filter(s -> !s.isBlank())
+                .orElse("—"));
+        utsFrom.setText(t.getSourceBoardText());
+        utsTo.setText(t.getDestinationBoardText());
+        utsDate.setText(t.getDateDisplay().isBlank() ? "--/--" : t.getDateDisplay());
+        utsAdult.setText(t.getAdult().isBlank() ? "—" : t.getAdult());
+        utsChild.setText(t.getChild().isBlank() ? "—" : t.getChild());
+        utsClass.setText(t.getTravelClass().isBlank() ? "—" : t.getTravelClass());
         utsFare.setText(formatFareRupee(t.getFare()));
-        utsTrainType.setText("—");
-        utsPayMode.setText("UPI-QR");
-        utsTxnType.setText(t.getTransactionId());
-        utsOperator.setText("—");
+        utsTrainType.setText(t.getTrainType().isBlank() ? "—" : TrainTypeField.display(t.getTrainType()));
+        utsPayMode.setText(t.getPaymentGw().isBlank() ? "—" : t.getPaymentGw());
+        utsTxnType.setText(t.getTxnType().isBlank() ? "—" : TxnTypeField.display(t.getTxnType()));
+        utsOperator.setText(t.getOperator()
+                .map(OperatorSession::getOperatorName)
+                .filter(s -> !s.isBlank())
+                .orElse("—"));
 
         bindQr(utsQrImage, utsQrPlaceholder, qrImage);
         footerLastUpdated.setText("Last updated: " + LocalDateTime.now().format(LAST_UPDATED_FMT));
@@ -276,6 +285,10 @@ public class PassengerDisplayView implements Initializable {
         }
     }
 
+    public void clearDisplay() {
+        clearAll();
+    }
+
     private void clearAll() {
         utsBoard.setVisible(true);
         utsBoard.setManaged(true);
@@ -286,22 +299,23 @@ public class PassengerDisplayView implements Initializable {
         utsWindowNo.setText("—");
         utsFrom.setText("—");
         utsTo.setText("—");
-        utsDate.setText("--/--/----");
-        utsAdult.setText("0");
-        utsChild.setText("0");
+        utsDate.setText("—");
+        utsAdult.setText("—");
+        utsChild.setText("—");
         utsClass.setText("—");
         utsFare.setText("—");
         utsTrainType.setText("—");
-        utsPayMode.setText("UPI-QR");
+        utsPayMode.setText("—");
         utsTxnType.setText("—");
         utsOperator.setText("—");
         footerLastUpdated.setText("Last updated: —");
         bindQr(utsQrImage, utsQrPlaceholder, null);
 
+        prsOperatorCode.setText("—");
         prsFrom.setText("—");
         prsTo.setText("—");
         prsTrainNo.setText("—");
-        prsQuota.setText("GN");
+        prsQuota.setText("—");
         prsDate.setText("—");
         prsTotalPax.setText("—");
         prsClass.setText("—");
@@ -309,7 +323,7 @@ public class PassengerDisplayView implements Initializable {
         prsBoarding.setText("—");
         prsResUpto.setText("—");
         prsOperatorName.setText("—");
-        restoreDefaultPassengerRows();
+        prsPaxRows.clear();
         bindQr(prsQrImage, prsQrPlaceholder, null);
     }
 

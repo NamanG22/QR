@@ -1,7 +1,7 @@
 package com.railway.qfrds;
 
 /**
- * Ticket channel detected from supervisor packet {@code TYPE=} field.
+ * Ticket channel. UTS is selected by command code 00 ({@code thUts:}).
  */
 public enum TicketType {
     UTS,

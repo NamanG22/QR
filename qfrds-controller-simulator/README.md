@@ -69,12 +69,20 @@ mvn clean verify -Pwindows-jpackage -DskipTests -Djpackage.win.console=true
 
 Physical null-modem or straight-through cable between console TX and controller RX. Same-PC test: use **com0com** pair — see `SERIAL_SETUP.md`.
 
-Packet format (newline-terminated, UTF‑8):
+Packet format (`$<code><Length><Data>^`, UTF‑8). Colon is a field separator **inside Data**; Data ends with `:`; Length counts `Data^`.
 
 ```text
-TYPE=UTS|SRC=NDLS|DST=AGC|FARE=120|TXN=TX123|TS=2026-05-09 12:30:00
-TYPE=PRS|SRC=NDLS|DST=MUM|FARE=2450|TXN=TX555|TS=2026-05-09 12:30:00|PNAME=Rahul
+$007thUts:^
+$0126NDLS:NEW DELHI:NEW DELHI:^
+$03406:^
+$073E:^
+$1206PLAT:^
+$1303:^
+$1534MUKESH KUMAR GARHWAL:NDLS99:99:3:^
+$2122SBI PAYMENT GATE WAY:^
 ```
+
+Train type display: O=ORD, E=M/E, S=SUP, T=MMT, C=COM, R=RAJ, D=SHT, M=RMT, H=DHI, J=JAN, P=PRM. Unknown transaction codes show **INVALID**. Codes **17–20** are reserved. Clear (`$1303:^`) blanks every field. Refund: `$1415CANCRFND00790:^`. QR (code 22) has a 3-digit length and no trailing colon.
 
 QR payload embedded in the QR matrix:
 

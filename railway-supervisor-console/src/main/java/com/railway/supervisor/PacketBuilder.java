@@ -3,17 +3,18 @@ package com.railway.supervisor;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
- * Builds the UTF-8 serial payload as a single line for the fare repeater listener.
+ * Builds production RS232 command frames {@code $<code><Length><Data>^}.
  * <p>
- * Packet grammar (pipe-separated key=value segments):
+ * UTS issue sequence: 13 clear, 00 select, 15 operator, 01–08, 09 class, 12 txn type,
+ * 21 payment GW, 22 QR payload (22 omitted when empty).
+ * Codes 17–20 are reserved and are not sent. Code 14 is a separate refund command.
+ * PRS still uses a single wrapped field payload until its command set is specified.
  * </p>
- * <pre>
- * TYPE=&lt;UTS|PRS&gt;|SRC=&lt;source&gt;|DST=&lt;destination&gt;|FARE=&lt;fare&gt;|TXN=&lt;txn&gt;|TS=&lt;timestamp&gt;
- * Optional PRS suffix: |PNAME=&lt;passengerName&gt;
- * </pre>
  */
 public final class PacketBuilder {
 
@@ -24,16 +25,44 @@ public final class PacketBuilder {
     private PacketBuilder() {
     }
 
+    public static String clearDisplay() {
+        return CommandFrame.wrap(CommandSet.CLEAR_CODE, "");
+    }
+
+    public static String cancellationRefund(CancellationRefund refund) {
+        return CommandFrame.wrap(CommandSet.REFUND_CODE, refund.pack());
+    }
+
     /**
-     * Composes the wire-format packet from validated ticket data and an authoritative timestamp.
-     *
-     * @param data      non-null ticket fields from the UI
-     * @param timestamp typically {@link Instant#now()} captured at send time
-     * @return complete packet string (without trailing newline; serial layer adds it)
+     * One or more complete command frames (including SOT and EOT) for the ticket.
      */
-    public static String build(TicketData data, Instant timestamp) {
+    public static List<String> buildFrames(TicketData data, Instant timestamp) {
         Objects.requireNonNull(data, "data");
         Objects.requireNonNull(timestamp, "timestamp");
+
+        if (data.getTicketType() == TicketType.UTS) {
+            List<String> frames = new ArrayList<>();
+            frames.add(CommandFrame.wrap(CommandSet.CLEAR_CODE, ""));
+            frames.add(CommandFrame.wrap(CommandSet.UTS_CODE, CommandSet.UTS_DATA));
+            frames.add(CommandFrame.wrap(CommandSet.OPERATOR_CODE, data.getOperator().pack()));
+            frames.add(CommandFrame.wrap(CommandSet.SOURCE_STATION_CODE, data.getSource().pack()));
+            frames.add(CommandFrame.wrap(CommandSet.DEST_STATION_CODE, data.getDestination().pack()));
+            frames.add(CommandFrame.wrap(CommandSet.DATE_CODE, data.getDay()));
+            frames.add(CommandFrame.wrap(CommandSet.MONTH_CODE, data.getMonth()));
+            frames.add(CommandFrame.wrap(CommandSet.ADULT_CODE, data.getAdult()));
+            frames.add(CommandFrame.wrap(CommandSet.CHILD_CODE, data.getChild()));
+            frames.add(CommandFrame.wrap(CommandSet.TRAIN_TYPE_CODE, data.getTrainType()));
+            frames.add(CommandFrame.wrap(CommandSet.FARE_CODE, data.getFare()));
+            frames.add(CommandFrame.wrap(CommandSet.CLASS_CODE, data.getTravelClass()));
+            frames.add(CommandFrame.wrap(CommandSet.TXN_TYPE_CODE, data.getTxnType()));
+            if (data.getPaymentGw() != null && !data.getPaymentGw().isBlank()) {
+                frames.add(CommandFrame.wrap(CommandSet.PAYMENT_GW_CODE, data.getPaymentGw()));
+            }
+            if (data.getQrPayload() != null && !data.getQrPayload().isBlank()) {
+                frames.add(CommandFrame.wrap(CommandSet.QR_PAYLOAD_CODE, data.getQrPayload()));
+            }
+            return frames;
+        }
 
         String type = data.getTicketType().name();
         String ts = TS_FORMAT.format(timestamp);
@@ -51,6 +80,6 @@ public final class PacketBuilder {
             sb.append("|PNAME=").append(data.getPassengerName());
         }
 
-        return sb.toString();
+        return List.of(CommandFrame.wrap(type, sb.toString()));
     }
 }
