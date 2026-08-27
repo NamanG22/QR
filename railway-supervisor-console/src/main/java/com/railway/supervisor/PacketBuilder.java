@@ -59,7 +59,8 @@ public final class PacketBuilder {
                 frames.add(CommandFrame.wrap(CommandSet.PAYMENT_GW_CODE, data.getPaymentGw()));
             }
             if (data.getQrPayload() != null && !data.getQrPayload().isBlank()) {
-                frames.add(CommandFrame.wrap(CommandSet.QR_PAYLOAD_CODE, data.getQrPayload()));
+                String qr = UpiQueryAmount.overlayFare(data.getQrPayload(), data.getFare());
+                frames.add(CommandFrame.wrap(CommandSet.QR_PAYLOAD_CODE, qr));
             }
             return frames;
         }

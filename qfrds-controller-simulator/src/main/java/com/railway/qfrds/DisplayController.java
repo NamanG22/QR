@@ -257,7 +257,7 @@ public final class DisplayController {
     private void refreshUtsQrAndDisplay() {
         String qrPayload = utsTicket.getQrPayload().isBlank()
                 ? qrGenerator.buildQrPayload(utsTicket)
-                : utsTicket.getQrPayload();
+                : UpiQueryAmount.overlayFare(utsTicket.getQrPayload(), utsTicket.getFare());
         QRGeneratorService.OptionalImageResult qrImage = qrGenerator.renderQrImage(qrPayload);
         if (!qrImage.isSuccess()) {
             statusView.setQrGenerationStatus("FAILED: " + qrImage.getError());

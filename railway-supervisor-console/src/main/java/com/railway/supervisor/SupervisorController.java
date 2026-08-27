@@ -306,7 +306,10 @@ public class SupervisorController {
                 return;
             }
             paymentGwPacked = trimOrEmpty(paymentGwField.getText());
-            qrPayloadPacked = trimOrEmpty(qrPayloadField.getText());
+            qrPayloadPacked = UpiQueryAmount.overlayFare(trimOrEmpty(qrPayloadField.getText()), fare);
+            if (!qrPayloadPacked.equals(trimOrEmpty(qrPayloadField.getText()))) {
+                qrPayloadField.setText(qrPayloadPacked);
+            }
             if (qrPayloadPacked.indexOf(CommandFrame.EOT) >= 0 || qrPayloadPacked.indexOf(CommandFrame.SOT) >= 0) {
                 showAlert(Alert.AlertType.ERROR, "Validation",
                         "QR payload cannot contain SOT $ or EOT ^.");
