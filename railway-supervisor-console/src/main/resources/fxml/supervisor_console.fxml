@@ -25,7 +25,7 @@
             </padding>
             <Label styleClass="title-label" text="Indian Railways Supervisor Console"/>
             <Label styleClass="subtitle-label"
-                   text="PRS / UTS supervisor terminal · QR Fare Repeater Display demo"/>
+                   text="PRS / UTS supervisor terminal · QR Fare Repeater Display"/>
             <Separator styleClass="header-separator"/>
         </VBox>
     </top>

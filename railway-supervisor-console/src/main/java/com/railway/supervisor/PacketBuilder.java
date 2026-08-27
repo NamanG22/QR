@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
- * Builds the UTF-8 serial payload as a single line for the fare repeater / QR demo listener.
+ * Builds the UTF-8 serial payload as a single line for the fare repeater listener.
  * <p>
  * Packet grammar (pipe-separated key=value segments):
  * </p>

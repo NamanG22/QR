@@ -154,25 +154,7 @@ public final class SerialPortConfig {
         return sb.toString();
     }
 
-    public static String openFailureDetail(SerialPort port) {
-        return "";
-    }
-
-    /**
-     * com0com partner port — only used when {@code QFRDS_PAIR_PORT} is set explicitly.
-     */
-    public static String pairPortName(String primaryPort) {
-        String env = System.getenv("QFRDS_PAIR_PORT");
-        if (env != null && !env.isBlank()) {
-            return env.trim();
-        }
-        return null;
-    }
-
     public static String linkLabel() {
-        if (TransportConfig.useTcp()) {
-            return "TCP:" + TransportConfig.tcpPort();
-        }
         return portName();
     }
 }

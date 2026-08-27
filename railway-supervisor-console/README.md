@@ -1,6 +1,6 @@
 # Railway Supervisor Console Simulator
 
-JavaFX desktop demo that mimics an Indian Railways PRS/UTS supervisor terminal for a **QR Fare Repeater Display System** proof-of-concept. It builds pipe-delimited ticket packets and sends them over **RS232** (9600 8N1, UTF-8 text + newline) via **jSerialComm**.
+JavaFX desktop app that mimics an Indian Railways PRS/UTS supervisor terminal for a **QR Fare Repeater Display System**. It builds pipe-delimited ticket packets and sends them over **RS232** (9600 8N1, UTF-8 text + newline) via **jSerialComm**.
 
 **Lab:** USB-to-serial adapter on the console PC — select its COM port in the UI.  
 **Production:** direct RS232 from the CRIS terminal to the controller.

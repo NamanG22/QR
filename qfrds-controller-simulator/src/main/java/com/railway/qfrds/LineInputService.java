@@ -1,7 +1,7 @@
 package com.railway.qfrds;
 
 /**
- * Newline-delimited UTF-8 packet source (serial or TCP mock link).
+ * Newline-delimited UTF-8 packet source (RS232).
  */
 public interface LineInputService {
 
@@ -13,6 +13,6 @@ public interface LineInputService {
 
     int getReconnectAttempts();
 
-    /** Short label for engineering UI, e.g. {@code COM10} or {@code TCP:9000}. */
+    /** Short label for engineering UI, e.g. {@code COM10}. */
     String linkLabel();
 }

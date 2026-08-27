@@ -5,7 +5,7 @@ import javafx.application.Platform;
 import java.util.Objects;
 
 /**
- * Central coordinator for the QFRDS demo: bridges RS232 lines → parse → QR synthesis →
+ * Central coordinator for QFRDS: bridges RS232 lines → parse → QR synthesis →
  * passenger-facing display and engineering status screen.
  * <p>
  * All UI mutations run on the JavaFX application thread via {@link Platform#runLater}.
@@ -46,7 +46,7 @@ public final class DisplayController {
                         "UPI QR enabled — VPA " + UpiQrConfig.vpa() + " (" + UpiQrConfig.payeeName() + ")"));
             } else {
                 statusView.appendLog(LogFormatter.ts(
-                        "UPI QR not set — using demo text QR"));
+                        "UPI QR not set — using ticket-text QR"));
             }
             statusView.appendLog(LogFormatter.ts(
                     SerialPortConfig.useExplicitPort()

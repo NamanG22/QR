@@ -9,7 +9,7 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>QFRDS Controller Simulator</name>
-    <description>Remote Data Acquisition Intelligent Controller simulator for Indian Railways QFRDS demo</description>
+    <description>Remote Data Acquisition Intelligent Controller for Indian Railways QFRDS passenger display</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -250,22 +250,6 @@
                                 </configuration>
                             </execution>
                         </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <!-- Passenger window only (no engineering UI, no serial). Run: mvn -Ppassenger-display-only javafx:run -->
-        <profile>
-            <id>passenger-display-only</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.openjfx</groupId>
-                        <artifactId>javafx-maven-plugin</artifactId>
-                        <configuration>
-                            <mainClass>com.railway.qfrds.PassengerDisplayOnlyApp</mainClass>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>

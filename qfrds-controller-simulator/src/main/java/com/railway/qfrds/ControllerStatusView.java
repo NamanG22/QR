@@ -196,6 +196,6 @@ public class ControllerStatusView implements Initializable {
         }
         setSerialConnectionSummary(mock
                 ? "DISCONNECTED — retrying " + linkLabel
-                : "CONNECTED — " + linkLabel + (linkLabel.startsWith("TCP:") ? "" : " 9600 8N1"));
+                : "CONNECTED — " + linkLabel + " 9600 8N1");
     }
 }

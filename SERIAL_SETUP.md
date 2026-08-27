@@ -1,9 +1,7 @@
 # RS232 link — Supervisor console → Controller
 
 Production uses **RS232 → RS232** between the CRIS terminal and the QFRDS controller.  
-For lab/demo on two PCs, use **USB-serial on the console PC** wired to **RS232 on the thin client**.
-
-The wireless TCP path is preserved on branch **`backup/wireless-tcp-20260617`** (see `NETWORK_SETUP.md`).
+For lab work on two PCs, use **USB-serial on the console PC** wired to **RS232 on the thin client**.
 
 ## Wiring
 
@@ -75,7 +73,6 @@ No physical cable required.
 |----------|-----|---------|
 | `QFRDS_SUPERVISOR_PORT` | Console | Default COM port in the UI |
 | `QFRDS_CONTROLLER_PORT` | Controller | Pin one listen port; if unset, listens on **all** COM ports |
-| `QFRDS_PAIR_PORT` | Controller | com0com partner port (same-PC test only) |
 
 ## Troubleshooting
 
@@ -89,7 +86,6 @@ No physical cable required.
 | Footer `WAITING · no COM in Device Manager` | Thin client has **zero** COM ports — plug USB-serial adapter on thin client |
 | Footer `WAITING · cannot open any port` | Ports exist but busy — close other apps using COM ports |
 | Garbled display | Baud mismatch — both sides must be 9600 8N1 |
-| Need wireless demo again | `git checkout backup/wireless-tcp-20260617` |
 
 ### Diagnose on the thin client
 

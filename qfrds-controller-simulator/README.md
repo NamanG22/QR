@@ -1,6 +1,6 @@
 # QFRDS Controller Simulator
 
-JavaFX application that simulates the **Remote Data Acquisition Intelligent Controller** for an Indian Railways **QFRDS** (QR Fare Repeater Display System) demo: listens on **RS232** (default **COM10**) for UTF‑8 ticket lines from the [Railway Supervisor Console Simulator](../railway-supervisor-console/), parses packets, builds payment QR codes (**ZXing**), and drives the passenger-facing display.
+JavaFX application that runs the **Remote Data Acquisition Intelligent Controller** for an Indian Railways **QFRDS** (QR Fare Repeater Display System): listens on **RS232** (default **COM1**) for UTF‑8 ticket lines from the [Railway Supervisor Console](../railway-supervisor-console/), parses packets, builds payment QR codes (**ZXing**), and drives the passenger-facing display.
 
 **Production:** RS232 from CRIS terminal. **Lab:** USB-serial on the console PC wired to controller RS232.
 
@@ -93,7 +93,7 @@ TXN=<txn>|FARE=<fare>|SRC=<src>|DST=<dst>|TS=<timestamp>[|PNAME=<name>]
 | Class | Role |
 |-------|------|
 | `MainApp` | Dual-stage launcher |
-| `SerialListenerService` | RS232 COM10 (default), 9600 8N1, line reader, reconnect |
+| `MultiSerialListenerService` | RS232 listener (default COM1), 9600 8N1, line reader, reconnect |
 | `TicketPacketParser` | Pipe-separated field parser; ignores unknown keys |
 | `TicketData` | Parsed ticket value object |
 | `QRGeneratorService` | ZXing QR bitmap → JavaFX `WritableImage` |

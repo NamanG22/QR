@@ -83,8 +83,4 @@ public final class SerialPortConfig {
         }
         return sb.toString();
     }
-
-    public static String openFailureDetail(SerialPort port) {
-        return "";
-    }
 }

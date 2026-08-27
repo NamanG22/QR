@@ -4,8 +4,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 /**
- * UPI payment QR settings. Defaults are hardcoded for the demo; override with
- * {@code QFRDS_UPI_VPA} / {@code QFRDS_UPI_PAYEE_NAME} if needed.
+ * UPI payment QR settings. Override with {@code QFRDS_UPI_VPA} / {@code QFRDS_UPI_PAYEE_NAME}.
  */
 public final class UpiQrConfig {
 
