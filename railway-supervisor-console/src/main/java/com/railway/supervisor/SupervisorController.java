@@ -398,17 +398,12 @@ public class SupervisorController {
                     "Cancellation refund amount must be 1–5 numeric digits (e.g. 790).");
             return;
         }
-        String classPacked = ClassField.pack(classCombo.getValue()).orElse(null);
-        if (classPacked == null) {
-            showAlert(Alert.AlertType.ERROR, "Validation", "Class must be I or II.");
-            return;
-        }
         String txnTypePacked = TxnTypeField.pack(txnTypeCombo.getValue()).orElse(null);
         if (txnTypePacked == null) {
             showAlert(Alert.AlertType.ERROR, "Validation", "Select a transaction type.");
             return;
         }
-        java.util.List<String> frames = PacketBuilder.cancellationRefund(refund, classPacked, txnTypePacked);
+        java.util.List<String> frames = PacketBuilder.cancellationRefund(refund, txnTypePacked);
         boolean ok = true;
         for (String frame : frames) {
             appendLog("Frame: " + frame);
@@ -418,7 +413,7 @@ public class SupervisorController {
             }
         }
         if (ok) {
-            appendLog("Cancellation refund (code 09/12/14) sent.");
+            appendLog("Cancellation refund (code 12/14) sent.");
         } else {
             appendLog("Send failed — check COM port and cable, then click Connect.");
         }

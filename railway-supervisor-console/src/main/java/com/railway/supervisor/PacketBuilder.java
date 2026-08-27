@@ -29,12 +29,9 @@ public final class PacketBuilder {
         return CommandFrame.wrap(CommandSet.CLEAR_CODE, "");
     }
 
-    public static List<String> cancellationRefund(CancellationRefund refund, String travelClass, String txnType) {
+    public static List<String> cancellationRefund(CancellationRefund refund, String txnType) {
         Objects.requireNonNull(refund, "refund");
         List<String> frames = new ArrayList<>();
-        if (travelClass != null && !travelClass.isBlank()) {
-            frames.add(CommandFrame.wrap(CommandSet.CLASS_CODE, travelClass.trim()));
-        }
         if (txnType != null && !txnType.isBlank()) {
             frames.add(CommandFrame.wrap(CommandSet.TXN_TYPE_CODE, txnType.trim()));
         }
