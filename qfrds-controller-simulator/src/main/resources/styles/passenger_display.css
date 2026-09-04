@@ -107,6 +107,99 @@
     -fx-max-height: 2.4cm;
 }
 
+.pv-design-prs-seg-5-black {
+    -fx-background-color: #000000;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 4.5cm;
+    -fx-min-width: 4.5cm;
+    -fx-max-width: 4.5cm;
+    -fx-pref-height: 2.4cm;
+    -fx-min-height: 2.4cm;
+    -fx-max-height: 2.4cm;
+}
+
+.pv-design-prs-seg-rest-black {
+    -fx-background-color: #000000;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 15cm;
+    -fx-min-width: 15cm;
+    -fx-max-width: 15cm;
+    -fx-pref-height: 2.4cm;
+    -fx-min-height: 2.4cm;
+    -fx-max-height: 2.4cm;
+}
+
+.pv-design-prs-rest-split {
+    -fx-spacing: 2mm;
+    -fx-fill-height: true;
+    -fx-alignment: TOP_LEFT;
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 15cm;
+    -fx-min-width: 15cm;
+    -fx-max-width: 15cm;
+    -fx-pref-height: 2.4cm;
+    -fx-min-height: 2.4cm;
+    -fx-max-height: 2.4cm;
+}
+
+.pv-design-prs-seg-6-black {
+    -fx-background-color: #000000;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 6cm;
+    -fx-min-width: 6cm;
+    -fx-max-width: 6cm;
+    -fx-pref-height: 2.4cm;
+    -fx-min-height: 2.4cm;
+    -fx-max-height: 2.4cm;
+}
+
+.pv-design-prs-seg-88-black {
+    -fx-background-color: #000000;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 8.8cm;
+    -fx-min-width: 8.8cm;
+    -fx-max-width: 8.8cm;
+    -fx-pref-height: 2.4cm;
+    -fx-min-height: 2.4cm;
+    -fx-max-height: 2.4cm;
+}
+
+.pv-design-prs-seg-48 {
+    -fx-background-color: #ffffff;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 4.8cm;
+    -fx-min-width: 4.8cm;
+    -fx-max-width: 4.8cm;
+    -fx-pref-height: 2.4cm;
+    -fx-min-height: 2.4cm;
+    -fx-max-height: 2.4cm;
+}
+
+.pv-design-prs-seg-10 {
+    -fx-background-color: #470000;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 10cm;
+    -fx-min-width: 10cm;
+    -fx-max-width: 10cm;
+    -fx-pref-height: 2.4cm;
+    -fx-min-height: 2.4cm;
+    -fx-max-height: 2.4cm;
+}
+
 .pv-design-prs-box-inner {
     -fx-background-color: #ffffff;
     -fx-border-width: 0;
