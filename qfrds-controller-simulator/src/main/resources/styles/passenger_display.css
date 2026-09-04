@@ -17,6 +17,11 @@
     -fx-background-color: #ffffff;
 }
 
+/* Empty white canvas for the upcoming PRS redesign. Do not reuse on UTS/PRS boards. */
+.pv-design-board {
+    -fx-background-color: #ffffff;
+}
+
 .qr-frame {
     -fx-background-color: #ffffff;
     -fx-border-color: #2a2a2a;

@@ -471,10 +471,13 @@
                     </VBox>
                 </center>
             </BorderPane>
+
+            <!-- TEMP canvas for the new PRS layout. Current UTS/PRS boards are unchanged. -->
+            <BorderPane fx:id="designBoard" managed="false" styleClass="pv-design-board" visible="false"/>
         </StackPane>
     </center>
     <bottom>
-        <HBox alignment="CENTER_LEFT" styleClass="passenger-footer-tech">
+        <HBox fx:id="passengerFooter" alignment="CENTER_LEFT" styleClass="passenger-footer-tech">
             <padding>
                 <Insets bottom="6.0" left="10.0" right="10.0" top="4.0"/>
             </padding>

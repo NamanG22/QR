@@ -13,6 +13,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 
@@ -69,6 +70,8 @@ public class PassengerDisplayView implements Initializable {
     private BorderPane utsBoard;
     @FXML
     private BorderPane prsBoard;
+    @FXML
+    private BorderPane designBoard;
 
     /* UTS */
     @FXML
@@ -144,6 +147,8 @@ public class PassengerDisplayView implements Initializable {
     private Label footerLastUpdated;
     @FXML
     private Label footerLinkStatus;
+    @FXML
+    private HBox passengerFooter;
 
     private final ObservableList<PaxRow> prsPaxRows = FXCollections.observableArrayList();
 
@@ -154,10 +159,7 @@ public class PassengerDisplayView implements Initializable {
         Tooltip.install(prsLogoPlaceholder, new Tooltip("Indian Railways Logo"));
         initPassengerTable();
         clearAll();
-        utsBoard.setVisible(false);
-        utsBoard.setManaged(false);
-        prsBoard.setVisible(true);
-        prsBoard.setManaged(true);
+        showDesignBoard();
         setLinkStatus("—", false, false, 0, "starting");
     }
 
@@ -171,6 +173,7 @@ public class PassengerDisplayView implements Initializable {
      * Refreshes the active board (UTS vs PRS) and QR bitmap. JavaFX thread only.
      */
     public void applyTicketUpdate(TicketData ticket, WritableImage qrImage) {
+        hideDesignBoard();
         boolean prs = ticket.getTicketType() == TicketType.PRS;
         utsBoard.setVisible(!prs);
         utsBoard.setManaged(!prs);
@@ -216,6 +219,7 @@ public class PassengerDisplayView implements Initializable {
      * Refreshes the PRS board from a TDRC/QR/payment packet. JavaFX thread only.
      */
     public void applyPrsUpdate(PrsTdrc booking, WritableImage qrImage) {
+        hideDesignBoard();
         utsBoard.setVisible(false);
         utsBoard.setManaged(false);
         prsBoard.setVisible(true);
@@ -354,6 +358,28 @@ public class PassengerDisplayView implements Initializable {
 
     public void clearDisplay() {
         clearAll();
+    }
+
+    private void showDesignBoard() {
+        utsBoard.setVisible(false);
+        utsBoard.setManaged(false);
+        prsBoard.setVisible(false);
+        prsBoard.setManaged(false);
+        designBoard.setVisible(true);
+        designBoard.setManaged(true);
+        if (passengerFooter != null) {
+            passengerFooter.setVisible(false);
+            passengerFooter.setManaged(false);
+        }
+    }
+
+    private void hideDesignBoard() {
+        designBoard.setVisible(false);
+        designBoard.setManaged(false);
+        if (passengerFooter != null) {
+            passengerFooter.setVisible(true);
+            passengerFooter.setManaged(true);
+        }
     }
 
     private void clearAll() {
