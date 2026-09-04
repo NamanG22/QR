@@ -481,12 +481,27 @@
                                   StackPane.alignment="TOP_LEFT">
                                 <Region maxWidth="Infinity" styleClass="pv-design-prs-box-yellow"
                                         VBox.vgrow="NEVER"/>
-                                <Region maxWidth="Infinity" styleClass="pv-design-prs-box-inner"
-                                        VBox.vgrow="NEVER"/>
-                                <Region maxWidth="Infinity" styleClass="pv-design-prs-box-inner"
-                                        VBox.vgrow="NEVER"/>
-                                <Region maxWidth="Infinity" styleClass="pv-design-prs-box-inner"
-                                        VBox.vgrow="NEVER"/>
+                                <HBox maxWidth="Infinity" styleClass="pv-design-prs-row-split"
+                                      VBox.vgrow="NEVER">
+                                    <Region styleClass="pv-design-prs-box-inner pv-design-prs-half"
+                                            HBox.hgrow="NEVER"/>
+                                    <Region styleClass="pv-design-prs-box-inner pv-design-prs-half"
+                                            HBox.hgrow="NEVER"/>
+                                </HBox>
+                                <HBox maxWidth="Infinity" styleClass="pv-design-prs-row-split"
+                                      VBox.vgrow="NEVER">
+                                    <Region styleClass="pv-design-prs-box-inner pv-design-prs-half"
+                                            HBox.hgrow="NEVER"/>
+                                    <Region styleClass="pv-design-prs-box-inner pv-design-prs-half"
+                                            HBox.hgrow="NEVER"/>
+                                </HBox>
+                                <HBox maxWidth="Infinity" styleClass="pv-design-prs-row-split"
+                                      VBox.vgrow="NEVER">
+                                    <Region styleClass="pv-design-prs-box-inner pv-design-prs-half"
+                                            HBox.hgrow="NEVER"/>
+                                    <Region styleClass="pv-design-prs-box-inner pv-design-prs-half"
+                                            HBox.hgrow="NEVER"/>
+                                </HBox>
                                 <Region maxWidth="Infinity" styleClass="pv-design-prs-box-inner"
                                         VBox.vgrow="NEVER"/>
                                 <Region maxWidth="Infinity" styleClass="pv-design-prs-box-orange"
