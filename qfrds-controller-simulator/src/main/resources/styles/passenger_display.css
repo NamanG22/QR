@@ -144,6 +144,72 @@
     -fx-padding: 1mm 0mm 0mm 2mm;
 }
 
+.pv-design-prs-res-en {
+    -fx-font-size: 9mm;
+}
+
+.pv-design-prs-res-hi {
+    -fx-font-size: 7mm;
+}
+
+VBox.pv-design-prs-label {
+    -fx-padding: -2mm 0mm 0mm 2mm;
+}
+
+VBox.pv-design-prs-train {
+    -fx-padding: 1mm 0mm 0mm 2mm;
+}
+
+.pv-design-prs-fare {
+    -fx-alignment: CENTER;
+}
+
+VBox.pv-design-prs-fare {
+    -fx-padding: 0;
+    -fx-alignment: CENTER;
+}
+
+.pv-design-prs-fare .pv-design-prs-label-en,
+.pv-design-prs-fare .pv-design-prs-label-hi {
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-max-width: Infinity;
+}
+
+.pv-design-prs-boarding {
+    -fx-alignment: CENTER;
+    -fx-spacing: -4mm;
+}
+
+VBox.pv-design-prs-boarding {
+    -fx-padding: 0;
+    -fx-alignment: CENTER;
+    -fx-spacing: -4mm;
+}
+
+.pv-design-prs-boarding .pv-design-prs-label-en {
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-max-width: Infinity;
+}
+
+.pv-design-prs-res {
+    -fx-alignment: CENTER;
+    -fx-spacing: -4mm;
+}
+
+VBox.pv-design-prs-res {
+    -fx-padding: 0;
+    -fx-alignment: CENTER;
+    -fx-spacing: -4mm;
+}
+
+.pv-design-prs-res .pv-design-prs-label-en {
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-max-width: Infinity;
+}
+
 .pv-design-prs-seg-rest {
     -fx-background-color: #ffffff;
     -fx-border-width: 0;
