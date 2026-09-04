@@ -35,6 +35,12 @@
     -fx-padding: 2mm;
 }
 
+.pv-design-prs-strips {
+    -fx-spacing: 1.5mm;
+    -fx-fill-width: true;
+    -fx-alignment: TOP_LEFT;
+}
+
 .pv-design-prs-box-inner {
     -fx-background-color: #ffffff;
     -fx-border-width: 0;
