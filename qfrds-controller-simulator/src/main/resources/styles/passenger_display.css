@@ -47,9 +47,9 @@
     -fx-background-insets: 0;
     -fx-padding: 0;
     -fx-min-width: 0;
-    -fx-pref-height: 3.3cm;
-    -fx-min-height: 3.3cm;
-    -fx-max-height: 3.3cm;
+    -fx-pref-height: 3.125cm;
+    -fx-min-height: 3.125cm;
+    -fx-max-height: 3.125cm;
 }
 
 .pv-design-prs-box-inner {
@@ -58,9 +58,9 @@
     -fx-background-insets: 0;
     -fx-padding: 0;
     -fx-min-width: 0;
-    -fx-pref-height: 2.64cm;
-    -fx-min-height: 2.64cm;
-    -fx-max-height: 2.64cm;
+    -fx-pref-height: 2.5cm;
+    -fx-min-height: 2.5cm;
+    -fx-max-height: 2.5cm;
 }
 
 .pv-design-prs-box-orange {
@@ -69,9 +69,9 @@
     -fx-background-insets: 0;
     -fx-padding: 0;
     -fx-min-width: 0;
-    -fx-pref-height: 5.28cm;
-    -fx-min-height: 5.28cm;
-    -fx-max-height: 5.28cm;
+    -fx-pref-height: 5cm;
+    -fx-min-height: 5cm;
+    -fx-max-height: 5cm;
 }
 
 .pv-design-prs-box-green {
@@ -80,9 +80,9 @@
     -fx-background-insets: 0;
     -fx-padding: 0;
     -fx-min-width: 0;
-    -fx-pref-height: 2.376cm;
-    -fx-min-height: 2.376cm;
-    -fx-max-height: 2.376cm;
+    -fx-pref-height: 2.25cm;
+    -fx-min-height: 2.25cm;
+    -fx-max-height: 2.25cm;
 }
 
 .qr-frame {
