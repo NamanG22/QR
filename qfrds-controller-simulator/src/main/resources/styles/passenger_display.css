@@ -29,7 +29,7 @@
     -fx-pref-height: 22cm;
     -fx-min-height: 22cm;
     -fx-max-height: 22cm;
-    -fx-background-color: #808080;
+    -fx-background-color: #b0b0b0;
     -fx-border-width: 0;
     -fx-background-insets: 0;
     -fx-padding: 2mm;
@@ -65,7 +65,7 @@
 .pv-design-prs-opcode {
     -fx-alignment: TOP_CENTER;
     -fx-spacing: 2mm;
-    -fx-padding: 2mm 3mm 0 0;
+    -fx-padding: 2mm 0 0 0;
     -fx-pref-width: 5.5cm;
     -fx-min-width: 5.5cm;
     -fx-max-width: 5.5cm;
@@ -89,6 +89,22 @@
     -fx-min-height: 2;
     -fx-max-height: 2;
     -fx-max-width: Infinity;
+}
+
+.pv-design-prs-header-right {
+    -fx-padding: 0;
+    -fx-spacing: 3mm;
+    -fx-alignment: TOP_RIGHT;
+}
+
+.pv-design-prs-logo {
+    -fx-background-color: #808080;
+    -fx-pref-width: 2.8cm;
+    -fx-min-width: 2.8cm;
+    -fx-max-width: 2.8cm;
+    -fx-pref-height: 3.325cm;
+    -fx-min-height: 3.325cm;
+    -fx-max-height: 3.325cm;
 }
 
 .pv-design-prs-row-split {
@@ -407,6 +423,16 @@ VBox.pv-design-prs-pax {
     -fx-pref-width: 6.4cm;
     -fx-min-width: 6.4cm;
     -fx-max-width: 6.4cm;
+}
+
+.pv-design-prs-class-rule {
+    -fx-background-color: #ffffff;
+    -fx-pref-height: 1;
+    -fx-min-height: 1;
+    -fx-max-height: 1;
+    -fx-pref-width: 3.6cm;
+    -fx-min-width: 3.6cm;
+    -fx-max-width: 3.6cm;
 }
 
 .pv-design-prs-rest-split-147 {

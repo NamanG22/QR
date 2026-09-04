@@ -484,12 +484,15 @@
                                            VBox.vgrow="NEVER">
                                     <Label alignment="BOTTOM_LEFT" maxWidth="Infinity" maxHeight="Infinity"
                                            styleClass="pv-design-prs-title" text="Ticket Information"/>
-                                    <VBox alignment="TOP_CENTER" styleClass="pv-design-prs-opcode"
+                                    <HBox alignment="TOP_RIGHT" spacing="2.0" styleClass="pv-design-prs-header-right"
                                           StackPane.alignment="TOP_RIGHT">
-                                        <Label styleClass="pv-design-prs-opcode-label" text="Operator Code"/>
-                                        <Region styleClass="pv-design-prs-opcode-rule"/>
-                                        <Label fx:id="designOperatorCode" styleClass="pv-design-prs-opcode-value" text=""/>
-                                    </VBox>
+                                        <VBox alignment="TOP_CENTER" styleClass="pv-design-prs-opcode">
+                                            <Label styleClass="pv-design-prs-opcode-label" text="Operator Code"/>
+                                            <Region styleClass="pv-design-prs-opcode-rule"/>
+                                            <Label fx:id="designOperatorCode" styleClass="pv-design-prs-opcode-value" text=""/>
+                                        </VBox>
+                                        <Region styleClass="pv-design-prs-logo"/>
+                                    </HBox>
                                 </StackPane>
                                 <HBox maxWidth="Infinity" styleClass="pv-design-prs-row-split"
                                       VBox.vgrow="NEVER">
@@ -549,7 +552,12 @@
                                         </HBox>
                                     </HBox>
                                     <HBox styleClass="pv-design-prs-half" HBox.hgrow="NEVER">
-                                        <Region styleClass="pv-design-prs-seg-48-black" HBox.hgrow="NEVER"/>
+                                        <VBox alignment="CENTER" styleClass="pv-design-prs-seg-48-black,pv-design-prs-pax"
+                                              HBox.hgrow="NEVER">
+                                            <Label styleClass="pv-design-prs-pax-title" text="Class"/>
+                                            <Region styleClass="pv-design-prs-class-rule"/>
+                                            <Label fx:id="designClass" styleClass="pv-design-prs-pax-value" text=""/>
+                                        </VBox>
                                         <HBox styleClass="pv-design-prs-rest-split-147" HBox.hgrow="NEVER">
                                             <VBox alignment="CENTER" styleClass="pv-design-prs-seg-51,pv-design-prs-label,pv-design-prs-fare"
                                                   HBox.hgrow="NEVER">

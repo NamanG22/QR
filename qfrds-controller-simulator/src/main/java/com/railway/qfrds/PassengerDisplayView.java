@@ -129,6 +129,8 @@ public class PassengerDisplayView implements Initializable {
     @FXML
     private Label prsClass;
     @FXML
+    private Label designClass;
+    @FXML
     private Label prsFare;
     @FXML
     private Label prsBoarding;
@@ -239,7 +241,7 @@ public class PassengerDisplayView implements Initializable {
         prsQuota.setText("GN");
         prsDate.setText(formatDateShort(t.getTimestampRaw()));
         setTotalPax("01");
-        prsClass.setText("SL");
+        setTravelClass("SL");
         prsFare.setText(formatFareRupee(t.getFare()));
         prsBoarding.setText(t.getSourceStation());
         prsResUpto.setText(t.getDestinationStation());
@@ -268,7 +270,7 @@ public class PassengerDisplayView implements Initializable {
             pax = String.format("%02d", t.getPassengers().size());
         }
         setTotalPax(pax);
-        prsClass.setText(dash(t.getTravelClass()));
+        setTravelClass(t.getTravelClass());
         prsFare.setText(formatFareRupee(t.getFare()));
         prsBoarding.setText(dash(t.getBoarding()));
         prsResUpto.setText(dash(t.getReservationUpto()));
@@ -303,6 +305,14 @@ public class PassengerDisplayView implements Initializable {
         prsTotalPax.setText(text.isBlank() ? "—" : text);
         if (designTotalPax != null) {
             designTotalPax.setText(text.isBlank() ? "" : dash(text));
+        }
+    }
+
+    private void setTravelClass(String value) {
+        String text = value == null ? "" : value;
+        prsClass.setText(text.isBlank() ? "—" : text);
+        if (designClass != null) {
+            designClass.setText(text.isBlank() ? "" : dash(text));
         }
     }
 
@@ -431,7 +441,7 @@ public class PassengerDisplayView implements Initializable {
         prsQuota.setText("—");
         prsDate.setText("—");
         setTotalPax("");
-        prsClass.setText("—");
+        setTravelClass("");
         prsFare.setText("—");
         prsBoarding.setText("—");
         prsResUpto.setText("—");
