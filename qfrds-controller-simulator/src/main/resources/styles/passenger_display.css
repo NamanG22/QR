@@ -52,6 +52,15 @@
     -fx-max-height: 3.325cm;
 }
 
+.pv-design-prs-title {
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
+    -fx-font-size: 85px;
+    -fx-font-weight: 900;
+    -fx-text-fill: #470000;
+    -fx-padding: 0 8 0 8;
+    -fx-wrap-text: false;
+}
+
 .pv-design-prs-row-split {
     -fx-spacing: 2mm;
     -fx-fill-height: true;
