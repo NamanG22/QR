@@ -40,6 +40,10 @@
     -fx-border-width: 0;
     -fx-background-insets: 0;
     -fx-padding: 0;
+    -fx-min-width: 0;
+    -fx-pref-height: 2cm;
+    -fx-min-height: 2cm;
+    -fx-max-height: 2cm;
 }
 
 .qr-frame {
