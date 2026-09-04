@@ -524,7 +524,11 @@
                                       VBox.vgrow="NEVER">
                                     <VBox styleClass="pv-design-prs-rows56-left" HBox.hgrow="NEVER">
                                         <HBox styleClass="pv-design-prs-col294-split" VBox.vgrow="NEVER">
-                                            <Region styleClass="pv-design-prs-seg-202-white" HBox.hgrow="NEVER"/>
+                                            <HBox styleClass="pv-design-prs-col212-split" HBox.hgrow="NEVER">
+                                                <Region styleClass="pv-design-prs-seg-68-24" HBox.hgrow="NEVER"/>
+                                                <Region styleClass="pv-design-prs-seg-9-white" HBox.hgrow="NEVER"/>
+                                                <Region styleClass="pv-design-prs-seg-6-24" HBox.hgrow="NEVER"/>
+                                            </HBox>
                                             <Region styleClass="pv-design-prs-seg-9-white" HBox.hgrow="NEVER"/>
                                         </HBox>
                                         <HBox styleClass="pv-design-prs-col294-split" VBox.vgrow="NEVER">
@@ -536,7 +540,10 @@
                                 </HBox>
                                 <HBox maxWidth="Infinity" styleClass="pv-design-prs-wide-split"
                                       VBox.vgrow="NEVER">
-                                    <Region styleClass="pv-design-prs-seg-294-green" HBox.hgrow="NEVER"/>
+                                    <HBox styleClass="pv-design-prs-col294-split" HBox.hgrow="NEVER">
+                                        <Region styleClass="pv-design-prs-seg-68-225" HBox.hgrow="NEVER"/>
+                                        <Region styleClass="pv-design-prs-seg-224-225" HBox.hgrow="NEVER"/>
+                                    </HBox>
                                     <Region styleClass="pv-design-prs-seg-10-green" HBox.hgrow="NEVER"/>
                                 </HBox>
                             </VBox>

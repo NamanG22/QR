@@ -267,6 +267,73 @@
     -fx-max-width: 29.4cm;
 }
 
+.pv-design-prs-col212-split {
+    -fx-spacing: 2mm;
+    -fx-fill-height: true;
+    -fx-alignment: TOP_LEFT;
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 21.2cm;
+    -fx-min-width: 21.2cm;
+    -fx-max-width: 21.2cm;
+    -fx-pref-height: 2.4cm;
+    -fx-min-height: 2.4cm;
+    -fx-max-height: 2.4cm;
+}
+
+.pv-design-prs-seg-68-24 {
+    -fx-background-color: #ffffff;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 6.8cm;
+    -fx-min-width: 6.8cm;
+    -fx-max-width: 6.8cm;
+    -fx-pref-height: 2.4cm;
+    -fx-min-height: 2.4cm;
+    -fx-max-height: 2.4cm;
+}
+
+.pv-design-prs-seg-6-24 {
+    -fx-background-color: #ffffff;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 6cm;
+    -fx-min-width: 6cm;
+    -fx-max-width: 6cm;
+    -fx-pref-height: 2.4cm;
+    -fx-min-height: 2.4cm;
+    -fx-max-height: 2.4cm;
+}
+
+.pv-design-prs-seg-68-225 {
+    -fx-background-color: #ffffff;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 6.8cm;
+    -fx-min-width: 6.8cm;
+    -fx-max-width: 6.8cm;
+    -fx-pref-height: 2.25cm;
+    -fx-min-height: 2.25cm;
+    -fx-max-height: 2.25cm;
+}
+
+.pv-design-prs-seg-224-225 {
+    -fx-background-color: #ffffff;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 22.4cm;
+    -fx-min-width: 22.4cm;
+    -fx-max-width: 22.4cm;
+    -fx-pref-height: 2.25cm;
+    -fx-min-height: 2.25cm;
+    -fx-max-height: 2.25cm;
+}
+
 .pv-design-prs-seg-202-white {
     -fx-background-color: #ffffff;
     -fx-border-width: 0;
