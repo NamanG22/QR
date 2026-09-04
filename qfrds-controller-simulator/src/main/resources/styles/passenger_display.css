@@ -19,7 +19,7 @@
 
 /* Empty white canvas for the upcoming PRS redesign. Do not reuse on UTS/PRS boards. */
 .pv-design-board {
-    -fx-background-color: #ffffff;
+    -fx-background-color: #000000;
 }
 
 .pv-design-prs-box {
@@ -30,6 +30,13 @@
     -fx-min-height: 22cm;
     -fx-max-height: 22cm;
     -fx-background-color: #808080;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 1mm;
+}
+
+.pv-design-prs-box-inner {
+    -fx-background-color: #ffffff;
     -fx-border-width: 0;
     -fx-background-insets: 0;
     -fx-padding: 0;
