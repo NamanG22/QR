@@ -200,6 +200,44 @@
     -fx-max-height: 2.4cm;
 }
 
+.pv-design-prs-wide-split {
+    -fx-spacing: 2mm;
+    -fx-fill-height: true;
+    -fx-alignment: TOP_LEFT;
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 39.6cm;
+    -fx-min-width: 39.6cm;
+    -fx-max-width: 39.6cm;
+}
+
+.pv-design-prs-seg-294-white {
+    -fx-background-color: #ffffff;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 29.4cm;
+    -fx-min-width: 29.4cm;
+    -fx-max-width: 29.4cm;
+    -fx-pref-height: 2.4cm;
+    -fx-min-height: 2.4cm;
+    -fx-max-height: 2.4cm;
+}
+
+.pv-design-prs-seg-10-white {
+    -fx-background-color: #ffffff;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 10cm;
+    -fx-min-width: 10cm;
+    -fx-max-width: 10cm;
+    -fx-pref-height: 2.4cm;
+    -fx-min-height: 2.4cm;
+    -fx-max-height: 2.4cm;
+}
+
 .pv-design-prs-box-inner {
     -fx-background-color: #ffffff;
     -fx-border-width: 0;
@@ -211,6 +249,32 @@
     -fx-max-height: 2.4cm;
 }
 
+.pv-design-prs-seg-294-orange {
+    -fx-background-color: #ff8800;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 29.4cm;
+    -fx-min-width: 29.4cm;
+    -fx-max-width: 29.4cm;
+    -fx-pref-height: 5.2cm;
+    -fx-min-height: 5.2cm;
+    -fx-max-height: 5.2cm;
+}
+
+.pv-design-prs-seg-10-orange {
+    -fx-background-color: #ff8800;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 10cm;
+    -fx-min-width: 10cm;
+    -fx-max-width: 10cm;
+    -fx-pref-height: 5.2cm;
+    -fx-min-height: 5.2cm;
+    -fx-max-height: 5.2cm;
+}
+
 .pv-design-prs-box-orange {
     -fx-background-color: #ff8800;
     -fx-border-width: 0;
@@ -220,6 +284,32 @@
     -fx-pref-height: 5.2cm;
     -fx-min-height: 5.2cm;
     -fx-max-height: 5.2cm;
+}
+
+.pv-design-prs-seg-294-green {
+    -fx-background-color: #00aa00;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 29.4cm;
+    -fx-min-width: 29.4cm;
+    -fx-max-width: 29.4cm;
+    -fx-pref-height: 2.25cm;
+    -fx-min-height: 2.25cm;
+    -fx-max-height: 2.25cm;
+}
+
+.pv-design-prs-seg-10-green {
+    -fx-background-color: #00aa00;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 10cm;
+    -fx-min-width: 10cm;
+    -fx-max-width: 10cm;
+    -fx-pref-height: 2.25cm;
+    -fx-min-height: 2.25cm;
+    -fx-max-height: 2.25cm;
 }
 
 .pv-design-prs-box-green {
