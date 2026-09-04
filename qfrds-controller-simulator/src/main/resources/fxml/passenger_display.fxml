@@ -522,12 +522,18 @@
                                 </HBox>
                                 <HBox maxWidth="Infinity" styleClass="pv-design-prs-wide-split"
                                       VBox.vgrow="NEVER">
-                                    <Region styleClass="pv-design-prs-seg-294-white" HBox.hgrow="NEVER"/>
+                                    <HBox styleClass="pv-design-prs-col294-split" HBox.hgrow="NEVER">
+                                        <Region styleClass="pv-design-prs-seg-202-white" HBox.hgrow="NEVER"/>
+                                        <Region styleClass="pv-design-prs-seg-9-white" HBox.hgrow="NEVER"/>
+                                    </HBox>
                                     <Region styleClass="pv-design-prs-seg-10-white" HBox.hgrow="NEVER"/>
                                 </HBox>
                                 <HBox maxWidth="Infinity" styleClass="pv-design-prs-wide-split"
                                       VBox.vgrow="NEVER">
-                                    <Region styleClass="pv-design-prs-seg-294-orange" HBox.hgrow="NEVER"/>
+                                    <HBox styleClass="pv-design-prs-col294-split" HBox.hgrow="NEVER">
+                                        <Region styleClass="pv-design-prs-seg-202-orange" HBox.hgrow="NEVER"/>
+                                        <Region styleClass="pv-design-prs-seg-9-orange" HBox.hgrow="NEVER"/>
+                                    </HBox>
                                     <Region styleClass="pv-design-prs-seg-10-orange" HBox.hgrow="NEVER"/>
                                 </HBox>
                                 <HBox maxWidth="Infinity" styleClass="pv-design-prs-wide-split"
