@@ -146,7 +146,7 @@
                         <TextField fx:id="qrPayloadField" HBox.hgrow="ALWAYS" promptText="QR payload (code 22, optional)"/>
                     </HBox>
 
-                    <Label styleClass="field-label" text="Transaction ID" GridPane.columnIndex="0"
+                    <Label fx:id="transactionLabel" styleClass="field-label" text="Transaction ID" GridPane.columnIndex="0"
                            GridPane.rowIndex="12"/>
                     <TextField fx:id="transactionField" promptText="Unique transaction reference"
                                GridPane.columnIndex="1" GridPane.rowIndex="12"/>
@@ -156,6 +156,94 @@
                     <TextField fx:id="passengerNameField" promptText="Required for PRS"
                                GridPane.columnIndex="1" GridPane.rowIndex="13"/>
                 </GridPane>
+
+                <VBox fx:id="prsPanel" managed="false" spacing="12.0" visible="false">
+                    <Label styleClass="field-label" text="PRS TDRC (sub-function 111)"/>
+                    <GridPane hgap="12.0" vgap="8.0">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="NEVER" maxWidth="140.0" minWidth="120.0"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                        </columnConstraints>
+                        <Label styleClass="field-label" text="Train No" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <TextField fx:id="prsTrainField" promptText="5 chars e.g. 12420"
+                                   GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                        <Label styleClass="field-label" text="Class / Quota" GridPane.columnIndex="0"
+                               GridPane.rowIndex="1"/>
+                        <HBox spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <TextField fx:id="prsClassField" prefWidth="64.0" promptText="CC"/>
+                            <TextField fx:id="prsQuotaField" prefWidth="64.0" promptText="GN"/>
+                        </HBox>
+                        <Label styleClass="field-label" text="Boarding / Res upto" GridPane.columnIndex="0"
+                               GridPane.rowIndex="2"/>
+                        <HBox spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                            <TextField fx:id="prsBoardingField" prefWidth="80.0" promptText="NDLS"/>
+                            <TextField fx:id="prsResUptoField" prefWidth="80.0" promptText="LKO"/>
+                        </HBox>
+                        <Label styleClass="field-label" text="Operator code" GridPane.columnIndex="0"
+                               GridPane.rowIndex="3"/>
+                        <TextField fx:id="prsOpCodeField" promptText="6 chars" GridPane.columnIndex="1"
+                                   GridPane.rowIndex="3"/>
+                        <Label styleClass="field-label" text="Operator name" GridPane.columnIndex="0"
+                               GridPane.rowIndex="4"/>
+                        <TextField fx:id="prsOpNameField" promptText="20 chars" GridPane.columnIndex="1"
+                                   GridPane.rowIndex="4"/>
+                        <Label styleClass="field-label" text="Special message" GridPane.columnIndex="0"
+                               GridPane.rowIndex="5"/>
+                        <TextField fx:id="prsSpecialField" promptText="Optional 25 chars"
+                                   GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                        <Label styleClass="field-label" text="QR / display msg" GridPane.columnIndex="0"
+                               GridPane.rowIndex="6"/>
+                        <VBox spacing="6.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                            <TextField fx:id="prsQrField" promptText="UPI string (sub-function 112)"/>
+                            <TextField fx:id="prsQrMessageField" promptText="Message after $ (100 chars)"/>
+                        </VBox>
+                        <Label styleClass="field-label" text="Payment text" GridPane.columnIndex="0"
+                               GridPane.rowIndex="7"/>
+                        <TextField fx:id="prsPaymentTextField" promptText="113 success / 114 fail (25 chars)"
+                                   GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+                    </GridPane>
+                    <Label styleClass="hint-label"
+                           text="Passengers: name (16) · sex (1) · age (2) · status / coach-berth e.g. C2 - 43. Empty rows are skipped. Max 6."
+                           wrapText="true"/>
+                    <VBox fx:id="prsPaxRowsBox" spacing="6.0">
+                        <HBox spacing="8.0">
+                            <TextField prefWidth="180.0" promptText="Name"/>
+                            <TextField prefWidth="48.0" promptText="Sex"/>
+                            <TextField prefWidth="48.0" promptText="Age"/>
+                            <TextField HBox.hgrow="ALWAYS" promptText="Status e.g. C2 - 43"/>
+                        </HBox>
+                        <HBox spacing="8.0">
+                            <TextField prefWidth="180.0" promptText="Name"/>
+                            <TextField prefWidth="48.0" promptText="Sex"/>
+                            <TextField prefWidth="48.0" promptText="Age"/>
+                            <TextField HBox.hgrow="ALWAYS" promptText="Status"/>
+                        </HBox>
+                        <HBox spacing="8.0">
+                            <TextField prefWidth="180.0" promptText="Name"/>
+                            <TextField prefWidth="48.0" promptText="Sex"/>
+                            <TextField prefWidth="48.0" promptText="Age"/>
+                            <TextField HBox.hgrow="ALWAYS" promptText="Status"/>
+                        </HBox>
+                        <HBox spacing="8.0">
+                            <TextField prefWidth="180.0" promptText="Name"/>
+                            <TextField prefWidth="48.0" promptText="Sex"/>
+                            <TextField prefWidth="48.0" promptText="Age"/>
+                            <TextField HBox.hgrow="ALWAYS" promptText="Status"/>
+                        </HBox>
+                        <HBox spacing="8.0">
+                            <TextField prefWidth="180.0" promptText="Name"/>
+                            <TextField prefWidth="48.0" promptText="Sex"/>
+                            <TextField prefWidth="48.0" promptText="Age"/>
+                            <TextField HBox.hgrow="ALWAYS" promptText="Status"/>
+                        </HBox>
+                        <HBox spacing="8.0">
+                            <TextField prefWidth="180.0" promptText="Name"/>
+                            <TextField prefWidth="48.0" promptText="Sex"/>
+                            <TextField prefWidth="48.0" promptText="Age"/>
+                            <TextField HBox.hgrow="ALWAYS" promptText="Status"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
 
                 <GridPane hgap="12.0" vgap="8.0" styleClass="link-panel">
                     <columnConstraints>
@@ -177,10 +265,16 @@
                 <HBox alignment="CENTER_LEFT" spacing="12.0">
                     <Button mnemonicParsing="false" onAction="#onGenerateTicket" styleClass="primary-button"
                             text="Generate Ticket"/>
-                    <Button mnemonicParsing="false" onAction="#onClearDisplay" styleClass="secondary-button"
-                            text="Clear Display"/>
-                    <Button mnemonicParsing="false" onAction="#onCancellationRefund" styleClass="secondary-button"
-                            text="Send Cancellation Refund"/>
+                    <Button fx:id="clearDisplayButton" mnemonicParsing="false" onAction="#onClearDisplay"
+                            styleClass="secondary-button" text="Clear Display"/>
+                    <Button fx:id="refundButton" mnemonicParsing="false" onAction="#onCancellationRefund"
+                            styleClass="secondary-button" text="Send Cancellation Refund"/>
+                    <Button fx:id="prsPingButton" managed="false" mnemonicParsing="false" onAction="#onPrsPing"
+                            styleClass="secondary-button" text="PRS Ping 110" visible="false"/>
+                    <Button fx:id="prsPayOkButton" managed="false" mnemonicParsing="false" onAction="#onPrsPayOk"
+                            styleClass="secondary-button" text="Payment OK 113" visible="false"/>
+                    <Button fx:id="prsPayFailButton" managed="false" mnemonicParsing="false" onAction="#onPrsPayFail"
+                            styleClass="secondary-button" text="Payment Fail 114" visible="false"/>
                     <Region HBox.hgrow="ALWAYS"/>
                 </HBox>
                 </VBox>

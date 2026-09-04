@@ -227,6 +227,31 @@ public final class MultiSerialListenerService implements LineInputService {
         }
     }
 
+    /**
+     * Writes a reply on every open listen port (PRS ping 110 {@code Q}→{@code S}).
+     */
+    public boolean sendReply(byte[] bytes) {
+        if (bytes == null || bytes.length == 0) {
+            return false;
+        }
+        boolean any = false;
+        for (PortSession session : openSessions) {
+            if (session.port == null || !session.port.isOpen()) {
+                continue;
+            }
+            int written = session.port.writeBytes(bytes, bytes.length);
+            if (written > 0) {
+                any = true;
+                try {
+                    session.port.flushIOBuffers();
+                } catch (Exception ex) {
+                    LOG.log(Level.FINE, "flush reply", ex);
+                }
+            }
+        }
+        return any;
+    }
+
     private void logTs(String message) {
         logSink.accept(LogFormatter.ts(message));
     }

@@ -139,3 +139,22 @@ Code 22 is sent when the supervisor QR field is filled. QR Data must not contain
 
 Cancellation refund (amount 790): `$1415CANCRFND00790:^`
 
+## PRS packet format
+
+PRS uses a different envelope (control characters, not `$...^`):
+
+```text
+SOH (ASCII 1) + thPRS + 02 + <sub> + Q + <3-digit length> + STX (ASCII 2) + body + ETX (ASCII 3)
+```
+
+| Sub | Meaning |
+|------|---------|
+| 110 | Connectivity ping — empty body, length blank. Device replies with `Q` changed to `S` |
+| 111 | TDRC + passengers. Inner fields `$01:` train … `$18:` seat/status (`C2 - 43`). Extra passengers `$19:`–`$38:` |
+| 112 | QR string, then `$`, then display message |
+| 113 | Payment success text |
+| 114 | Payment failure text |
+
+New TDRC (111) clears the board first, then fills the PRS board. Select **PRS** on the supervisor, then **Generate Ticket**.
+
+

@@ -13,7 +13,7 @@ import java.util.Objects;
  * UTS issue sequence: 13 clear, 00 select, 15 operator, 01–08, 09 class, 12 txn type,
  * 21 payment GW, 22 QR payload (22 omitted when empty).
  * Codes 17–20 are reserved and are not sent. Code 14 is a separate refund command.
- * PRS still uses a single wrapped field payload until its command set is specified.
+ * PRS uses a separate SOH/STX/ETX envelope ({@link PrsFrame}).
  * </p>
  */
 public final class PacketBuilder {

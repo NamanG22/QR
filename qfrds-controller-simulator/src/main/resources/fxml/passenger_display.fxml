@@ -435,6 +435,8 @@
                                 </StackPane>
                                 <ImageView fx:id="prsQrImage" fitHeight="136.0" fitWidth="136.0" managed="false"
                                            preserveRatio="true" smooth="true" visible="false"/>
+                                <Label fx:id="prsPayStatus" managed="false" styleClass="pv-label-en-lg"
+                                       text="" visible="false" wrapText="true"/>
                             </VBox>
                         </GridPane>
 

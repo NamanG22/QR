@@ -10,8 +10,8 @@ import java.util.Optional;
  * There is no colon between code, length, and data. {@code Data} uses {@code :} as a
  * field separator and usually ends with a trailing colon (code 22 QR is the exception).
  * {@code Length} is the UTF-8 byte length of {@code Data} plus EOT (i.e. {@code Data^}).
+ * PRS uses a separate SOH/STX/ETX envelope ({@link PrsFrame}).
  * </p>
- * PRS still uses the legacy {@code $Code:Length:Data^} form.
  */
 public final class CommandFrame {
 

@@ -1,8 +1,10 @@
 package com.railway.qfrds;
 
 import javafx.application.Platform;
+import javafx.scene.image.WritableImage;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Central coordinator for QFRDS: bridges RS232 lines → parse → QR synthesis →
@@ -22,6 +24,7 @@ public final class DisplayController {
     private MultiSerialListenerService serial;
     private int packetsReceived;
     private TicketData utsTicket = TicketData.blankUts();
+    private PrsTdrc prsTicket = PrsTdrc.blank();
 
     public DisplayController(ControllerStatusView statusView, PassengerDisplayView passengerView) {
         this.statusView = Objects.requireNonNull(statusView, "statusView");
@@ -77,8 +80,136 @@ public final class DisplayController {
      */
     private void handleRawLine(String line) {
         packetsReceived++;
+        if (PrsFrame.isFrame(line)) {
+            handlePrsLine(line);
+            return;
+        }
         TicketPacketParser.ParseResult result = parser.parse(line);
         Platform.runLater(() -> applyPacketToUi(line, result));
+    }
+
+    private void handlePrsLine(String line) {
+        Optional<PrsFrame.Unwrapped> frame = PrsFrame.unwrap(line);
+        if (frame.isEmpty()) {
+            Platform.runLater(() -> {
+                statusView.setLastPacketPreview(truncate(PrsFrame.toLog(line), 512));
+                statusView.appendLog(LogFormatter.ts("PARSE ERROR: invalid PRS SOH/STX/ETX frame"));
+                statusView.setQrGenerationStatus("FAILED");
+                statusView.setDetectedTicketType("—");
+                statusView.pulseErrorLed();
+                refreshPassengerLinkStatus();
+            });
+            return;
+        }
+        PrsFrame.Unwrapped unwrapped = frame.get();
+        String sub = unwrapped.subFunction();
+
+        if (PrsFrame.SUB_PING.equals(sub)) {
+            byte[] reply = PrsFrame.wrapPingReply().getBytes(java.nio.charset.StandardCharsets.ISO_8859_1);
+            boolean sent = serial != null && serial.sendReply(reply);
+            Platform.runLater(() -> {
+                statusView.setLastPacketPreview(PrsFrame.toLog(line));
+                statusView.setDetectedTicketType("PRS");
+                statusView.appendLog(LogFormatter.ts(
+                        "PRS ping (110) — replied S" + (sent ? "" : " (send failed)")));
+                statusView.pulseDisplayPipelineLed();
+                refreshPassengerLinkStatus();
+            });
+            return;
+        }
+
+        if (PrsFrame.SUB_TDRC.equals(sub)) {
+            Optional<PrsTdrc> parsed = PrsTdrc.unpackBody(unwrapped.body());
+            Platform.runLater(() -> applyPrsTdrc(line, parsed));
+            return;
+        }
+        if (PrsFrame.SUB_QR.equals(sub)) {
+            PrsQr.Split qr = PrsQr.unpack(unwrapped.body());
+            Platform.runLater(() -> applyPrsQr(line, qr));
+            return;
+        }
+        if (PrsFrame.SUB_PAY_OK.equals(sub) || PrsFrame.SUB_PAY_FAIL.equals(sub)) {
+            String text = unwrapped.body() == null ? "" : unwrapped.body().trim();
+            boolean ok = PrsFrame.SUB_PAY_OK.equals(sub);
+            Platform.runLater(() -> applyPrsPayment(line, text, ok));
+            return;
+        }
+
+        Platform.runLater(() -> {
+            statusView.setLastPacketPreview(truncate(PrsFrame.toLog(line), 512));
+            statusView.appendLog(LogFormatter.ts("PARSE ERROR: unknown PRS sub-function " + sub));
+            statusView.pulseErrorLed();
+            refreshPassengerLinkStatus();
+        });
+    }
+
+    private void applyPrsTdrc(String line, Optional<PrsTdrc> parsed) {
+        statusView.setLastPacketPreview(truncate(PrsFrame.toLog(line), 512));
+        refreshPassengerLinkStatus();
+        if (parsed.isEmpty()) {
+            statusView.appendLog(LogFormatter.ts("PARSE ERROR: PRS TDRC (111) had no fields"));
+            statusView.pulseErrorLed();
+            return;
+        }
+        prsTicket = parsed.get();
+        passengerView.clearDisplay();
+        statusView.setDetectedTicketType("PRS");
+        statusView.setQrGenerationStatus("—");
+        statusView.appendLog(LogFormatter.ts(
+                "PRS TDRC (111) train " + prsTicket.getTrainNo()
+                        + " " + prsTicket.getFrom() + "-" + prsTicket.getDestination()
+                        + " pax " + prsTicket.getPassengers().size()));
+        passengerView.applyPrsUpdate(prsTicket, null);
+        statusView.pulseDisplayPipelineLed();
+    }
+
+    private void applyPrsQr(String line, PrsQr.Split qr) {
+        statusView.setLastPacketPreview(truncate(PrsFrame.toLog(line), 512));
+        refreshPassengerLinkStatus();
+        prsTicket = prsTicket.withQr(qr.qr(), qr.message());
+        statusView.setDetectedTicketType("PRS");
+        statusView.appendLog(LogFormatter.ts("PRS QR (112) " + qr.qr().length() + " chars"));
+        refreshPrsQrAndDisplay();
+    }
+
+    private void applyPrsPayment(String line, String text, boolean success) {
+        statusView.setLastPacketPreview(truncate(PrsFrame.toLog(line), 512));
+        refreshPassengerLinkStatus();
+        prsTicket = prsTicket.withPaymentText(text);
+        statusView.setDetectedTicketType("PRS");
+        statusView.appendLog(LogFormatter.ts(
+                (success ? "PRS payment success (113): " : "PRS payment fail (114): ") + text));
+        WritableImage qrImage = null;
+        if (!prsTicket.getQrPayload().isBlank()) {
+            QRGeneratorService.OptionalImageResult encoded = qrGenerator.renderQrImage(prsTicket.getQrPayload());
+            if (encoded.isSuccess()) {
+                qrImage = encoded.getImage();
+            }
+        }
+        passengerView.applyPrsUpdate(prsTicket, qrImage);
+        statusView.pulseDisplayPipelineLed();
+    }
+
+    private void refreshPrsQrAndDisplay() {
+        String payload = prsTicket.getQrPayload();
+        if (payload.isBlank()) {
+            passengerView.applyPrsUpdate(prsTicket, null);
+            statusView.setQrGenerationStatus("—");
+            return;
+        }
+        QRGeneratorService.OptionalImageResult qrImage = qrGenerator.renderQrImage(payload);
+        if (!qrImage.isSuccess()) {
+            statusView.setQrGenerationStatus("FAILED: " + qrImage.getError());
+            statusView.appendLog(LogFormatter.ts("QR encode error: " + qrImage.getError()));
+            passengerView.applyPrsUpdate(prsTicket, null);
+            statusView.pulseQrWarningLed();
+            return;
+        }
+        statusView.setQrGenerationStatus("OK");
+        statusView.appendLog(LogFormatter.ts("QR payload: " + truncate(payload, 300)));
+        passengerView.applyPrsUpdate(prsTicket, qrImage.getImage());
+        statusView.pulseQrOkLed();
+        statusView.pulseDisplayPipelineLed();
     }
 
     private void applyPacketToUi(String line, TicketPacketParser.ParseResult result) {
@@ -169,6 +300,7 @@ public final class DisplayController {
         }
         if (kind == TicketPacketParser.Kind.CLEAR) {
             utsTicket = TicketData.blankUts();
+            prsTicket = PrsTdrc.blank();
             statusView.setDetectedTicketType("UTS");
             statusView.setQrGenerationStatus("—");
             statusView.appendLog(LogFormatter.ts("Clear display (code 13)"));

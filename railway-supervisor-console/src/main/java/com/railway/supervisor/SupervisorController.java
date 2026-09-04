@@ -3,15 +3,19 @@ package com.railway.supervisor;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.Node;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Supervisor form: builds ticket packets and sends them to the controller over RS232.
@@ -21,8 +25,6 @@ import java.util.regex.Pattern;
  * </p>
  */
 public class SupervisorController {
-
-    private static final Pattern NUMERIC_FARE = Pattern.compile("^\\d+(\\.\\d+)?$");
 
     @FXML
     private ComboBox<TicketType> ticketTypeCombo;
@@ -97,11 +99,47 @@ public class SupervisorController {
     @FXML
     private TextField qrPayloadField;
     @FXML
+    private Label transactionLabel;
+    @FXML
     private TextField transactionField;
     @FXML
     private TextField passengerNameField;
     @FXML
     private Label passengerNameLabel;
+    @FXML
+    private VBox prsPanel;
+    @FXML
+    private TextField prsTrainField;
+    @FXML
+    private TextField prsClassField;
+    @FXML
+    private TextField prsQuotaField;
+    @FXML
+    private TextField prsBoardingField;
+    @FXML
+    private TextField prsResUptoField;
+    @FXML
+    private TextField prsOpCodeField;
+    @FXML
+    private TextField prsOpNameField;
+    @FXML
+    private TextField prsSpecialField;
+    @FXML
+    private TextField prsQrField;
+    @FXML
+    private TextField prsQrMessageField;
+    @FXML
+    private TextField prsPaymentTextField;
+    @FXML
+    private VBox prsPaxRowsBox;
+    @FXML
+    private Button refundButton;
+    @FXML
+    private Button prsPingButton;
+    @FXML
+    private Button prsPayOkButton;
+    @FXML
+    private Button prsPayFailButton;
     @FXML
     private TextField serialPortField;
     @FXML
@@ -174,6 +212,35 @@ public class SupervisorController {
         paymentGwField.setText("SBI PAYMENT GATE WAY");
         qrPayloadField.setText(
                 "upi://pay?pa=abc@sbi&pn=test&mc=&tr=ref000003&tn=&am=1&cu=INR&url=&mode=05&purpose=03&orgid=159002&sign=MEUCIFaORLs4mJLK7pSkb5eP69d5Xd6LstvC6xJjSXeQO9HvAiEAZh7T/OYWhaPmraL4VsY6RkVXaBq+Hel2iRewCOARItf=");
+        prsTrainField.setText("12420");
+        prsClassField.setText("CC");
+        prsQuotaField.setText("GN");
+        prsBoardingField.setText("NDLS");
+        prsResUptoField.setText("LKO");
+        prsOpCodeField.setText("ASHWAN");
+        prsOpNameField.setText("ASHWANI");
+        sourceField.setText("NDLS");
+        destinationField.setText("LKO");
+        fareField.setText("725");
+        prsQrField.setText(
+                "upi://pay?ver=01&pa=railsbiupi11@sbi&pn=RailwayPayment&mc=4112&tr=803210000686309NR&am=1&cu=INR");
+        prsQrMessageField.setText("INDIAN RAILWAYS NDLS TO LKO (CC) TRN:12420 TO PAY:Rs.725");
+        prsPaymentTextField.setText("PAYMENT SUCCESS");
+        fillFirstPrsPassenger("RAVI KUMAR", "M", "32", "C2 - 43");
+    }
+
+    private void fillFirstPrsPassenger(String name, String sex, String age, String status) {
+        if (prsPaxRowsBox == null || prsPaxRowsBox.getChildren().isEmpty()) {
+            return;
+        }
+        Node first = prsPaxRowsBox.getChildren().get(0);
+        if (!(first instanceof HBox row) || row.getChildren().size() < 4) {
+            return;
+        }
+        ((TextField) row.getChildren().get(0)).setText(name);
+        ((TextField) row.getChildren().get(1)).setText(sex);
+        ((TextField) row.getChildren().get(2)).setText(age);
+        ((TextField) row.getChildren().get(3)).setText(status);
     }
 
     @FXML
@@ -198,6 +265,10 @@ public class SupervisorController {
         TicketType type = ticketTypeCombo.getValue();
         if (type == null) {
             showAlert(Alert.AlertType.ERROR, "Validation", "Please select a ticket type.");
+            return;
+        }
+        if (type == TicketType.PRS) {
+            sendPrsBooking();
             return;
         }
 
@@ -317,21 +388,6 @@ public class SupervisorController {
             }
         }
 
-        if (type == TicketType.PRS) {
-            if (fare.isEmpty() || txn.isEmpty()) {
-                showAlert(Alert.AlertType.ERROR, "Validation", "Fare and transaction ID are required for PRS.");
-                return;
-            }
-            if (!NUMERIC_FARE.matcher(fare).matches()) {
-                showAlert(Alert.AlertType.ERROR, "Validation", "Fare must be numeric (integer or decimal).");
-                return;
-            }
-            if (pname.isEmpty()) {
-                showAlert(Alert.AlertType.ERROR, "Validation", "Passenger name is required for PRS tickets.");
-                return;
-            }
-        }
-
         Instant ts = Instant.now();
         TicketData data = new TicketData(
                 type,
@@ -373,6 +429,156 @@ public class SupervisorController {
         }
         if (ok) {
             appendLog("Packet(s) sent successfully over RS232.");
+        } else {
+            appendLog("Send failed — check COM port and cable, then click Connect.");
+        }
+    }
+
+    @FXML
+    private void onPrsPing() {
+        if (!ensureSerialReady()) {
+            return;
+        }
+        sendOne(PrsFrame.wrapPingQuery(), "PRS ping (110) sent — controller should reply with S.");
+    }
+
+    @FXML
+    private void onPrsPayOk() {
+        sendPrsPayment(PrsFrame.SUB_PAY_OK, "PRS payment success (113) sent.");
+    }
+
+    @FXML
+    private void onPrsPayFail() {
+        sendPrsPayment(PrsFrame.SUB_PAY_FAIL, "PRS payment fail (114) sent.");
+    }
+
+    private void sendPrsPayment(String sub, String successMessage) {
+        if (!ensureSerialReady()) {
+            return;
+        }
+        String text = trimOrEmpty(prsPaymentTextField.getText());
+        if (text.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Validation", "Enter payment text (up to 25 characters).");
+            return;
+        }
+        if (text.length() > 25) {
+            text = text.substring(0, 25);
+            prsPaymentTextField.setText(text);
+        }
+        sendOne(PrsFrame.wrap(sub, PrsFrame.QUERY, text), successMessage);
+    }
+
+    private void sendPrsBooking() {
+        if (!ensureSerialReady()) {
+            return;
+        }
+        String src = trimOrEmpty(sourceField.getText());
+        String dst = trimOrEmpty(destinationField.getText());
+        if (src.isEmpty() || dst.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Validation", "Source and destination station codes are required.");
+            return;
+        }
+        String train = trimOrEmpty(prsTrainField.getText());
+        if (train.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Validation", "Train number is required.");
+            return;
+        }
+        String day = TwoDigitField.pack(trimOrEmpty(dayField.getText()), CommandSet.DATE_MIN, CommandSet.DATE_MAX)
+                .orElse(null);
+        String month = TwoDigitField.pack(trimOrEmpty(monthField.getText()), CommandSet.MONTH_MIN, CommandSet.MONTH_MAX)
+                .orElse(null);
+        if (day == null || month == null) {
+            showAlert(Alert.AlertType.ERROR, "Validation", "Date must be DD and month MM.");
+            return;
+        }
+        List<PrsTdrc.PrsPassenger> pax = collectPrsPassengers();
+        if (pax.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Validation", "Enter at least one passenger (name + status/seat).");
+            return;
+        }
+        String resUpto = trimOrEmpty(prsResUptoField.getText());
+        if (resUpto.isEmpty()) {
+            resUpto = dst;
+        }
+        String boarding = trimOrEmpty(prsBoardingField.getText());
+        if (boarding.isEmpty()) {
+            boarding = src;
+        }
+        PrsTdrc tdrc = new PrsTdrc(
+                train,
+                day,
+                month,
+                src,
+                trimOrEmpty(prsClassField.getText()),
+                trimOrEmpty(prsQuotaField.getText()),
+                dst,
+                String.format("%02d", pax.size()),
+                resUpto,
+                boarding,
+                trimOrEmpty(prsOpCodeField.getText()),
+                trimOrEmpty(prsOpNameField.getText()),
+                trimOrEmpty(prsSpecialField.getText()),
+                trimOrEmpty(fareField.getText()),
+                pax,
+                "",
+                "",
+                ""
+        );
+        List<String> frames = new ArrayList<>();
+        frames.add(PrsFrame.wrap(PrsFrame.SUB_TDRC, PrsFrame.QUERY, tdrc.packBody()));
+        String qr = trimOrEmpty(prsQrField.getText());
+        if (!qr.isEmpty()) {
+            String overlaid = overlayPrsQrAmount(qr, tdrc.getFare());
+            String message = trimOrEmpty(prsQrMessageField.getText());
+            frames.add(PrsFrame.wrap(PrsFrame.SUB_QR, PrsFrame.QUERY, PrsQr.pack(overlaid, message)));
+        }
+        sendFrames(frames, "PRS TDRC (111)" + (qr.isEmpty() ? "" : " + QR (112)") + " sent.");
+    }
+
+    private List<PrsTdrc.PrsPassenger> collectPrsPassengers() {
+        List<PrsTdrc.PrsPassenger> pax = new ArrayList<>();
+        if (prsPaxRowsBox == null) {
+            return pax;
+        }
+        for (Node node : prsPaxRowsBox.getChildren()) {
+            if (!(node instanceof HBox row) || row.getChildren().size() < 4) {
+                continue;
+            }
+            String name = trimOrEmpty(((TextField) row.getChildren().get(0)).getText());
+            String sex = trimOrEmpty(((TextField) row.getChildren().get(1)).getText());
+            String age = trimOrEmpty(((TextField) row.getChildren().get(2)).getText());
+            String status = trimOrEmpty(((TextField) row.getChildren().get(3)).getText());
+            if (name.isEmpty() && status.isEmpty()) {
+                continue;
+            }
+            pax.add(new PrsTdrc.PrsPassenger(name, sex, age, status));
+        }
+        return pax;
+    }
+
+    private static String overlayPrsQrAmount(String qr, String fare) {
+        if (fare == null || fare.isBlank() || !qr.toLowerCase().contains("am=")) {
+            return qr;
+        }
+        try {
+            int n = Integer.parseInt(fare.trim().replaceAll("\\D", ""));
+            return qr.replaceFirst("([?&]am=)[^&]*", "$1" + n);
+        } catch (NumberFormatException ex) {
+            return qr;
+        }
+    }
+
+    private void sendFrames(List<String> frames, String successMessage) {
+        boolean ok = true;
+        for (String frame : frames) {
+            appendLog("Frame: " + PrsFrame.toLog(frame));
+            if (!serialService.sendLine(frame)) {
+                ok = false;
+                break;
+            }
+        }
+        if (ok) {
+            appendLog(successMessage);
         } else {
             appendLog("Send failed — check COM port and cable, then click Connect.");
         }
@@ -426,10 +632,14 @@ public class SupervisorController {
 
     private void updatePassengerVisibility(TicketType type) {
         boolean prs = type == TicketType.PRS;
-        passengerNameLabel.setVisible(prs);
-        passengerNameLabel.setManaged(prs);
-        passengerNameField.setVisible(prs);
-        passengerNameField.setManaged(prs);
+        setShown(prsPanel, prs);
+        setShown(prsPingButton, prs);
+        setShown(prsPayOkButton, prs);
+        setShown(prsPayFailButton, prs);
+        setShown(passengerNameLabel, false);
+        setShown(passengerNameField, false);
+        setShown(transactionLabel, !prs);
+        setShown(transactionField, !prs);
         sourceEngField.setVisible(!prs);
         sourceEngField.setManaged(!prs);
         sourceHindiField.setVisible(!prs);
@@ -438,10 +648,10 @@ public class SupervisorController {
         destEngField.setManaged(!prs);
         destHindiField.setVisible(!prs);
         destHindiField.setManaged(!prs);
-        dateLabel.setVisible(!prs);
-        dateLabel.setManaged(!prs);
-        dateBox.setVisible(!prs);
-        dateBox.setManaged(!prs);
+        dateLabel.setVisible(true);
+        dateLabel.setManaged(true);
+        dateBox.setVisible(true);
+        dateBox.setManaged(true);
         adultChildLabel.setVisible(!prs);
         adultChildLabel.setManaged(!prs);
         adultChildBox.setVisible(!prs);
@@ -454,10 +664,9 @@ public class SupervisorController {
         classTxnLabel.setManaged(!prs);
         classTxnBox.setVisible(!prs);
         classTxnBox.setManaged(!prs);
-        refundLabel.setVisible(!prs);
-        refundLabel.setManaged(!prs);
-        refundBox.setVisible(!prs);
-        refundBox.setManaged(!prs);
+        setShown(refundLabel, !prs);
+        setShown(refundBox, !prs);
+        setShown(refundButton, !prs);
         operatorLabel.setVisible(!prs);
         operatorLabel.setManaged(!prs);
         operatorField.setVisible(!prs);
@@ -473,6 +682,14 @@ public class SupervisorController {
         if (!prs) {
             passengerNameField.clear();
         }
+    }
+
+    private static void setShown(Node node, boolean shown) {
+        if (node == null) {
+            return;
+        }
+        node.setVisible(shown);
+        node.setManaged(shown);
     }
 
     private boolean ensureSerialReady() {
@@ -499,7 +716,7 @@ public class SupervisorController {
     }
 
     private void sendOne(String frame, String successMessage) {
-        appendLog("Frame: " + frame);
+        appendLog("Frame: " + (PrsFrame.isFrame(frame) ? PrsFrame.toLog(frame) : frame));
         if (serialService.sendLine(frame)) {
             appendLog(successMessage);
         } else {

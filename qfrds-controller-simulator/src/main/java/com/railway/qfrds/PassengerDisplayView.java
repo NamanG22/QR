@@ -136,6 +136,8 @@ public class PassengerDisplayView implements Initializable {
     @FXML
     private ImageView prsLogoPlaceholder;
     @FXML
+    private Label prsPayStatus;
+    @FXML
     private TableView<PaxRow> prsPaxTable;
 
     @FXML
@@ -206,6 +208,17 @@ public class PassengerDisplayView implements Initializable {
         footerLastUpdated.setText("Last updated: " + LocalDateTime.now().format(LAST_UPDATED_FMT));
     }
 
+    /**
+     * Refreshes the PRS board from a TDRC/QR/payment packet. JavaFX thread only.
+     */
+    public void applyPrsUpdate(PrsTdrc booking, WritableImage qrImage) {
+        utsBoard.setVisible(false);
+        utsBoard.setManaged(false);
+        prsBoard.setVisible(true);
+        prsBoard.setManaged(true);
+        fillPrsBooking(booking, qrImage);
+    }
+
     private void fillPrs(TicketData t, WritableImage qrImage) {
         prsOperatorCode.setText("CLIENT");
         prsFrom.setText(t.getSourceStation());
@@ -223,9 +236,59 @@ public class PassengerDisplayView implements Initializable {
         applyPassengerTableOverlay(name);
 
         prsOperatorName.setText("—");
+        if (prsPayStatus != null) {
+            prsPayStatus.setText("");
+        }
 
         bindQr(prsQrImage, prsQrPlaceholder, qrImage);
         footerLastUpdated.setText("Last updated: " + LocalDateTime.now().format(LAST_UPDATED_FMT));
+    }
+
+    private void fillPrsBooking(PrsTdrc t, WritableImage qrImage) {
+        prsOperatorCode.setText(dash(t.getOperatorCode()));
+        prsFrom.setText(dash(t.getFrom()));
+        prsTo.setText(dash(t.getDestination()));
+        prsTrainNo.setText(dash(t.getTrainNo()));
+        prsQuota.setText(dash(t.getQuota()));
+        prsDate.setText(t.dateDisplay());
+        String pax = t.getPaxCount();
+        if (pax.isBlank() && !t.getPassengers().isEmpty()) {
+            pax = String.format("%02d", t.getPassengers().size());
+        }
+        prsTotalPax.setText(dash(pax));
+        prsClass.setText(dash(t.getTravelClass()));
+        prsFare.setText(formatFareRupee(t.getFare()));
+        prsBoarding.setText(dash(t.getBoarding()));
+        prsResUpto.setText(dash(t.getReservationUpto()));
+        prsOperatorName.setText(dash(t.getOperatorName()));
+
+        prsPaxRows.clear();
+        for (PrsTdrc.PrsPassenger p : t.getPassengers()) {
+            prsPaxRows.add(new PaxRow(p.name(), p.sex(), p.age(), p.status()));
+        }
+
+        String status = firstNonBlank(t.getPaymentText(), t.getQrMessage(), t.getSpecialMessage());
+        if (prsPayStatus != null) {
+            prsPayStatus.setText(status);
+            prsPayStatus.setVisible(!status.isBlank());
+            prsPayStatus.setManaged(!status.isBlank());
+        }
+
+        bindQr(prsQrImage, prsQrPlaceholder, qrImage);
+        footerLastUpdated.setText("Last updated: " + LocalDateTime.now().format(LAST_UPDATED_FMT));
+    }
+
+    private static String dash(String value) {
+        return value == null || value.isBlank() ? "—" : value;
+    }
+
+    private static String firstNonBlank(String... values) {
+        for (String value : values) {
+            if (value != null && !value.isBlank()) {
+                return value.trim();
+            }
+        }
+        return "";
     }
 
     private void applyPassengerTableOverlay(Optional<String> ticketName) {
@@ -323,6 +386,11 @@ public class PassengerDisplayView implements Initializable {
         prsBoarding.setText("—");
         prsResUpto.setText("—");
         prsOperatorName.setText("—");
+        if (prsPayStatus != null) {
+            prsPayStatus.setText("");
+            prsPayStatus.setVisible(false);
+            prsPayStatus.setManaged(false);
+        }
         prsPaxRows.clear();
         bindQr(prsQrImage, prsQrPlaceholder, null);
     }
