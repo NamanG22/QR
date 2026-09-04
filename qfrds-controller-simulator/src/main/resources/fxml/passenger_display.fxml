@@ -473,7 +473,13 @@
             </BorderPane>
 
             <!-- TEMP canvas for the new PRS layout. Current UTS/PRS boards are unchanged. -->
-            <BorderPane fx:id="designBoard" managed="false" styleClass="pv-design-board" visible="false"/>
+            <BorderPane fx:id="designBoard" managed="false" styleClass="pv-design-board" visible="false">
+                <top>
+                    <HBox alignment="TOP_LEFT">
+                        <Region styleClass="pv-design-prs-box"/>
+                    </HBox>
+                </top>
+            </BorderPane>
         </StackPane>
     </center>
     <bottom>
