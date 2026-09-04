@@ -483,18 +483,36 @@
                                         VBox.vgrow="NEVER"/>
                                 <HBox maxWidth="Infinity" styleClass="pv-design-prs-row-split"
                                       VBox.vgrow="NEVER">
-                                    <Region styleClass="pv-design-prs-half" HBox.hgrow="NEVER"/>
-                                    <Region styleClass="pv-design-prs-half" HBox.hgrow="NEVER"/>
+                                    <HBox styleClass="pv-design-prs-half" HBox.hgrow="NEVER">
+                                        <Region styleClass="pv-design-prs-seg-5" HBox.hgrow="NEVER"/>
+                                        <Region styleClass="pv-design-prs-seg-rest" HBox.hgrow="NEVER"/>
+                                    </HBox>
+                                    <HBox styleClass="pv-design-prs-half" HBox.hgrow="NEVER">
+                                        <Region styleClass="pv-design-prs-seg-5" HBox.hgrow="NEVER"/>
+                                        <Region styleClass="pv-design-prs-seg-rest" HBox.hgrow="NEVER"/>
+                                    </HBox>
                                 </HBox>
                                 <HBox maxWidth="Infinity" styleClass="pv-design-prs-row-split"
                                       VBox.vgrow="NEVER">
-                                    <Region styleClass="pv-design-prs-half" HBox.hgrow="NEVER"/>
-                                    <Region styleClass="pv-design-prs-half" HBox.hgrow="NEVER"/>
+                                    <HBox styleClass="pv-design-prs-half" HBox.hgrow="NEVER">
+                                        <Region styleClass="pv-design-prs-seg-5" HBox.hgrow="NEVER"/>
+                                        <Region styleClass="pv-design-prs-seg-rest" HBox.hgrow="NEVER"/>
+                                    </HBox>
+                                    <HBox styleClass="pv-design-prs-half" HBox.hgrow="NEVER">
+                                        <Region styleClass="pv-design-prs-seg-5" HBox.hgrow="NEVER"/>
+                                        <Region styleClass="pv-design-prs-seg-rest" HBox.hgrow="NEVER"/>
+                                    </HBox>
                                 </HBox>
                                 <HBox maxWidth="Infinity" styleClass="pv-design-prs-row-split"
                                       VBox.vgrow="NEVER">
-                                    <Region styleClass="pv-design-prs-half" HBox.hgrow="NEVER"/>
-                                    <Region styleClass="pv-design-prs-half" HBox.hgrow="NEVER"/>
+                                    <HBox styleClass="pv-design-prs-half" HBox.hgrow="NEVER">
+                                        <Region styleClass="pv-design-prs-seg-5" HBox.hgrow="NEVER"/>
+                                        <Region styleClass="pv-design-prs-seg-rest" HBox.hgrow="NEVER"/>
+                                    </HBox>
+                                    <HBox styleClass="pv-design-prs-half" HBox.hgrow="NEVER">
+                                        <Region styleClass="pv-design-prs-seg-5" HBox.hgrow="NEVER"/>
+                                        <Region styleClass="pv-design-prs-seg-rest" HBox.hgrow="NEVER"/>
+                                    </HBox>
                                 </HBox>
                                 <Region maxWidth="Infinity" styleClass="pv-design-prs-box-inner"
                                         VBox.vgrow="NEVER"/>
