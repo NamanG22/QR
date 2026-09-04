@@ -41,6 +41,17 @@
     -fx-alignment: TOP_LEFT;
 }
 
+.pv-design-prs-box-yellow {
+    -fx-background-color: #ffdd00;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-min-width: 0;
+    -fx-pref-height: 2.5cm;
+    -fx-min-height: 2.5cm;
+    -fx-max-height: 2.5cm;
+}
+
 .pv-design-prs-box-inner {
     -fx-background-color: #ffffff;
     -fx-border-width: 0;
