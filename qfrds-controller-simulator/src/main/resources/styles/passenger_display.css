@@ -52,6 +52,17 @@
     -fx-max-height: 2cm;
 }
 
+.pv-design-prs-box-green {
+    -fx-background-color: #00aa00;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-min-width: 0;
+    -fx-pref-height: 1.8cm;
+    -fx-min-height: 1.8cm;
+    -fx-max-height: 1.8cm;
+}
+
 .qr-frame {
     -fx-background-color: #ffffff;
     -fx-border-color: #2a2a2a;
