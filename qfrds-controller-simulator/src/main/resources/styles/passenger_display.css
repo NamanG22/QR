@@ -54,7 +54,7 @@
 
 .pv-design-prs-title {
     -fx-font-family: "Playfair Display Black", "Georgia", serif;
-    -fx-font-size: 85px;
+    -fx-font-size: 96px;
     -fx-font-weight: 900;
     -fx-text-fill: #470000;
     -fx-padding: 0 8 -4mm 2mm;
@@ -102,6 +102,34 @@
     -fx-pref-height: 2.4cm;
     -fx-min-height: 2.4cm;
     -fx-max-height: 2.4cm;
+}
+
+.pv-design-prs-from {
+    -fx-alignment: TOP_LEFT;
+    -fx-padding: -2mm 0mm 0mm 2mm;
+    -fx-spacing: -1mm;
+}
+
+.pv-design-prs-from-en {
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
+    -fx-font-size: 10mm;
+    -fx-font-weight: 700;
+    -fx-text-fill: #470000;
+    -fx-wrap-text: false;
+    -fx-padding: 0;
+    -fx-min-width: 0;
+    -fx-max-width: Infinity;
+}
+
+.pv-design-prs-from-hi {
+    -fx-font-family: "Tiro Devanagari Hindi", "Noto Sans Devanagari", "Mangal", sans-serif;
+    -fx-font-size: 9mm;
+    -fx-font-weight: 700;
+    -fx-text-fill: #470000;
+    -fx-wrap-text: false;
+    -fx-padding: 0;
+    -fx-min-width: 0;
+    -fx-max-width: Infinity;
 }
 
 .pv-design-prs-seg-rest {
