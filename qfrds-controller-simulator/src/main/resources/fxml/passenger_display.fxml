@@ -484,6 +484,12 @@
                                            VBox.vgrow="NEVER">
                                     <Label alignment="BOTTOM_LEFT" maxWidth="Infinity" maxHeight="Infinity"
                                            styleClass="pv-design-prs-title" text="Ticket Information"/>
+                                    <VBox alignment="TOP_CENTER" styleClass="pv-design-prs-opcode"
+                                          StackPane.alignment="TOP_RIGHT">
+                                        <Label styleClass="pv-design-prs-opcode-label" text="Operator Code"/>
+                                        <Region styleClass="pv-design-prs-opcode-rule"/>
+                                        <Label fx:id="designOperatorCode" styleClass="pv-design-prs-opcode-value" text=""/>
+                                    </VBox>
                                 </StackPane>
                                 <HBox maxWidth="Infinity" styleClass="pv-design-prs-row-split"
                                       VBox.vgrow="NEVER">

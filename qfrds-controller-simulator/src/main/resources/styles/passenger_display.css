@@ -62,6 +62,35 @@
     -fx-alignment: BOTTOM_LEFT;
 }
 
+.pv-design-prs-opcode {
+    -fx-alignment: TOP_CENTER;
+    -fx-spacing: 2mm;
+    -fx-padding: 2mm 3mm 0 0;
+    -fx-pref-width: 5.5cm;
+    -fx-min-width: 5.5cm;
+    -fx-max-width: 5.5cm;
+}
+
+.pv-design-prs-opcode-label,
+.pv-design-prs-opcode-value {
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
+    -fx-font-size: 5mm;
+    -fx-font-weight: 700;
+    -fx-text-fill: #470000;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-max-width: Infinity;
+    -fx-wrap-text: false;
+}
+
+.pv-design-prs-opcode-rule {
+    -fx-background-color: #000000;
+    -fx-pref-height: 2;
+    -fx-min-height: 2;
+    -fx-max-height: 2;
+    -fx-max-width: Infinity;
+}
+
 .pv-design-prs-row-split {
     -fx-spacing: 2mm;
     -fx-fill-height: true;

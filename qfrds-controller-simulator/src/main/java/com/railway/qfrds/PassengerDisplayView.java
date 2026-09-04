@@ -111,6 +111,8 @@ public class PassengerDisplayView implements Initializable {
     @FXML
     private Label prsOperatorCode;
     @FXML
+    private Label designOperatorCode;
+    @FXML
     private Label prsFrom;
     @FXML
     private Label prsTo;
@@ -230,7 +232,7 @@ public class PassengerDisplayView implements Initializable {
     }
 
     private void fillPrs(TicketData t, WritableImage qrImage) {
-        prsOperatorCode.setText("CLIENT");
+        setOperatorCode("CLIENT");
         prsFrom.setText(t.getSourceStation());
         prsTo.setText(t.getDestinationStation());
         prsTrainNo.setText("—");
@@ -255,7 +257,7 @@ public class PassengerDisplayView implements Initializable {
     }
 
     private void fillPrsBooking(PrsTdrc t, WritableImage qrImage) {
-        prsOperatorCode.setText(dash(t.getOperatorCode()));
+        setOperatorCode(t.getOperatorCode());
         prsFrom.setText(dash(t.getFrom()));
         prsTo.setText(dash(t.getDestination()));
         prsTrainNo.setText(dash(t.getTrainNo()));
@@ -286,6 +288,14 @@ public class PassengerDisplayView implements Initializable {
 
         bindQr(prsQrImage, prsQrPlaceholder, qrImage);
         footerLastUpdated.setText("Last updated: " + LocalDateTime.now().format(LAST_UPDATED_FMT));
+    }
+
+    private void setOperatorCode(String value) {
+        String text = value == null ? "" : value;
+        prsOperatorCode.setText(text.isBlank() ? "—" : text);
+        if (designOperatorCode != null) {
+            designOperatorCode.setText(text.isBlank() ? "" : dash(text));
+        }
     }
 
     private void setTotalPax(String value) {
@@ -414,7 +424,7 @@ public class PassengerDisplayView implements Initializable {
         footerLastUpdated.setText("Last updated: —");
         bindQr(utsQrImage, utsQrPlaceholder, null);
 
-        prsOperatorCode.setText("—");
+        setOperatorCode("");
         prsFrom.setText("—");
         prsTo.setText("—");
         prsTrainNo.setText("—");
