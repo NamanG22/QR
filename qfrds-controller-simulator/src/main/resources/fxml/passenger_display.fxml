@@ -487,6 +487,8 @@
                                         VBox.vgrow="NEVER"/>
                                 <Region maxWidth="Infinity" styleClass="pv-design-prs-box-inner"
                                         VBox.vgrow="NEVER"/>
+                                <Region maxWidth="Infinity" styleClass="pv-design-prs-box-orange"
+                                        VBox.vgrow="NEVER"/>
                                 <Region maxWidth="Infinity" styleClass="pv-design-prs-box-green"
                                         VBox.vgrow="NEVER"/>
                             </VBox>
