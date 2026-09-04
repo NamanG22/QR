@@ -6,6 +6,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -14,7 +16,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
 import java.io.IOException;
@@ -160,6 +164,7 @@ public class PassengerDisplayView implements Initializable {
         initPassengerTable();
         clearAll();
         showDesignBoard();
+        clipToBounds(designBoard);
         setLinkStatus("—", false, false, 0, "starting");
     }
 
@@ -371,6 +376,27 @@ public class PassengerDisplayView implements Initializable {
             passengerFooter.setVisible(false);
             passengerFooter.setManaged(false);
         }
+    }
+
+    /** Paint of every design cell stays inside that cell's bounds. */
+    private static void clipToBounds(Parent root) {
+        if (root instanceof Region region) {
+            clipRegion(region);
+        }
+        for (Node child : root.getChildrenUnmodifiable()) {
+            if (child instanceof Parent parent) {
+                clipToBounds(parent);
+            } else if (child instanceof Region region) {
+                clipRegion(region);
+            }
+        }
+    }
+
+    private static void clipRegion(Region region) {
+        Rectangle clip = new Rectangle();
+        clip.widthProperty().bind(region.widthProperty());
+        clip.heightProperty().bind(region.heightProperty());
+        region.setClip(clip);
     }
 
     private void hideDesignBoard() {

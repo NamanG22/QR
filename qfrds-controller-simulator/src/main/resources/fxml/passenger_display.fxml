@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Text?>
 
 <!-- RDSO QFRDS receipt-style layouts: paired cells = white maroon-serif label + black value box -->
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
@@ -482,8 +483,9 @@
                                 <StackPane maxWidth="Infinity" alignment="BOTTOM_LEFT"
                                            styleClass="pv-design-prs-box-yellow"
                                            VBox.vgrow="NEVER">
-                                    <Label alignment="BOTTOM_LEFT" maxWidth="Infinity" maxHeight="Infinity"
-                                           styleClass="pv-design-prs-title" text="Ticket Information"/>
+                                    <HBox alignment="BOTTOM_LEFT" styleClass="pv-design-prs-title-box">
+                                        <Text styleClass="pv-design-prs-title" text="Ticket Information"/>
+                                    </HBox>
                                 </StackPane>
                                 <HBox maxWidth="Infinity" styleClass="pv-design-prs-row-split"
                                       VBox.vgrow="NEVER">
