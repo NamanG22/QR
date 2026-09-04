@@ -234,9 +234,9 @@
     -fx-background-color: transparent;
     -fx-border-width: 0;
     -fx-padding: 0;
-    -fx-pref-width: 29.5cm;
-    -fx-min-width: 29.5cm;
-    -fx-max-width: 29.5cm;
+    -fx-pref-width: 30cm;
+    -fx-min-width: 30cm;
+    -fx-max-width: 30cm;
 }
 
 .pv-design-prs-seg-7-24 {
@@ -547,9 +547,9 @@
     -fx-border-width: 0;
     -fx-background-insets: 0;
     -fx-padding: 0;
-    -fx-pref-width: 21.2cm;
-    -fx-min-width: 21.2cm;
-    -fx-max-width: 21.2cm;
+    -fx-pref-width: 21.7cm;
+    -fx-min-width: 21.7cm;
+    -fx-max-width: 21.7cm;
     -fx-pref-height: 5.2cm;
     -fx-min-height: 5.2cm;
     -fx-max-height: 5.2cm;
