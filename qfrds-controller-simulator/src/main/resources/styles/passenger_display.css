@@ -104,13 +104,13 @@
     -fx-max-height: 2.4cm;
 }
 
-.pv-design-prs-from {
+.pv-design-prs-label {
     -fx-alignment: TOP_LEFT;
     -fx-padding: -2mm 0mm 0mm 2mm;
     -fx-spacing: -1mm;
 }
 
-.pv-design-prs-from-en {
+.pv-design-prs-label-en {
     -fx-font-family: "Playfair Display Black", "Georgia", serif;
     -fx-font-size: 10mm;
     -fx-font-weight: 700;
@@ -121,7 +121,7 @@
     -fx-max-width: Infinity;
 }
 
-.pv-design-prs-from-hi {
+.pv-design-prs-label-hi {
     -fx-font-family: "Tiro Devanagari Hindi", "Noto Sans Devanagari", "Mangal", sans-serif;
     -fx-font-size: 9mm;
     -fx-font-weight: 700;
@@ -130,6 +130,18 @@
     -fx-padding: 0;
     -fx-min-width: 0;
     -fx-max-width: Infinity;
+}
+
+.pv-design-prs-train-en {
+    -fx-font-size: 9mm;
+}
+
+.pv-design-prs-train-hi {
+    -fx-font-size: 8mm;
+}
+
+.pv-design-prs-train {
+    -fx-padding: 1mm 0mm 0mm 2mm;
 }
 
 .pv-design-prs-seg-rest {
@@ -405,6 +417,10 @@
     -fx-pref-height: 2.4cm;
     -fx-min-height: 2.4cm;
     -fx-max-height: 2.4cm;
+}
+
+.pv-design-prs-seg-48.pv-design-prs-label {
+    -fx-padding: -2mm 0mm 0mm 2mm;
 }
 
 .pv-design-prs-seg-10 {
