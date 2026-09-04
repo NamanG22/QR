@@ -154,6 +154,10 @@ public class PassengerDisplayView implements Initializable {
         Tooltip.install(prsLogoPlaceholder, new Tooltip("Indian Railways Logo"));
         initPassengerTable();
         clearAll();
+        utsBoard.setVisible(false);
+        utsBoard.setManaged(false);
+        prsBoard.setVisible(true);
+        prsBoard.setManaged(true);
         setLinkStatus("—", false, false, 0, "starting");
     }
 
