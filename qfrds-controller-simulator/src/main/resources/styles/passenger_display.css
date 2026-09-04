@@ -36,7 +36,7 @@
 }
 
 .pv-design-prs-strips {
-    -fx-spacing: 1.5mm;
+    -fx-spacing: 2mm;
     -fx-fill-width: true;
     -fx-alignment: TOP_LEFT;
 }
