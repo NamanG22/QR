@@ -482,7 +482,8 @@
                                 <StackPane maxWidth="Infinity" alignment="BOTTOM_LEFT"
                                            styleClass="pv-design-prs-box-yellow"
                                            VBox.vgrow="NEVER">
-                                    <Label styleClass="pv-design-prs-title" text="Ticket Information"/>
+                                    <Label alignment="BOTTOM_LEFT" maxWidth="Infinity" maxHeight="Infinity"
+                                           styleClass="pv-design-prs-title" text="Ticket Information"/>
                                 </StackPane>
                                 <HBox maxWidth="Infinity" styleClass="pv-design-prs-row-split"
                                       VBox.vgrow="NEVER">

@@ -59,6 +59,7 @@
     -fx-text-fill: #470000;
     -fx-padding: 0 8 0 8;
     -fx-wrap-text: false;
+    -fx-alignment: BOTTOM_LEFT;
 }
 
 .pv-design-prs-row-split {
