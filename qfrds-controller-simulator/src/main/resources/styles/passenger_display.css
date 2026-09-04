@@ -408,7 +408,7 @@ VBox.pv-design-prs-pax {
 }
 
 .pv-design-prs-pax-title {
-    -fx-font-size: 6mm;
+    -fx-font-size: 8mm;
 }
 
 .pv-design-prs-pax-value {
@@ -474,6 +474,57 @@ VBox.pv-design-prs-pax {
     -fx-pref-height: 2.4cm;
     -fx-min-height: 2.4cm;
     -fx-max-height: 2.4cm;
+}
+
+.pv-design-prs-value {
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
+    -fx-font-size: 8mm;
+    -fx-font-weight: 700;
+    -fx-text-fill: #ffffff;
+    -fx-alignment: CENTER_LEFT;
+    -fx-text-alignment: LEFT;
+    -fx-padding: 0 3mm 0 3mm;
+    -fx-wrap-text: true;
+    -fx-max-width: Infinity;
+}
+
+.pv-design-prs-value-lg {
+    -fx-font-size: 10mm;
+}
+
+.pv-design-prs-fare-value {
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
+    -fx-font-size: 13mm;
+    -fx-font-weight: 700;
+    -fx-text-fill: #ffffff;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-padding: 0 2mm 0 2mm;
+    -fx-wrap-text: false;
+    -fx-max-width: Infinity;
+}
+
+.pv-design-prs-qr-placeholder {
+    -fx-alignment: CENTER;
+}
+
+.pv-design-prs-qr-hint {
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
+    -fx-font-size: 6mm;
+    -fx-font-weight: 700;
+    -fx-text-fill: #808080;
+}
+
+.pv-design-prs-pay-status {
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
+    -fx-font-size: 4.5mm;
+    -fx-font-weight: 700;
+    -fx-text-fill: #470000;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-padding: 2mm 3mm 3mm 3mm;
+    -fx-wrap-text: true;
+    -fx-max-width: Infinity;
 }
 
 .pv-design-prs-col30-split {
@@ -875,9 +926,9 @@ VBox.pv-design-prs-pay {
 .pv-design-prs-sheet-header {
     -fx-background-color: #470000;
     -fx-text-fill: #ffffff;
-    -fx-font-family: "Playfair Display Black", "Georgia", serif;
+    -fx-font-family: "Inter", "Arial", "Segoe UI", sans-serif;
     -fx-font-size: 4mm;
-    -fx-font-weight: 700;
+    -fx-font-weight: 600;
     -fx-alignment: CENTER_LEFT;
     -fx-padding: 0 2mm 0 2mm;
     -fx-border-color: #333333;
@@ -888,9 +939,9 @@ VBox.pv-design-prs-pay {
 .pv-design-prs-sheet-cell {
     -fx-background-color: #000000;
     -fx-text-fill: #ffffff;
-    -fx-font-family: "Playfair Display Black", "Georgia", serif;
+    -fx-font-family: "Inter", "Arial", "Segoe UI", sans-serif;
     -fx-font-size: 4mm;
-    -fx-font-weight: 700;
+    -fx-font-weight: 400;
     -fx-alignment: CENTER_LEFT;
     -fx-padding: 0 2mm 0 2mm;
     -fx-border-color: #333333;

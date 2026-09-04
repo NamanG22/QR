@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -13,6 +14,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
@@ -115,13 +117,23 @@ public class PassengerDisplayView implements Initializable {
     @FXML
     private Label prsFrom;
     @FXML
+    private Label designFrom;
+    @FXML
     private Label prsTo;
+    @FXML
+    private Label designTo;
     @FXML
     private Label prsTrainNo;
     @FXML
+    private Label designTrainNo;
+    @FXML
     private Label prsQuota;
     @FXML
+    private Label designQuota;
+    @FXML
     private Label prsDate;
+    @FXML
+    private Label designDate;
     @FXML
     private Label prsTotalPax;
     @FXML
@@ -133,21 +145,37 @@ public class PassengerDisplayView implements Initializable {
     @FXML
     private Label prsFare;
     @FXML
+    private Label designFare;
+    @FXML
     private Label prsBoarding;
+    @FXML
+    private Label designBoarding;
     @FXML
     private Label prsResUpto;
     @FXML
+    private Label designResUpto;
+    @FXML
     private Label prsOperatorName;
+    @FXML
+    private Label designOperatorName;
     @FXML
     private StackPane prsQrPlaceholder;
     @FXML
     private ImageView prsQrImage;
     @FXML
+    private StackPane designQrPlaceholder;
+    @FXML
+    private ImageView designQrImage;
+    @FXML
     private ImageView prsLogoPlaceholder;
     @FXML
     private Label prsPayStatus;
     @FXML
+    private Label designPayStatus;
+    @FXML
     private TableView<PaxRow> prsPaxTable;
+    @FXML
+    private GridPane designPaxSheet;
 
     @FXML
     private Label footerLastUpdated;
@@ -157,6 +185,7 @@ public class PassengerDisplayView implements Initializable {
     private HBox passengerFooter;
 
     private final ObservableList<PaxRow> prsPaxRows = FXCollections.observableArrayList();
+    private final Label[][] designPaxCells = new Label[PrsTdrc.MAX_PASSENGERS][4];
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -164,8 +193,8 @@ public class PassengerDisplayView implements Initializable {
         Tooltip.install(utsLogoPlaceholder, new Tooltip("Indian Railways Logo"));
         Tooltip.install(prsLogoPlaceholder, new Tooltip("Indian Railways Logo"));
         initPassengerTable();
+        initDesignPaxSheet();
         clearAll();
-        showDesignBoard();
         setLinkStatus("—", false, false, 0, "starting");
     }
 
@@ -179,16 +208,12 @@ public class PassengerDisplayView implements Initializable {
      * Refreshes the active board (UTS vs PRS) and QR bitmap. JavaFX thread only.
      */
     public void applyTicketUpdate(TicketData ticket, WritableImage qrImage) {
-        hideDesignBoard();
         boolean prs = ticket.getTicketType() == TicketType.PRS;
-        utsBoard.setVisible(!prs);
-        utsBoard.setManaged(!prs);
-        prsBoard.setVisible(prs);
-        prsBoard.setManaged(prs);
-
         if (prs) {
+            showDesignBoard();
             fillPrs(ticket, qrImage);
         } else {
+            showUtsBoard();
             fillUts(ticket, qrImage);
         }
     }
@@ -225,108 +250,142 @@ public class PassengerDisplayView implements Initializable {
      * Refreshes the PRS board from a TDRC/QR/payment packet. JavaFX thread only.
      */
     public void applyPrsUpdate(PrsTdrc booking, WritableImage qrImage) {
-        hideDesignBoard();
-        utsBoard.setVisible(false);
-        utsBoard.setManaged(false);
-        prsBoard.setVisible(true);
-        prsBoard.setManaged(true);
+        showDesignBoard();
         fillPrsBooking(booking, qrImage);
     }
 
     private void fillPrs(TicketData t, WritableImage qrImage) {
         setOperatorCode("CLIENT");
-        prsFrom.setText(t.getSourceStation());
-        prsTo.setText(t.getDestinationStation());
-        prsTrainNo.setText("—");
-        prsQuota.setText("GN");
-        prsDate.setText(formatDateShort(t.getTimestampRaw()));
+        setPaired(prsFrom, designFrom, t.getSourceStation());
+        setPaired(prsTo, designTo, t.getDestinationStation());
+        setPaired(prsTrainNo, designTrainNo, "");
+        setPaired(prsQuota, designQuota, "GN");
+        setPaired(prsDate, designDate, formatDateShort(t.getTimestampRaw()));
         setTotalPax("01");
         setTravelClass("SL");
-        prsFare.setText(formatFareRupee(t.getFare()));
-        prsBoarding.setText(t.getSourceStation());
-        prsResUpto.setText(t.getDestinationStation());
+        setFare(t.getFare());
+        setPaired(prsBoarding, designBoarding, t.getSourceStation());
+        setPaired(prsResUpto, designResUpto, t.getDestinationStation());
 
         Optional<String> name = t.getPassengerName();
         applyPassengerTableOverlay(name);
+        clearDesignPax();
+        name.filter(n -> !n.isBlank()).ifPresent(n -> setDesignPaxCell(0, 0, n.trim()));
 
-        prsOperatorName.setText("—");
-        if (prsPayStatus != null) {
-            prsPayStatus.setText("");
-        }
+        setPaired(prsOperatorName, designOperatorName, "");
+        setPayStatus("");
 
-        bindQr(prsQrImage, prsQrPlaceholder, qrImage);
+        bindPrsQr(qrImage);
         footerLastUpdated.setText("Last updated: " + LocalDateTime.now().format(LAST_UPDATED_FMT));
     }
 
     private void fillPrsBooking(PrsTdrc t, WritableImage qrImage) {
         setOperatorCode(t.getOperatorCode());
-        prsFrom.setText(dash(t.getFrom()));
-        prsTo.setText(dash(t.getDestination()));
-        prsTrainNo.setText(dash(t.getTrainNo()));
-        prsQuota.setText(dash(t.getQuota()));
-        prsDate.setText(t.dateDisplay());
+        setPaired(prsFrom, designFrom, t.getFrom());
+        setPaired(prsTo, designTo, t.getDestination());
+        setPaired(prsTrainNo, designTrainNo, t.getTrainNo());
+        setPaired(prsQuota, designQuota, t.getQuota());
+        setPaired(prsDate, designDate, t.dateDisplay());
         String pax = t.getPaxCount();
         if (pax.isBlank() && !t.getPassengers().isEmpty()) {
             pax = String.format("%02d", t.getPassengers().size());
         }
         setTotalPax(pax);
         setTravelClass(t.getTravelClass());
-        prsFare.setText(formatFareRupee(t.getFare()));
-        prsBoarding.setText(dash(t.getBoarding()));
-        prsResUpto.setText(dash(t.getReservationUpto()));
-        prsOperatorName.setText(dash(t.getOperatorName()));
+        setFare(t.getFare());
+        setPaired(prsBoarding, designBoarding, t.getBoarding());
+        setPaired(prsResUpto, designResUpto, t.getReservationUpto());
+        setPaired(prsOperatorName, designOperatorName, t.getOperatorName());
 
         prsPaxRows.clear();
         for (PrsTdrc.PrsPassenger p : t.getPassengers()) {
             prsPaxRows.add(new PaxRow(p.name(), p.sex(), p.age(), p.status()));
         }
+        fillDesignPaxFromRows();
 
-        String status = firstNonBlank(t.getPaymentText(), t.getQrMessage(), t.getSpecialMessage());
-        if (prsPayStatus != null) {
-            prsPayStatus.setText(status);
-            prsPayStatus.setVisible(!status.isBlank());
-            prsPayStatus.setManaged(!status.isBlank());
-        }
-
-        bindQr(prsQrImage, prsQrPlaceholder, qrImage);
+        setPayStatus(t.getPaymentText());
+        bindPrsQr(qrImage);
         footerLastUpdated.setText("Last updated: " + LocalDateTime.now().format(LAST_UPDATED_FMT));
     }
 
     private void setOperatorCode(String value) {
-        String text = value == null ? "" : value;
-        prsOperatorCode.setText(text.isBlank() ? "—" : text);
-        if (designOperatorCode != null) {
-            designOperatorCode.setText(text.isBlank() ? "" : dash(text));
-        }
+        setPaired(prsOperatorCode, designOperatorCode, value);
     }
 
     private void setTotalPax(String value) {
-        String text = value == null ? "" : value;
-        prsTotalPax.setText(text.isBlank() ? "—" : text);
-        if (designTotalPax != null) {
-            designTotalPax.setText(text.isBlank() ? "" : dash(text));
-        }
+        setPaired(prsTotalPax, designTotalPax, value);
     }
 
     private void setTravelClass(String value) {
-        String text = value == null ? "" : value;
-        prsClass.setText(text.isBlank() ? "—" : text);
-        if (designClass != null) {
-            designClass.setText(text.isBlank() ? "" : dash(text));
+        setPaired(prsClass, designClass, value);
+    }
+
+    private void setFare(String value) {
+        if (prsFare != null) {
+            prsFare.setText(formatFareRupee(value));
         }
+        if (designFare != null) {
+            String plain = formatFarePlain(value);
+            designFare.setText(plain.isBlank() ? "—" : plain);
+        }
+    }
+
+    private void setPaired(Label original, Label design, String value) {
+        String shown = dash(value);
+        if (original != null) {
+            original.setText(shown);
+        }
+        if (design != null) {
+            design.setText(shown);
+        }
+    }
+
+    private void clearDesignValues() {
+        setEmpty(designOperatorCode);
+        setEmpty(designFrom);
+        setEmpty(designTo);
+        setEmpty(designTrainNo);
+        setEmpty(designQuota);
+        setEmpty(designDate);
+        setEmpty(designTotalPax);
+        setEmpty(designClass);
+        setEmpty(designFare);
+        setEmpty(designBoarding);
+        setEmpty(designResUpto);
+        setEmpty(designOperatorName);
+        setPayStatus("");
+        clearDesignPax();
+        bindQr(designQrImage, designQrPlaceholder, null);
+    }
+
+    private static void setEmpty(Label label) {
+        if (label != null) {
+            label.setText("—");
+        }
+    }
+
+    private void setPayStatus(String status) {
+        String text = status == null ? "" : status.trim();
+        boolean show = !text.isBlank();
+        if (prsPayStatus != null) {
+            prsPayStatus.setText(text);
+            prsPayStatus.setVisible(show);
+            prsPayStatus.setManaged(show);
+        }
+        if (designPayStatus != null) {
+            designPayStatus.setText(text);
+            designPayStatus.setVisible(show);
+            designPayStatus.setManaged(show);
+        }
+    }
+
+    private void bindPrsQr(WritableImage qrImage) {
+        bindQr(prsQrImage, prsQrPlaceholder, qrImage);
+        bindQr(designQrImage, designQrPlaceholder, qrImage);
     }
 
     private static String dash(String value) {
         return value == null || value.isBlank() ? "—" : value;
-    }
-
-    private static String firstNonBlank(String... values) {
-        for (String value : values) {
-            if (value != null && !value.isBlank()) {
-                return value.trim();
-            }
-        }
-        return "";
     }
 
     private void applyPassengerTableOverlay(Optional<String> ticketName) {
@@ -370,7 +429,57 @@ public class PassengerDisplayView implements Initializable {
         prsPaxTable.setPlaceholder(new Label(""));
     }
 
+    private void initDesignPaxSheet() {
+        if (designPaxSheet == null) {
+            return;
+        }
+        for (Node node : designPaxSheet.getChildren()) {
+            if (!(node instanceof Label label)) {
+                continue;
+            }
+            int row = gridIndex(GridPane.getRowIndex(node));
+            int col = gridIndex(GridPane.getColumnIndex(node));
+            if (row >= 1 && row <= PrsTdrc.MAX_PASSENGERS && col >= 0 && col < 4) {
+                designPaxCells[row - 1][col] = label;
+            }
+        }
+    }
+
+    private static int gridIndex(Integer index) {
+        return index == null ? 0 : index;
+    }
+
+    private void fillDesignPaxFromRows() {
+        clearDesignPax();
+        int limit = Math.min(prsPaxRows.size(), PrsTdrc.MAX_PASSENGERS);
+        for (int i = 0; i < limit; i++) {
+            PaxRow row = prsPaxRows.get(i);
+            setDesignPaxCell(i, 0, row.nameProperty().get());
+            setDesignPaxCell(i, 1, row.sexProperty().get());
+            setDesignPaxCell(i, 2, row.ageProperty().get());
+            setDesignPaxCell(i, 3, row.statusProperty().get());
+        }
+    }
+
+    private void setDesignPaxCell(int row, int col, String value) {
+        Label cell = designPaxCells[row][col];
+        if (cell != null) {
+            cell.setText(dash(value));
+        }
+    }
+
+    private void clearDesignPax() {
+        for (int row = 0; row < PrsTdrc.MAX_PASSENGERS; row++) {
+            for (int col = 0; col < 4; col++) {
+                setDesignPaxCell(row, col, "");
+            }
+        }
+    }
+
     private static void bindQr(ImageView imageView, StackPane placeholder, WritableImage qrImage) {
+        if (imageView == null || placeholder == null) {
+            return;
+        }
         if (qrImage != null) {
             imageView.setImage(qrImage);
             imageView.setVisible(true);
@@ -388,6 +497,14 @@ public class PassengerDisplayView implements Initializable {
 
     public void clearDisplay() {
         clearAll();
+    }
+
+    private void showUtsBoard() {
+        hideDesignBoard();
+        utsBoard.setVisible(true);
+        utsBoard.setManaged(true);
+        prsBoard.setVisible(false);
+        prsBoard.setManaged(false);
     }
 
     private void showDesignBoard() {
@@ -413,11 +530,6 @@ public class PassengerDisplayView implements Initializable {
     }
 
     private void clearAll() {
-        utsBoard.setVisible(true);
-        utsBoard.setManaged(true);
-        prsBoard.setVisible(false);
-        prsBoard.setManaged(false);
-
         utsTerminalId.setText("—");
         utsWindowNo.setText("—");
         utsFrom.setText("—");
@@ -435,24 +547,22 @@ public class PassengerDisplayView implements Initializable {
         bindQr(utsQrImage, utsQrPlaceholder, null);
 
         setOperatorCode("");
-        prsFrom.setText("—");
-        prsTo.setText("—");
-        prsTrainNo.setText("—");
-        prsQuota.setText("—");
-        prsDate.setText("—");
+        setPaired(prsFrom, designFrom, "");
+        setPaired(prsTo, designTo, "");
+        setPaired(prsTrainNo, designTrainNo, "");
+        setPaired(prsQuota, designQuota, "");
+        setPaired(prsDate, designDate, "");
         setTotalPax("");
         setTravelClass("");
-        prsFare.setText("—");
-        prsBoarding.setText("—");
-        prsResUpto.setText("—");
-        prsOperatorName.setText("—");
-        if (prsPayStatus != null) {
-            prsPayStatus.setText("");
-            prsPayStatus.setVisible(false);
-            prsPayStatus.setManaged(false);
-        }
+        setFare("");
+        setPaired(prsBoarding, designBoarding, "");
+        setPaired(prsResUpto, designResUpto, "");
+        setPaired(prsOperatorName, designOperatorName, "");
+        setPayStatus("");
         prsPaxRows.clear();
-        bindQr(prsQrImage, prsQrPlaceholder, null);
+        bindPrsQr(null);
+        clearDesignValues();
+        showDesignBoard();
     }
 
     /** Short terminal id derived from transaction id for the UTS header strip. */
@@ -507,6 +617,25 @@ public class PassengerDisplayView implements Initializable {
             return String.format("₹ %.2f", v);
         } catch (NumberFormatException ex) {
             return "₹ " + trimmed;
+        }
+    }
+
+    private static String formatFarePlain(String fare) {
+        if (fare == null || fare.isBlank()) {
+            return "";
+        }
+        String trimmed = fare.trim();
+        if (trimmed.startsWith("₹")) {
+            trimmed = trimmed.substring(1).trim();
+        }
+        if (trimmed.isBlank() || "—".equals(trimmed)) {
+            return "";
+        }
+        try {
+            double v = Double.parseDouble(trimmed);
+            return String.format("%.2f", v);
+        } catch (NumberFormatException ex) {
+            return trimmed;
         }
     }
 
