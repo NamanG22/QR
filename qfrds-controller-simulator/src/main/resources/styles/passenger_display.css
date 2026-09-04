@@ -252,7 +252,7 @@ VBox.pv-design-prs-railway {
 .pv-design-prs-railway-hi {
     -fx-font-family: "Tiro Devanagari Hindi", "Noto Sans Devanagari", "Mangal", sans-serif;
     -fx-font-size: 8mm;
-    -fx-font-weight: 700;
+    -fx-font-weight: 400;
     -fx-text-fill: #470000;
     -fx-alignment: CENTER;
     -fx-text-alignment: CENTER;
@@ -338,6 +338,46 @@ VBox.pv-design-prs-railway {
     -fx-pref-height: 2.4cm;
     -fx-min-height: 2.4cm;
     -fx-max-height: 2.4cm;
+}
+
+.pv-design-prs-pax {
+    -fx-alignment: CENTER;
+    -fx-spacing: 1mm;
+}
+
+VBox.pv-design-prs-pax {
+    -fx-padding: 1.5mm;
+    -fx-alignment: CENTER;
+    -fx-spacing: 1mm;
+}
+
+.pv-design-prs-pax-title,
+.pv-design-prs-pax-value {
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-max-width: Infinity;
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
+    -fx-font-weight: 700;
+    -fx-wrap-text: false;
+}
+
+.pv-design-prs-pax-title {
+    -fx-font-size: 6mm;
+}
+
+.pv-design-prs-pax-value {
+    -fx-font-size: 8mm;
+}
+
+.pv-design-prs-pax-rule {
+    -fx-background-color: #ffffff;
+    -fx-pref-height: 1;
+    -fx-min-height: 1;
+    -fx-max-height: 1;
+    -fx-pref-width: 6.4cm;
+    -fx-min-width: 6.4cm;
+    -fx-max-width: 6.4cm;
 }
 
 .pv-design-prs-rest-split-147 {

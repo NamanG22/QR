@@ -534,7 +534,12 @@
                                         </VBox>
                                         <HBox styleClass="pv-design-prs-rest-split" HBox.hgrow="NEVER">
                                             <Region styleClass="pv-design-prs-seg-6-black" HBox.hgrow="NEVER"/>
-                                            <Region styleClass="pv-design-prs-seg-88-black" HBox.hgrow="NEVER"/>
+                                            <VBox alignment="CENTER" styleClass="pv-design-prs-seg-88-black,pv-design-prs-pax"
+                                                  HBox.hgrow="NEVER">
+                                                <Label styleClass="pv-design-prs-pax-title" text="Total Passengers"/>
+                                                <Region styleClass="pv-design-prs-pax-rule"/>
+                                                <Label fx:id="designTotalPax" styleClass="pv-design-prs-pax-value" text=""/>
+                                            </VBox>
                                         </HBox>
                                     </HBox>
                                     <HBox styleClass="pv-design-prs-half" HBox.hgrow="NEVER">
