@@ -210,6 +210,56 @@ VBox.pv-design-prs-res {
     -fx-max-width: Infinity;
 }
 
+.pv-design-prs-operator {
+    -fx-alignment: CENTER;
+    -fx-spacing: -4mm;
+}
+
+VBox.pv-design-prs-operator {
+    -fx-padding: 0;
+    -fx-alignment: CENTER;
+    -fx-spacing: -4mm;
+}
+
+.pv-design-prs-operator .pv-design-prs-label-en {
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-max-width: Infinity;
+}
+
+.pv-design-prs-railway {
+    -fx-alignment: CENTER;
+    -fx-spacing: 1mm;
+}
+
+VBox.pv-design-prs-railway {
+    -fx-padding: 0;
+    -fx-alignment: CENTER;
+    -fx-spacing: 1mm;
+}
+
+.pv-design-prs-railway-en {
+    -fx-font-family: "Google Sans Flex", "Roboto", "Segoe UI", sans-serif;
+    -fx-font-size: 9mm;
+    -fx-font-weight: 400;
+    -fx-text-fill: #470000;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-wrap-text: false;
+    -fx-max-width: Infinity;
+}
+
+.pv-design-prs-railway-hi {
+    -fx-font-family: "Tiro Devanagari Hindi", "Noto Sans Devanagari", "Mangal", sans-serif;
+    -fx-font-size: 8mm;
+    -fx-font-weight: 700;
+    -fx-text-fill: #470000;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-wrap-text: false;
+    -fx-max-width: Infinity;
+}
+
 .pv-design-prs-seg-rest {
     -fx-background-color: #ffffff;
     -fx-border-width: 0;
@@ -369,7 +419,7 @@ VBox.pv-design-prs-res {
 }
 
 .pv-design-prs-seg-81-24 {
-    -fx-background-color: #ffffff;
+    -fx-background-color: #000000;
     -fx-border-width: 0;
     -fx-background-insets: 0;
     -fx-padding: 0;
@@ -395,7 +445,7 @@ VBox.pv-design-prs-res {
 }
 
 .pv-design-prs-seg-81-52 {
-    -fx-background-color: #ffffff;
+    -fx-background-color: #000000;
     -fx-border-width: 0;
     -fx-background-insets: 0;
     -fx-padding: 0;
@@ -405,6 +455,52 @@ VBox.pv-design-prs-res {
     -fx-pref-height: 5.2cm;
     -fx-min-height: 5.2cm;
     -fx-max-height: 5.2cm;
+}
+
+.pv-design-prs-pay {
+    -fx-alignment: CENTER;
+    -fx-spacing: 3mm;
+}
+
+VBox.pv-design-prs-pay {
+    -fx-padding: 2mm 2mm 6mm 2mm;
+    -fx-alignment: CENTER;
+    -fx-spacing: 3mm;
+}
+
+.pv-design-prs-pay-title {
+    -fx-alignment: CENTER;
+    -fx-spacing: -4mm;
+}
+
+.pv-design-prs-pay .pv-design-prs-label-en,
+.pv-design-prs-pay-upi {
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-max-width: Infinity;
+    -fx-text-fill: #ffffff;
+}
+
+.pv-design-prs-pay .pv-design-prs-label-en {
+    -fx-font-size: 10mm;
+}
+
+.pv-design-prs-pay-rule {
+    -fx-background-color: #ffffff;
+    -fx-pref-height: 1;
+    -fx-min-height: 1;
+    -fx-max-height: 1;
+    -fx-pref-width: 6cm;
+    -fx-min-width: 6cm;
+    -fx-max-width: 6cm;
+}
+
+.pv-design-prs-pay-upi {
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
+    -fx-font-size: 8mm;
+    -fx-font-weight: 700;
+    -fx-text-fill: #ffffff;
+    -fx-wrap-text: false;
 }
 
 .pv-design-prs-seg-7-225 {
@@ -421,7 +517,7 @@ VBox.pv-design-prs-res {
 }
 
 .pv-design-prs-seg-228-225 {
-    -fx-background-color: #ffffff;
+    -fx-background-color: #000000;
     -fx-border-width: 0;
     -fx-background-insets: 0;
     -fx-padding: 0;
@@ -663,7 +759,7 @@ VBox.pv-design-prs-res {
 }
 
 .pv-design-prs-seg-202-orange {
-    -fx-background-color: #ffffff;
+    -fx-background-color: #000000;
     -fx-border-width: 0;
     -fx-background-insets: 0;
     -fx-padding: 0;
@@ -673,6 +769,42 @@ VBox.pv-design-prs-res {
     -fx-pref-height: 5.2cm;
     -fx-min-height: 5.2cm;
     -fx-max-height: 5.2cm;
+}
+
+.pv-design-prs-sheet {
+    -fx-background-color: #000000;
+    -fx-border-color: #333333;
+    -fx-border-width: 1;
+}
+
+.pv-design-prs-sheet-header {
+    -fx-background-color: #470000;
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
+    -fx-font-size: 4mm;
+    -fx-font-weight: 700;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 2mm 0 2mm;
+    -fx-border-color: #333333;
+    -fx-border-width: 0 1 1 0;
+    -fx-wrap-text: false;
+}
+
+.pv-design-prs-sheet-cell {
+    -fx-background-color: #000000;
+    -fx-text-fill: #ffffff;
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
+    -fx-font-size: 4mm;
+    -fx-font-weight: 700;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 2mm 0 2mm;
+    -fx-border-color: #333333;
+    -fx-border-width: 0 1 1 0;
+    -fx-wrap-text: false;
+}
+
+.pv-design-prs-sheet-odd {
+    -fx-background-color: #1a1a1a;
 }
 
 .pv-design-prs-seg-9-orange {

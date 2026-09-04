@@ -567,8 +567,145 @@
                                             <Region styleClass="pv-design-prs-seg-81-24" HBox.hgrow="NEVER"/>
                                         </HBox>
                                         <HBox styleClass="pv-design-prs-col295-split" VBox.vgrow="NEVER">
-                                            <Region styleClass="pv-design-prs-seg-202-orange" HBox.hgrow="NEVER"/>
-                                            <Region styleClass="pv-design-prs-seg-81-52" HBox.hgrow="NEVER"/>
+                                            <GridPane hgap="0" vgap="0" HBox.hgrow="NEVER"
+                                                      styleClass="pv-design-prs-seg-202-orange,pv-design-prs-sheet">
+                                                <columnConstraints>
+                                                    <ColumnConstraints hgrow="ALWAYS" percentWidth="56.0"/>
+                                                    <ColumnConstraints hgrow="ALWAYS" percentWidth="12.0"/>
+                                                    <ColumnConstraints hgrow="ALWAYS" percentWidth="12.0"/>
+                                                    <ColumnConstraints hgrow="ALWAYS" percentWidth="20.0"/>
+                                                </columnConstraints>
+                                                <rowConstraints>
+                                                    <RowConstraints percentHeight="14.2857" valignment="CENTER" vgrow="ALWAYS"/>
+                                                    <RowConstraints percentHeight="14.2857" valignment="CENTER" vgrow="ALWAYS"/>
+                                                    <RowConstraints percentHeight="14.2857" valignment="CENTER" vgrow="ALWAYS"/>
+                                                    <RowConstraints percentHeight="14.2857" valignment="CENTER" vgrow="ALWAYS"/>
+                                                    <RowConstraints percentHeight="14.2857" valignment="CENTER" vgrow="ALWAYS"/>
+                                                    <RowConstraints percentHeight="14.2857" valignment="CENTER" vgrow="ALWAYS"/>
+                                                    <RowConstraints percentHeight="14.2857" valignment="CENTER" vgrow="ALWAYS"/>
+                                                </rowConstraints>
+                                                <Label styleClass="pv-design-prs-sheet-header" text="Passenger Name"
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="0" GridPane.rowIndex="0"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-header" text="Sex"
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-header" text="Age"
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="2" GridPane.rowIndex="0"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-header" text="Status"
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="3" GridPane.rowIndex="0"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="0" GridPane.rowIndex="1"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="2" GridPane.rowIndex="1"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="3" GridPane.rowIndex="1"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell,pv-design-prs-sheet-odd" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="0" GridPane.rowIndex="2"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell,pv-design-prs-sheet-odd" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="1" GridPane.rowIndex="2"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell,pv-design-prs-sheet-odd" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="2" GridPane.rowIndex="2"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell,pv-design-prs-sheet-odd" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="3" GridPane.rowIndex="2"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="0" GridPane.rowIndex="3"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="1" GridPane.rowIndex="3"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="2" GridPane.rowIndex="3"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="3" GridPane.rowIndex="3"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell,pv-design-prs-sheet-odd" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="0" GridPane.rowIndex="4"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell,pv-design-prs-sheet-odd" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="1" GridPane.rowIndex="4"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell,pv-design-prs-sheet-odd" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="2" GridPane.rowIndex="4"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell,pv-design-prs-sheet-odd" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="3" GridPane.rowIndex="4"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="0" GridPane.rowIndex="5"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="1" GridPane.rowIndex="5"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="2" GridPane.rowIndex="5"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="3" GridPane.rowIndex="5"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell,pv-design-prs-sheet-odd" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="0" GridPane.rowIndex="6"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell,pv-design-prs-sheet-odd" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="1" GridPane.rowIndex="6"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell,pv-design-prs-sheet-odd" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="2" GridPane.rowIndex="6"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                                <Label styleClass="pv-design-prs-sheet-cell,pv-design-prs-sheet-odd" text=""
+                                                       maxWidth="Infinity" maxHeight="Infinity"
+                                                       GridPane.columnIndex="3" GridPane.rowIndex="6"
+                                                       GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+                                            </GridPane>
+                                            <VBox alignment="CENTER" styleClass="pv-design-prs-seg-81-52,pv-design-prs-pay"
+                                                  HBox.hgrow="NEVER">
+                                                <VBox alignment="CENTER" styleClass="pv-design-prs-pay-title">
+                                                    <Label styleClass="pv-design-prs-label-en" text="Payment"/>
+                                                    <Label styleClass="pv-design-prs-label-en" text="Mode"/>
+                                                </VBox>
+                                                <Region styleClass="pv-design-prs-pay-rule"/>
+                                                <Label styleClass="pv-design-prs-pay-upi" text="UPI-QR CODE"/>
+                                            </VBox>
                                         </HBox>
                                     </VBox>
                                     <Region styleClass="pv-design-prs-seg-94-span56" HBox.hgrow="NEVER"/>
@@ -576,10 +713,18 @@
                                 <HBox maxWidth="Infinity" styleClass="pv-design-prs-wide-split"
                                       VBox.vgrow="NEVER">
                                     <HBox styleClass="pv-design-prs-col30-split" HBox.hgrow="NEVER">
-                                        <Region styleClass="pv-design-prs-seg-7-225" HBox.hgrow="NEVER"/>
+                                        <VBox alignment="CENTER" styleClass="pv-design-prs-seg-7-225,pv-design-prs-label,pv-design-prs-operator"
+                                              HBox.hgrow="NEVER">
+                                            <Label styleClass="pv-design-prs-label-en" text="Operator"/>
+                                            <Label styleClass="pv-design-prs-label-en" text="Name"/>
+                                        </VBox>
                                         <Region styleClass="pv-design-prs-seg-228-225" HBox.hgrow="NEVER"/>
                                     </HBox>
-                                    <Region styleClass="pv-design-prs-seg-94-225" HBox.hgrow="NEVER"/>
+                                    <VBox alignment="CENTER" styleClass="pv-design-prs-seg-94-225,pv-design-prs-railway"
+                                          HBox.hgrow="NEVER">
+                                        <Label styleClass="pv-design-prs-railway-en" text="North Eastern Railway"/>
+                                        <Label styleClass="pv-design-prs-railway-hi" text="वाराणसी मंडल"/>
+                                    </VBox>
                                 </HBox>
                             </VBox>
                         </StackPane>
