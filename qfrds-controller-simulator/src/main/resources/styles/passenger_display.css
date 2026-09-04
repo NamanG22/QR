@@ -57,15 +57,25 @@
     -fx-fill-height: true;
     -fx-alignment: TOP_LEFT;
     -fx-padding: 0;
+    -fx-pref-width: 39.6cm;
+    -fx-min-width: 39.6cm;
+    -fx-max-width: 39.6cm;
     -fx-pref-height: 2.4cm;
     -fx-min-height: 2.4cm;
     -fx-max-height: 2.4cm;
 }
 
 .pv-design-prs-half {
+    -fx-background-color: #ffffff;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
     -fx-pref-width: 19.7cm;
     -fx-min-width: 19.7cm;
     -fx-max-width: 19.7cm;
+    -fx-pref-height: 2.4cm;
+    -fx-min-height: 2.4cm;
+    -fx-max-height: 2.4cm;
 }
 
 .pv-design-prs-box-inner {
