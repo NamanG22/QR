@@ -479,8 +479,11 @@
                         <StackPane alignment="TOP_LEFT" styleClass="pv-design-prs-box">
                             <VBox maxWidth="Infinity" styleClass="pv-design-prs-strips"
                                   StackPane.alignment="TOP_LEFT">
-                                <Region maxWidth="Infinity" styleClass="pv-design-prs-box-yellow"
-                                        VBox.vgrow="NEVER"/>
+                                <StackPane maxWidth="Infinity" alignment="CENTER_LEFT"
+                                           styleClass="pv-design-prs-box-yellow"
+                                           VBox.vgrow="NEVER">
+                                    <Label styleClass="pv-title-ticket" text="Ticket Information"/>
+                                </StackPane>
                                 <HBox maxWidth="Infinity" styleClass="pv-design-prs-row-split"
                                       VBox.vgrow="NEVER">
                                     <HBox styleClass="pv-design-prs-half" HBox.hgrow="NEVER">
