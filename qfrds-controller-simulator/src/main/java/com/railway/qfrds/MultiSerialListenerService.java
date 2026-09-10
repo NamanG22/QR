@@ -1,8 +1,6 @@
 package com.railway.qfrds;
 
 import com.fazecast.jSerialComm.SerialPort;
-import com.fazecast.jSerialComm.SerialPortDataListener;
-import com.fazecast.jSerialComm.SerialPortEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +13,9 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
- * Event-driven RS232 listener (jSerialComm data listener). Keeps COM1 open continuously —
- * no read-timeout reconnects that drop packets mid-flight.
+ * Dedicated-thread RS232 reader. Uses a short blocking poll so the display keeps
+ * reading even after hours of idle — it does not depend on Windows serial events,
+ * which can stop firing while the port still looks open.
  */
 public final class MultiSerialListenerService implements LineInputService {
 
@@ -26,7 +25,10 @@ public final class MultiSerialListenerService implements LineInputService {
     private static final int DATA_BITS = 8;
     private static final int STOP_BITS = SerialPort.ONE_STOP_BIT;
     private static final int PARITY = SerialPort.NO_PARITY;
+    private static final int READ_TIMEOUT_MS = 100;
+    private static final int READ_BUFFER_SIZE = 512;
     private static final long RECONNECT_MS = 500;
+    private static final long HEALTH_LOG_NS = 10L * 60L * 1_000_000_000L;
 
     private final Consumer<String> lineConsumer;
     private final Consumer<String> logSink;
@@ -66,6 +68,10 @@ public final class MultiSerialListenerService implements LineInputService {
         for (String portName : targetPorts) {
             Thread worker = new Thread(() -> maintainPort(portName), "qfrds-serial-" + portName);
             worker.setDaemon(true);
+            worker.setUncaughtExceptionHandler((t, ex) -> {
+                LOG.log(Level.SEVERE, "serial thread died: " + t.getName(), ex);
+                SerialDiagLog.write(t.getName() + " died: " + ex);
+            });
             workers.add(worker);
             worker.start();
         }
@@ -136,26 +142,26 @@ public final class MultiSerialListenerService implements LineInputService {
 
     private void maintainPort(String portName) {
         while (running.get()) {
-            PortSession session = openSession(portName);
-            if (session == null) {
-                reconnectAttempts++;
-                sleepInterruptible(RECONNECT_MS);
-                continue;
+            try {
+                PortSession session = openSession(portName);
+                if (session == null) {
+                    reconnectAttempts++;
+                    sleepInterruptible(RECONNECT_MS);
+                    continue;
+                }
+
+                openSessions.add(session);
+                everHadSession = true;
+                reconnectAttempts = 0;
+                logTs("RS232 listener active on " + portName + " @ " + BAUD + " 8N1 (blocking poll).");
+                SerialDiagLog.write("Listening on " + portName);
+
+                session.readLoop();
+            } catch (Throwable t) {
+                LOG.log(Level.WARNING, "serial reader " + portName, t);
+                SerialDiagLog.write(portName + " reader error: " + t);
             }
 
-            openSessions.add(session);
-            everHadSession = true;
-            reconnectAttempts = 0;
-            logTs("RS232 listener active on " + portName + " @ " + BAUD + " 8N1 (event-driven).");
-            SerialDiagLog.write("Listening on " + portName);
-
-            while (running.get() && session.port.isOpen() && !session.disconnected) {
-                sleepInterruptible(1_000);
-            }
-
-            session.detachListener();
-            openSessions.remove(session);
-            session.closeQuietly();
             if (running.get()) {
                 logTs(portName + " link down — reopening in " + RECONNECT_MS + "ms.");
                 sleepInterruptible(RECONNECT_MS);
@@ -174,7 +180,7 @@ public final class MultiSerialListenerService implements LineInputService {
         candidate.setNumStopBits(STOP_BITS);
         candidate.setParity(PARITY);
         candidate.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
-        candidate.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 0, 0);
+        candidate.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, READ_TIMEOUT_MS, 0);
 
         if (!candidate.openPort()) {
             SerialDiagLog.write("Could not open " + portName);
@@ -184,22 +190,17 @@ public final class MultiSerialListenerService implements LineInputService {
         candidate.setRTS();
         drainStaleInput(candidate);
 
-        PortSession session = new PortSession(portName, candidate);
-        session.attachListener(this::onBytesReceived);
-        return session;
+        return new PortSession(portName, candidate);
     }
 
-    private void onBytesReceived(String portName, byte[] data, int length) {
-        SerialLineFramer framer = openSessions.stream()
-                .filter(s -> s.portName.equals(portName))
-                .findFirst()
-                .map(s -> s.framer)
-                .orElse(null);
-        if (framer == null) {
-            return;
-        }
-        for (String line : framer.takeLinesFromChunk(data, length)) {
-            dispatchLine(portName, line);
+    private void onBytesReceived(PortSession session, byte[] data, int length) {
+        try {
+            for (String line : session.framer.takeLinesFromChunk(data, length)) {
+                dispatchLine(session.portName, line);
+            }
+        } catch (Exception ex) {
+            LOG.log(Level.WARNING, "frame assembly failed on " + session.portName, ex);
+            SerialDiagLog.write(session.portName + " frame error: " + ex);
         }
     }
 
@@ -213,7 +214,12 @@ public final class MultiSerialListenerService implements LineInputService {
                 LOG.log(Level.FINE, "heartbeat callback failed", ex);
             }
         }
-        lineConsumer.accept(line);
+        try {
+            lineConsumer.accept(line);
+        } catch (Exception ex) {
+            LOG.log(Level.WARNING, "packet handler failed", ex);
+            SerialDiagLog.write(portName + " handler error: " + ex);
+        }
     }
 
     private static void drainStaleInput(SerialPort port) {
@@ -275,8 +281,6 @@ public final class MultiSerialListenerService implements LineInputService {
         private final String portName;
         private final SerialPort port;
         private final SerialLineFramer framer = new SerialLineFramer();
-        private volatile boolean disconnected;
-        private SerialPortDataListener listener;
 
         private PortSession(String portName, SerialPort port) {
             this.portName = portName;
@@ -287,47 +291,37 @@ public final class MultiSerialListenerService implements LineInputService {
             return portName;
         }
 
-        private void attachListener(ReceiveCallback callback) {
-            listener = new SerialPortDataListener() {
-                @Override
-                public int getListeningEvents() {
-                    return SerialPort.LISTENING_EVENT_DATA_AVAILABLE
-                            | SerialPort.LISTENING_EVENT_PORT_DISCONNECTED;
-                }
-
-                @Override
-                public void serialEvent(SerialPortEvent event) {
-                    if (event.getEventType() == SerialPort.LISTENING_EVENT_PORT_DISCONNECTED) {
-                        disconnected = true;
-                        return;
+        private void readLoop() {
+            byte[] buf = new byte[READ_BUFFER_SIZE];
+            long lastHealthNanos = System.nanoTime();
+            try {
+                while (running.get() && port.isOpen()) {
+                    int read;
+                    try {
+                        read = port.readBytes(buf, buf.length);
+                    } catch (Exception ex) {
+                        LOG.log(Level.WARNING, "readBytes " + portName, ex);
+                        SerialDiagLog.write(portName + " read failed: " + ex);
+                        break;
                     }
-                    int available = port.bytesAvailable();
-                    if (available <= 0) {
-                        return;
-                    }
-                    byte[] buf = new byte[available];
-                    int read = port.readBytes(buf, buf.length);
                     if (read > 0) {
-                        callback.onReceive(portName, buf, read);
+                        onBytesReceived(this, buf, read);
+                    } else if (read < 0 || !port.isOpen()) {
+                        break;
+                    }
+                    long now = System.nanoTime();
+                    if (now - lastHealthNanos >= HEALTH_LOG_NS) {
+                        lastHealthNanos = now;
+                        SerialDiagLog.write(portName + " still listening");
                     }
                 }
-            };
-            port.addDataListener(listener);
-        }
-
-        private void detachListener() {
-            if (listener != null) {
-                try {
-                    port.removeDataListener();
-                } catch (Exception ex) {
-                    LOG.log(Level.FINE, "remove listener", ex);
-                }
-                listener = null;
+            } finally {
+                openSessions.remove(this);
+                closeQuietly();
             }
         }
 
         private void closeQuietly() {
-            detachListener();
             if (port.isOpen()) {
                 try {
                     port.closePort();
@@ -336,10 +330,5 @@ public final class MultiSerialListenerService implements LineInputService {
                 }
             }
         }
-    }
-
-    @FunctionalInterface
-    private interface ReceiveCallback {
-        void onReceive(String portName, byte[] data, int length);
     }
 }
