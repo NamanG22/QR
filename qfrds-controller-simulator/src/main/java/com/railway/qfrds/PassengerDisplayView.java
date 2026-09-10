@@ -77,7 +77,13 @@ public class PassengerDisplayView implements Initializable {
     @FXML
     private BorderPane designBoard;
     @FXML
+    private HBox designPrsWrap;
+    @FXML
+    private HBox designUtsWrap;
+    @FXML
     private StackPane designPrsBox;
+    @FXML
+    private StackPane designUtsBox;
 
     /* UTS */
     @FXML
@@ -181,6 +187,32 @@ public class PassengerDisplayView implements Initializable {
     @FXML
     private GridPane designPaxSheet;
 
+    /* UTS design canvas (PRS layout copy) */
+    @FXML
+    private Label designUtsOperatorCode;
+    @FXML
+    private Label designUtsFrom;
+    @FXML
+    private Label designUtsTo;
+    @FXML
+    private Label designUtsDate;
+    @FXML
+    private Label designUtsTotalPax;
+    @FXML
+    private Label designUtsClass;
+    @FXML
+    private Label designUtsFare;
+    @FXML
+    private Label designUtsTrainType;
+    @FXML
+    private Label designUtsResUpto;
+    @FXML
+    private Label designUtsOperatorName;
+    @FXML
+    private StackPane designUtsQrPlaceholder;
+    @FXML
+    private ImageView designUtsQrImage;
+
     @FXML
     private Label footerLastUpdated;
     @FXML
@@ -191,6 +223,7 @@ public class PassengerDisplayView implements Initializable {
     private final ObservableList<PaxRow> prsPaxRows = FXCollections.observableArrayList();
     private final Label[][] designPaxCells = new Label[PrsTdrc.MAX_PASSENGERS][4];
     private final Scale designPrsScale = new Scale(1, 1, 0, 0);
+    private final Scale designUtsScale = new Scale(1, 1, 0, 0);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -216,10 +249,10 @@ public class PassengerDisplayView implements Initializable {
     public void applyTicketUpdate(TicketData ticket, WritableImage qrImage) {
         boolean prs = ticket.getTicketType() == TicketType.PRS;
         if (prs) {
-            showDesignBoard();
+            showDesignPrsBoard();
             fillPrs(ticket, qrImage);
         } else {
-            showUtsBoard();
+            showDesignUtsBoard();
             fillUts(ticket, qrImage);
         }
     }
@@ -243,12 +276,27 @@ public class PassengerDisplayView implements Initializable {
         utsTrainType.setText(t.getTrainType().isBlank() ? "—" : TrainTypeField.display(t.getTrainType()));
         utsPayMode.setText(t.getPaymentGw().isBlank() ? "—" : t.getPaymentGw());
         utsTxnType.setText(t.getTxnType().isBlank() ? "—" : TxnTypeField.display(t.getTxnType()));
-        utsOperator.setText(t.getOperator()
+        String operatorName = t.getOperator()
                 .map(OperatorSession::getOperatorName)
                 .filter(s -> !s.isBlank())
-                .orElse("—"));
+                .orElse("");
+        utsOperator.setText(dash(operatorName));
+        setEmpty(designUtsOperatorCode);
+        setDesign(designUtsFrom, t.getSourceBoardText());
+        setDesign(designUtsTo, t.getDestinationBoardText());
+        setDesign(designUtsDate, t.getDateDisplay());
+        setEmpty(designUtsTotalPax);
+        setDesign(designUtsClass, t.getTravelClass());
+        if (designUtsFare != null) {
+            String plain = formatFarePlain(t.getFare());
+            designUtsFare.setText(plain.isBlank() ? "—" : plain);
+        }
+        setDesign(designUtsTrainType, t.getTrainType().isBlank() ? "" : TrainTypeField.display(t.getTrainType()));
+        setEmpty(designUtsResUpto);
+        setDesign(designUtsOperatorName, operatorName);
 
         bindQr(utsQrImage, utsQrPlaceholder, qrImage);
+        bindQr(designUtsQrImage, designUtsQrPlaceholder, qrImage);
         footerLastUpdated.setText("Last updated: " + LocalDateTime.now().format(LAST_UPDATED_FMT));
     }
 
@@ -256,7 +304,7 @@ public class PassengerDisplayView implements Initializable {
      * Refreshes the PRS board from a TDRC/QR/payment packet. JavaFX thread only.
      */
     public void applyPrsUpdate(PrsTdrc booking, WritableImage qrImage) {
-        showDesignBoard();
+        showDesignPrsBoard();
         fillPrsBooking(booking, qrImage);
     }
 
@@ -362,11 +410,16 @@ public class PassengerDisplayView implements Initializable {
         setPayStatus("");
         clearDesignPax();
         bindQr(designQrImage, designQrPlaceholder, null);
+        clearDesignUtsValues();
     }
 
     private static void setEmpty(Label label) {
+        setDesign(label, "");
+    }
+
+    private static void setDesign(Label label, String value) {
         if (label != null) {
-            label.setText("—");
+            label.setText(dash(value));
         }
     }
 
@@ -513,13 +566,23 @@ public class PassengerDisplayView implements Initializable {
         prsBoard.setManaged(false);
     }
 
-    private void showDesignBoard() {
+    private void showDesignPrsBoard() {
+        showDesignBoard(false);
+    }
+
+    private void showDesignUtsBoard() {
+        showDesignBoard(true);
+    }
+
+    private void showDesignBoard(boolean uts) {
         utsBoard.setVisible(false);
         utsBoard.setManaged(false);
         prsBoard.setVisible(false);
         prsBoard.setManaged(false);
         designBoard.setVisible(true);
         designBoard.setManaged(true);
+        setWrapVisible(designPrsWrap, !uts);
+        setWrapVisible(designUtsWrap, uts);
         if (passengerFooter != null) {
             passengerFooter.setVisible(false);
             passengerFooter.setManaged(false);
@@ -527,44 +590,62 @@ public class PassengerDisplayView implements Initializable {
         updateDesignBoxScale();
     }
 
+    private static void setWrapVisible(HBox wrap, boolean visible) {
+        if (wrap == null) {
+            return;
+        }
+        wrap.setVisible(visible);
+        wrap.setManaged(visible);
+    }
+
     /**
      * Stretch the 40cm × 22cm PRS board so it fills the current screen. Layout stays in cm;
      * only the painted size changes.
      */
     private void bindDesignBoxToScreen() {
-        if (designPrsBox == null) {
+        bindBoxToScreen(designPrsBox, designPrsScale);
+        bindBoxToScreen(designUtsBox, designUtsScale);
+    }
+
+    private void bindBoxToScreen(StackPane box, Scale scale) {
+        if (box == null) {
             return;
         }
-        designPrsBox.getTransforms().add(designPrsScale);
-        designPrsBox.sceneProperty().addListener((obs, oldScene, scene) -> {
+        box.getTransforms().add(scale);
+        box.sceneProperty().addListener((obs, oldScene, scene) -> {
             if (scene != null) {
                 scene.widthProperty().addListener((o, a, b) -> updateDesignBoxScale());
                 scene.heightProperty().addListener((o, a, b) -> updateDesignBoxScale());
                 updateDesignBoxScale();
             }
         });
-        designPrsBox.widthProperty().addListener((o, a, b) -> updateDesignBoxScale());
-        designPrsBox.heightProperty().addListener((o, a, b) -> updateDesignBoxScale());
+        box.widthProperty().addListener((o, a, b) -> updateDesignBoxScale());
+        box.heightProperty().addListener((o, a, b) -> updateDesignBoxScale());
         updateDesignBoxScale();
     }
 
     private void updateDesignBoxScale() {
-        if (designPrsBox == null) {
+        updateBoxScale(designPrsBox, designPrsScale);
+        updateBoxScale(designUtsBox, designUtsScale);
+    }
+
+    private void updateBoxScale(StackPane box, Scale scale) {
+        if (box == null) {
             return;
         }
-        Scene scene = designPrsBox.getScene();
+        Scene scene = box.getScene();
         if (scene == null) {
             return;
         }
-        double boxW = designPrsBox.getWidth();
-        double boxH = designPrsBox.getHeight();
+        double boxW = box.getWidth();
+        double boxH = box.getHeight();
         double sceneW = scene.getWidth();
         double sceneH = scene.getHeight();
         if (boxW <= 0 || boxH <= 0 || sceneW <= 0 || sceneH <= 0) {
             return;
         }
-        designPrsScale.setX(sceneW / boxW);
-        designPrsScale.setY(sceneH / boxH);
+        scale.setX(sceneW / boxW);
+        scale.setY(sceneH / boxH);
     }
 
     private void hideDesignBoard() {
@@ -574,6 +655,20 @@ public class PassengerDisplayView implements Initializable {
             passengerFooter.setVisible(true);
             passengerFooter.setManaged(true);
         }
+    }
+
+    private void clearDesignUtsValues() {
+        setEmpty(designUtsOperatorCode);
+        setEmpty(designUtsFrom);
+        setEmpty(designUtsTo);
+        setEmpty(designUtsDate);
+        setEmpty(designUtsTotalPax);
+        setEmpty(designUtsClass);
+        setEmpty(designUtsFare);
+        setEmpty(designUtsTrainType);
+        setEmpty(designUtsResUpto);
+        setEmpty(designUtsOperatorName);
+        bindQr(designUtsQrImage, designUtsQrPlaceholder, null);
     }
 
     private void clearAll() {
@@ -609,7 +704,7 @@ public class PassengerDisplayView implements Initializable {
         prsPaxRows.clear();
         bindPrsQr(null);
         clearDesignValues();
-        showDesignBoard();
+        showDesignUtsBoard();
     }
 
     /** Short terminal id derived from transaction id for the UTS header strip. */

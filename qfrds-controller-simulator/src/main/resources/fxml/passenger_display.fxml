@@ -472,10 +472,11 @@
                 </center>
             </BorderPane>
 
-            <!-- TEMP canvas for the new PRS layout. Current UTS/PRS boards are unchanged. -->
+            <!-- New PRS/UTS canvases. Original UTS/PRS boards are unchanged. -->
             <BorderPane fx:id="designBoard" managed="false" styleClass="pv-design-board" visible="false">
                 <top>
-                    <HBox alignment="TOP_LEFT">
+                    <StackPane>
+                    <HBox fx:id="designPrsWrap" alignment="TOP_LEFT">
                         <StackPane fx:id="designPrsBox" alignment="TOP_LEFT" styleClass="pv-design-prs-box">
                             <VBox maxWidth="Infinity" styleClass="pv-design-prs-strips"
                                   StackPane.alignment="TOP_LEFT">
@@ -804,6 +805,161 @@
                             </VBox>
                         </StackPane>
                     </HBox>
+                    <HBox fx:id="designUtsWrap" alignment="TOP_LEFT" managed="false" visible="false">
+                        <StackPane fx:id="designUtsBox" alignment="TOP_LEFT" styleClass="pv-design-prs-box">
+                            <VBox maxWidth="Infinity" styleClass="pv-design-prs-strips"
+                                  StackPane.alignment="TOP_LEFT">
+                                <StackPane maxWidth="Infinity" alignment="BOTTOM_LEFT"
+                                           styleClass="pv-design-prs-box-yellow"
+                                           VBox.vgrow="NEVER">
+                                    <Label alignment="BOTTOM_LEFT" maxWidth="Infinity" maxHeight="Infinity"
+                                           styleClass="pv-design-prs-title" text="Ticket Information"/>
+                                    <HBox alignment="TOP_RIGHT" spacing="2.0" styleClass="pv-design-prs-header-right"
+                                          StackPane.alignment="TOP_RIGHT">
+                                        <VBox alignment="TOP_CENTER" styleClass="pv-design-prs-opcode">
+                                            <Label styleClass="pv-design-prs-opcode-label" text="Operator Code"/>
+                                            <Region styleClass="pv-design-prs-opcode-rule"/>
+                                            <Label fx:id="designUtsOperatorCode" styleClass="pv-design-prs-opcode-value" text=""/>
+                                        </VBox>
+                                        <Region styleClass="pv-design-prs-logo"/>
+                                    </HBox>
+                                </StackPane>
+                                <HBox maxWidth="Infinity" styleClass="pv-design-prs-row-split"
+                                      VBox.vgrow="NEVER">
+                                    <HBox styleClass="pv-design-prs-half" HBox.hgrow="NEVER">
+                                        <VBox alignment="TOP_LEFT" styleClass="pv-design-prs-seg-5,pv-design-prs-label"
+                                              HBox.hgrow="NEVER">
+                                            <Label styleClass="pv-design-prs-label-en" text="From"/>
+                                            <Label styleClass="pv-design-prs-label-hi" text="कहाँ से"/>
+                                        </VBox>
+                                        <StackPane alignment="CENTER_LEFT" styleClass="pv-design-prs-seg-rest-black"
+                                                   HBox.hgrow="NEVER">
+                                            <Label fx:id="designUtsFrom" maxHeight="Infinity" maxWidth="Infinity"
+                                                   styleClass="pv-design-prs-value,pv-design-prs-value-lg" text="" wrapText="true"/>
+                                        </StackPane>
+                                    </HBox>
+                                    <HBox maxWidth="Infinity" styleClass="pv-design-prs-half-tail" HBox.hgrow="ALWAYS">
+                                        <VBox alignment="TOP_LEFT" styleClass="pv-design-prs-seg-48,pv-design-prs-label"
+                                              HBox.hgrow="NEVER">
+                                            <Label styleClass="pv-design-prs-label-en" text="To"/>
+                                            <Label styleClass="pv-design-prs-label-hi" text="कहाँ तक"/>
+                                        </VBox>
+                                        <StackPane alignment="CENTER_LEFT" maxWidth="Infinity"
+                                                   styleClass="pv-design-prs-seg-147-black"
+                                                   HBox.hgrow="ALWAYS">
+                                            <Label fx:id="designUtsTo" maxHeight="Infinity" maxWidth="Infinity"
+                                                   styleClass="pv-design-prs-value,pv-design-prs-value-lg" text="" wrapText="true"/>
+                                        </StackPane>
+                                    </HBox>
+                                </HBox>
+                                <HBox maxWidth="Infinity" styleClass="pv-design-prs-row-split"
+                                      VBox.vgrow="NEVER">
+                                    <HBox styleClass="pv-design-prs-half" HBox.hgrow="NEVER">
+                                        <VBox alignment="TOP_LEFT" styleClass="pv-design-prs-seg-5,pv-design-prs-label"
+                                              HBox.hgrow="NEVER">
+                                            <Label styleClass="pv-design-prs-label-en" text="Date"/>
+                                            <Label styleClass="pv-design-prs-label-hi" text="दिनांक"/>
+                                        </VBox>
+                                        <HBox styleClass="pv-design-prs-rest-split" HBox.hgrow="NEVER">
+                                            <StackPane alignment="CENTER_LEFT" styleClass="pv-design-prs-seg-6-black"
+                                                       HBox.hgrow="NEVER">
+                                                <Label fx:id="designUtsDate" maxHeight="Infinity" maxWidth="Infinity"
+                                                       styleClass="pv-design-prs-value,pv-design-prs-value-lg" text="" wrapText="true"/>
+                                            </StackPane>
+                                            <VBox alignment="CENTER" styleClass="pv-design-prs-seg-88-black,pv-design-prs-pax"
+                                                  HBox.hgrow="NEVER">
+                                                <Label styleClass="pv-design-prs-pax-title" text="Total Passengers"/>
+                                                <Region styleClass="pv-design-prs-pax-rule"/>
+                                                <Label fx:id="designUtsTotalPax" styleClass="pv-design-prs-pax-value" text=""/>
+                                            </VBox>
+                                        </HBox>
+                                    </HBox>
+                                    <HBox maxWidth="Infinity" styleClass="pv-design-prs-half-tail" HBox.hgrow="ALWAYS">
+                                        <VBox alignment="CENTER" styleClass="pv-design-prs-seg-48-black,pv-design-prs-pax"
+                                              HBox.hgrow="NEVER">
+                                            <Label styleClass="pv-design-prs-pax-title" text="Class"/>
+                                            <Region styleClass="pv-design-prs-class-rule"/>
+                                            <Label fx:id="designUtsClass" styleClass="pv-design-prs-pax-value" text=""/>
+                                        </VBox>
+                                        <HBox maxWidth="Infinity" styleClass="pv-design-prs-rest-split-147" HBox.hgrow="ALWAYS">
+                                            <VBox alignment="CENTER" styleClass="pv-design-prs-seg-51,pv-design-prs-label,pv-design-prs-fare"
+                                                  HBox.hgrow="NEVER">
+                                                <Label styleClass="pv-design-prs-label-en" text="Fare"/>
+                                                <Label styleClass="pv-design-prs-label-hi" text="किराया"/>
+                                            </VBox>
+                                            <StackPane alignment="CENTER" maxWidth="Infinity"
+                                                       styleClass="pv-design-prs-seg-94-maroon"
+                                                       HBox.hgrow="ALWAYS">
+                                                <Label fx:id="designUtsFare" maxHeight="Infinity" maxWidth="Infinity"
+                                                       styleClass="pv-design-prs-fare-value" text=""/>
+                                            </StackPane>
+                                        </HBox>
+                                    </HBox>
+                                </HBox>
+                                <HBox maxWidth="Infinity" styleClass="pv-design-prs-rows56"
+                                      VBox.vgrow="NEVER">
+                                    <VBox styleClass="pv-design-prs-rows56-left" HBox.hgrow="NEVER">
+                                        <HBox styleClass="pv-design-prs-col30-split" VBox.vgrow="NEVER">
+                                            <VBox alignment="CENTER" styleClass="pv-design-prs-seg-7-24,pv-design-prs-label,pv-design-prs-boarding"
+                                                  HBox.hgrow="NEVER">
+                                                <Label styleClass="pv-design-prs-label-en" text="Type of"/>
+                                                <Label styleClass="pv-design-prs-label-en" text="Train"/>
+                                            </VBox>
+                                            <StackPane alignment="CENTER_LEFT" styleClass="pv-design-prs-seg-81-24"
+                                                       HBox.hgrow="NEVER">
+                                                <Label fx:id="designUtsTrainType" maxHeight="Infinity" maxWidth="Infinity"
+                                                       styleClass="pv-design-prs-value" text="" wrapText="true"/>
+                                            </StackPane>
+                                            <VBox alignment="CENTER" styleClass="pv-design-prs-seg-62-24,pv-design-prs-label,pv-design-prs-res"
+                                                  HBox.hgrow="NEVER">
+                                                <Label styleClass="pv-design-prs-label-en,pv-design-prs-res-en" text="Reservation"/>
+                                                <Label styleClass="pv-design-prs-label-en,pv-design-prs-res-en" text="Up To"/>
+                                            </VBox>
+                                            <StackPane alignment="CENTER_LEFT" maxWidth="Infinity"
+                                                       styleClass="pv-design-prs-seg-81-24"
+                                                       HBox.hgrow="ALWAYS">
+                                                <Label fx:id="designUtsResUpto" maxHeight="Infinity" maxWidth="Infinity"
+                                                       styleClass="pv-design-prs-value" text="" wrapText="true"/>
+                                            </StackPane>
+                                        </HBox>
+                                    </VBox>
+                                    <StackPane alignment="CENTER" maxWidth="Infinity"
+                                               styleClass="pv-design-prs-seg-94-span56"
+                                               HBox.hgrow="ALWAYS">
+                                        <StackPane fx:id="designUtsQrPlaceholder" alignment="CENTER"
+                                                   styleClass="pv-design-prs-qr-placeholder">
+                                            <Label styleClass="pv-design-prs-qr-hint" text=""/>
+                                        </StackPane>
+                                        <ImageView fx:id="designUtsQrImage" fitHeight="280.0" fitWidth="280.0"
+                                                   managed="false" preserveRatio="true" smooth="true" visible="false"/>
+                                    </StackPane>
+                                </HBox>
+                                <HBox maxWidth="Infinity" styleClass="pv-design-prs-wide-split"
+                                      VBox.vgrow="NEVER">
+                                    <HBox maxWidth="Infinity" styleClass="pv-design-prs-col30-split" HBox.hgrow="NEVER">
+                                        <VBox alignment="CENTER" styleClass="pv-design-prs-seg-7-225,pv-design-prs-label,pv-design-prs-operator"
+                                              HBox.hgrow="NEVER">
+                                            <Label styleClass="pv-design-prs-label-en" text="Operator"/>
+                                            <Label styleClass="pv-design-prs-label-en" text="Name"/>
+                                        </VBox>
+                                        <StackPane alignment="CENTER_LEFT" maxWidth="Infinity"
+                                                   styleClass="pv-design-prs-seg-228-225"
+                                                   HBox.hgrow="ALWAYS">
+                                            <Label fx:id="designUtsOperatorName" maxHeight="Infinity" maxWidth="Infinity"
+                                                   styleClass="pv-design-prs-value" text="" wrapText="true"/>
+                                        </StackPane>
+                                    </HBox>
+                                    <VBox alignment="CENTER" maxWidth="Infinity"
+                                          styleClass="pv-design-prs-seg-94-225,pv-design-prs-railway"
+                                          HBox.hgrow="ALWAYS">
+                                        <Label styleClass="pv-design-prs-railway-en" text="North Eastern Railway"/>
+                                        <Label styleClass="pv-design-prs-railway-hi" text="वाराणसी मंडल"/>
+                                    </VBox>
+                                </HBox>
+                            </VBox>
+                        </StackPane>
+                    </HBox>
+                    </StackPane>
                 </top>
             </BorderPane>
         </StackPane>
