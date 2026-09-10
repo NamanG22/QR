@@ -46,7 +46,9 @@
     -fx-border-width: 0;
     -fx-background-insets: 0;
     -fx-padding: 0;
-    -fx-min-width: 0;
+    -fx-pref-width: 39.6cm;
+    -fx-min-width: 39.6cm;
+    -fx-max-width: 39.6cm;
     -fx-pref-height: 3.325cm;
     -fx-min-height: 3.325cm;
     -fx-max-height: 3.325cm;
@@ -131,6 +133,21 @@
     -fx-pref-width: 19.7cm;
     -fx-min-width: 19.7cm;
     -fx-max-width: 19.7cm;
+    -fx-pref-height: 2.4cm;
+    -fx-min-height: 2.4cm;
+    -fx-max-height: 2.4cm;
+}
+
+.pv-design-prs-half-tail {
+    -fx-spacing: 2mm;
+    -fx-fill-height: true;
+    -fx-alignment: TOP_LEFT;
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 19.7cm;
+    -fx-min-width: 0;
     -fx-pref-height: 2.4cm;
     -fx-min-height: 2.4cm;
     -fx-max-height: 2.4cm;
@@ -365,8 +382,7 @@ VBox.pv-design-prs-railway {
     -fx-background-insets: 0;
     -fx-padding: 0;
     -fx-pref-width: 14.7cm;
-    -fx-min-width: 14.7cm;
-    -fx-max-width: 14.7cm;
+    -fx-min-width: 0;
     -fx-pref-height: 2.4cm;
     -fx-min-height: 2.4cm;
     -fx-max-height: 2.4cm;
@@ -443,8 +459,7 @@ VBox.pv-design-prs-pax {
     -fx-border-width: 0;
     -fx-padding: 0;
     -fx-pref-width: 14.7cm;
-    -fx-min-width: 14.7cm;
-    -fx-max-width: 14.7cm;
+    -fx-min-width: 0;
     -fx-pref-height: 2.4cm;
     -fx-min-height: 2.4cm;
     -fx-max-height: 2.4cm;
@@ -469,8 +484,7 @@ VBox.pv-design-prs-pax {
     -fx-background-insets: 0;
     -fx-padding: 0;
     -fx-pref-width: 9.4cm;
-    -fx-min-width: 9.4cm;
-    -fx-max-width: 9.4cm;
+    -fx-min-width: 0;
     -fx-pref-height: 2.4cm;
     -fx-min-height: 2.4cm;
     -fx-max-height: 2.4cm;
@@ -681,8 +695,7 @@ VBox.pv-design-prs-pay {
     -fx-background-insets: 0;
     -fx-padding: 0;
     -fx-pref-width: 9.4cm;
-    -fx-min-width: 9.4cm;
-    -fx-max-width: 9.4cm;
+    -fx-min-width: 0;
     -fx-pref-height: 2.25cm;
     -fx-min-height: 2.25cm;
     -fx-max-height: 2.25cm;
@@ -780,8 +793,7 @@ VBox.pv-design-prs-pay {
     -fx-background-insets: 0;
     -fx-padding: 0;
     -fx-pref-width: 9.4cm;
-    -fx-min-width: 9.4cm;
-    -fx-max-width: 9.4cm;
+    -fx-min-width: 0;
     -fx-pref-height: 7.8cm;
     -fx-min-height: 7.8cm;
     -fx-max-height: 7.8cm;

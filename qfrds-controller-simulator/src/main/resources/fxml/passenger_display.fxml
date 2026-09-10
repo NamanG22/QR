@@ -508,14 +508,15 @@
                                                    styleClass="pv-design-prs-value,pv-design-prs-value-lg" text="" wrapText="true"/>
                                         </StackPane>
                                     </HBox>
-                                    <HBox styleClass="pv-design-prs-half" HBox.hgrow="NEVER">
+                                    <HBox maxWidth="Infinity" styleClass="pv-design-prs-half-tail" HBox.hgrow="ALWAYS">
                                         <VBox alignment="TOP_LEFT" styleClass="pv-design-prs-seg-48,pv-design-prs-label"
                                               HBox.hgrow="NEVER">
                                             <Label styleClass="pv-design-prs-label-en" text="To"/>
                                             <Label styleClass="pv-design-prs-label-hi" text="कहाँ तक"/>
                                         </VBox>
-                                        <StackPane alignment="CENTER_LEFT" styleClass="pv-design-prs-seg-147-black"
-                                                   HBox.hgrow="NEVER">
+                                        <StackPane alignment="CENTER_LEFT" maxWidth="Infinity"
+                                                   styleClass="pv-design-prs-seg-147-black"
+                                                   HBox.hgrow="ALWAYS">
                                             <Label fx:id="designTo" maxHeight="Infinity" maxWidth="Infinity"
                                                    styleClass="pv-design-prs-value,pv-design-prs-value-lg" text="" wrapText="true"/>
                                         </StackPane>
@@ -536,14 +537,15 @@
                                                    styleClass="pv-design-prs-value,pv-design-prs-value-lg" text="" wrapText="true"/>
                                         </StackPane>
                                     </HBox>
-                                    <HBox styleClass="pv-design-prs-half" HBox.hgrow="NEVER">
+                                    <HBox maxWidth="Infinity" styleClass="pv-design-prs-half-tail" HBox.hgrow="ALWAYS">
                                         <VBox alignment="TOP_LEFT" styleClass="pv-design-prs-seg-48,pv-design-prs-label"
                                               HBox.hgrow="NEVER">
                                             <Label styleClass="pv-design-prs-label-en" text="Quota"/>
                                             <Label styleClass="pv-design-prs-label-hi" text="कोटा"/>
                                         </VBox>
-                                        <StackPane alignment="CENTER_LEFT" styleClass="pv-design-prs-seg-147-black"
-                                                   HBox.hgrow="NEVER">
+                                        <StackPane alignment="CENTER_LEFT" maxWidth="Infinity"
+                                                   styleClass="pv-design-prs-seg-147-black"
+                                                   HBox.hgrow="ALWAYS">
                                             <Label fx:id="designQuota" maxHeight="Infinity" maxWidth="Infinity"
                                                    styleClass="pv-design-prs-value,pv-design-prs-value-lg" text="" wrapText="true"/>
                                         </StackPane>
@@ -571,21 +573,22 @@
                                             </VBox>
                                         </HBox>
                                     </HBox>
-                                    <HBox styleClass="pv-design-prs-half" HBox.hgrow="NEVER">
+                                    <HBox maxWidth="Infinity" styleClass="pv-design-prs-half-tail" HBox.hgrow="ALWAYS">
                                         <VBox alignment="CENTER" styleClass="pv-design-prs-seg-48-black,pv-design-prs-pax"
                                               HBox.hgrow="NEVER">
                                             <Label styleClass="pv-design-prs-pax-title" text="Class"/>
                                             <Region styleClass="pv-design-prs-class-rule"/>
                                             <Label fx:id="designClass" styleClass="pv-design-prs-pax-value" text=""/>
                                         </VBox>
-                                        <HBox styleClass="pv-design-prs-rest-split-147" HBox.hgrow="NEVER">
+                                        <HBox maxWidth="Infinity" styleClass="pv-design-prs-rest-split-147" HBox.hgrow="ALWAYS">
                                             <VBox alignment="CENTER" styleClass="pv-design-prs-seg-51,pv-design-prs-label,pv-design-prs-fare"
                                                   HBox.hgrow="NEVER">
                                                 <Label styleClass="pv-design-prs-label-en" text="Fare"/>
                                                 <Label styleClass="pv-design-prs-label-hi" text="किराया"/>
                                             </VBox>
-                                            <StackPane alignment="CENTER" styleClass="pv-design-prs-seg-94-maroon"
-                                                       HBox.hgrow="NEVER">
+                                            <StackPane alignment="CENTER" maxWidth="Infinity"
+                                                       styleClass="pv-design-prs-seg-94-maroon"
+                                                       HBox.hgrow="ALWAYS">
                                                 <Label fx:id="designFare" maxHeight="Infinity" maxWidth="Infinity"
                                                        styleClass="pv-design-prs-fare-value" text=""/>
                                             </StackPane>
@@ -759,8 +762,9 @@
                                             </VBox>
                                         </HBox>
                                     </VBox>
-                                    <StackPane alignment="CENTER" styleClass="pv-design-prs-seg-94-span56"
-                                               HBox.hgrow="NEVER">
+                                    <StackPane alignment="CENTER" maxWidth="Infinity"
+                                               styleClass="pv-design-prs-seg-94-span56"
+                                               HBox.hgrow="ALWAYS">
                                         <StackPane fx:id="designQrPlaceholder" alignment="CENTER"
                                                    styleClass="pv-design-prs-qr-placeholder">
                                             <Label styleClass="pv-design-prs-qr-hint" text=""/>
@@ -787,8 +791,9 @@
                                                    styleClass="pv-design-prs-value" text="" wrapText="true"/>
                                         </StackPane>
                                     </HBox>
-                                    <VBox alignment="CENTER" styleClass="pv-design-prs-seg-94-225,pv-design-prs-railway"
-                                          HBox.hgrow="NEVER">
+                                    <VBox alignment="CENTER" maxWidth="Infinity"
+                                          styleClass="pv-design-prs-seg-94-225,pv-design-prs-railway"
+                                          HBox.hgrow="ALWAYS">
                                         <Label styleClass="pv-design-prs-railway-en" text="North Eastern Railway"/>
                                         <Label styleClass="pv-design-prs-railway-hi" text="वाराणसी मंडल"/>
                                     </VBox>
