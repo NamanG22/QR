@@ -614,8 +614,9 @@
                                                 <Label styleClass="pv-design-prs-label-en,pv-design-prs-res-en" text="Reservation"/>
                                                 <Label styleClass="pv-design-prs-label-en,pv-design-prs-res-en" text="Up To"/>
                                             </VBox>
-                                            <StackPane alignment="CENTER_LEFT" styleClass="pv-design-prs-seg-81-24"
-                                                       HBox.hgrow="NEVER">
+                                            <StackPane alignment="CENTER_LEFT" maxWidth="Infinity"
+                                                       styleClass="pv-design-prs-seg-81-24"
+                                                       HBox.hgrow="ALWAYS">
                                                 <Label fx:id="designResUpto" maxHeight="Infinity" maxWidth="Infinity"
                                                        styleClass="pv-design-prs-value" text="" wrapText="true"/>
                                             </StackPane>
@@ -751,8 +752,9 @@
                                                        GridPane.columnIndex="3" GridPane.rowIndex="6"
                                                        GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
                                             </GridPane>
-                                            <VBox alignment="CENTER" styleClass="pv-design-prs-seg-81-52,pv-design-prs-pay"
-                                                  HBox.hgrow="NEVER">
+                                            <VBox alignment="CENTER" maxWidth="Infinity"
+                                                  styleClass="pv-design-prs-seg-81-52,pv-design-prs-pay"
+                                                  HBox.hgrow="ALWAYS">
                                                 <VBox alignment="CENTER" styleClass="pv-design-prs-pay-title">
                                                     <Label styleClass="pv-design-prs-label-en" text="Payment"/>
                                                     <Label styleClass="pv-design-prs-label-en" text="Mode"/>
@@ -779,14 +781,15 @@
                                 </HBox>
                                 <HBox maxWidth="Infinity" styleClass="pv-design-prs-wide-split"
                                       VBox.vgrow="NEVER">
-                                    <HBox styleClass="pv-design-prs-col30-split" HBox.hgrow="NEVER">
+                                    <HBox maxWidth="Infinity" styleClass="pv-design-prs-col30-split" HBox.hgrow="NEVER">
                                         <VBox alignment="CENTER" styleClass="pv-design-prs-seg-7-225,pv-design-prs-label,pv-design-prs-operator"
                                               HBox.hgrow="NEVER">
                                             <Label styleClass="pv-design-prs-label-en" text="Operator"/>
                                             <Label styleClass="pv-design-prs-label-en" text="Name"/>
                                         </VBox>
-                                        <StackPane alignment="CENTER_LEFT" styleClass="pv-design-prs-seg-228-225"
-                                                   HBox.hgrow="NEVER">
+                                        <StackPane alignment="CENTER_LEFT" maxWidth="Infinity"
+                                                   styleClass="pv-design-prs-seg-228-225"
+                                                   HBox.hgrow="ALWAYS">
                                             <Label fx:id="designOperatorName" maxHeight="Infinity" maxWidth="Infinity"
                                                    styleClass="pv-design-prs-value" text="" wrapText="true"/>
                                         </StackPane>

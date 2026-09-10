@@ -584,8 +584,7 @@ VBox.pv-design-prs-pax {
     -fx-background-insets: 0;
     -fx-padding: 0;
     -fx-pref-width: 8.1cm;
-    -fx-min-width: 8.1cm;
-    -fx-max-width: 8.1cm;
+    -fx-min-width: 0;
     -fx-pref-height: 2.4cm;
     -fx-min-height: 2.4cm;
     -fx-max-height: 2.4cm;
@@ -610,8 +609,7 @@ VBox.pv-design-prs-pax {
     -fx-background-insets: 0;
     -fx-padding: 0;
     -fx-pref-width: 8.1cm;
-    -fx-min-width: 8.1cm;
-    -fx-max-width: 8.1cm;
+    -fx-min-width: 0;
     -fx-pref-height: 5.2cm;
     -fx-min-height: 5.2cm;
     -fx-max-height: 5.2cm;
@@ -682,8 +680,7 @@ VBox.pv-design-prs-pay {
     -fx-background-insets: 0;
     -fx-padding: 0;
     -fx-pref-width: 22.8cm;
-    -fx-min-width: 22.8cm;
-    -fx-max-width: 22.8cm;
+    -fx-min-width: 0;
     -fx-pref-height: 2.25cm;
     -fx-min-height: 2.25cm;
     -fx-max-height: 2.25cm;
