@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -18,6 +19,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
+import javafx.scene.transform.Scale;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -74,6 +76,8 @@ public class PassengerDisplayView implements Initializable {
     private BorderPane prsBoard;
     @FXML
     private BorderPane designBoard;
+    @FXML
+    private StackPane designPrsBox;
 
     /* UTS */
     @FXML
@@ -186,6 +190,7 @@ public class PassengerDisplayView implements Initializable {
 
     private final ObservableList<PaxRow> prsPaxRows = FXCollections.observableArrayList();
     private final Label[][] designPaxCells = new Label[PrsTdrc.MAX_PASSENGERS][4];
+    private final Scale designPrsScale = new Scale(1, 1, 0, 0);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -195,6 +200,7 @@ public class PassengerDisplayView implements Initializable {
         initPassengerTable();
         initDesignPaxSheet();
         clearAll();
+        bindDesignBoxToScreen();
         setLinkStatus("—", false, false, 0, "starting");
     }
 
@@ -518,6 +524,47 @@ public class PassengerDisplayView implements Initializable {
             passengerFooter.setVisible(false);
             passengerFooter.setManaged(false);
         }
+        updateDesignBoxScale();
+    }
+
+    /**
+     * Stretch the 40cm × 22cm PRS board so it fills the current screen. Layout stays in cm;
+     * only the painted size changes.
+     */
+    private void bindDesignBoxToScreen() {
+        if (designPrsBox == null) {
+            return;
+        }
+        designPrsBox.getTransforms().add(designPrsScale);
+        designPrsBox.sceneProperty().addListener((obs, oldScene, scene) -> {
+            if (scene != null) {
+                scene.widthProperty().addListener((o, a, b) -> updateDesignBoxScale());
+                scene.heightProperty().addListener((o, a, b) -> updateDesignBoxScale());
+                updateDesignBoxScale();
+            }
+        });
+        designPrsBox.widthProperty().addListener((o, a, b) -> updateDesignBoxScale());
+        designPrsBox.heightProperty().addListener((o, a, b) -> updateDesignBoxScale());
+        updateDesignBoxScale();
+    }
+
+    private void updateDesignBoxScale() {
+        if (designPrsBox == null) {
+            return;
+        }
+        Scene scene = designPrsBox.getScene();
+        if (scene == null) {
+            return;
+        }
+        double boxW = designPrsBox.getWidth();
+        double boxH = designPrsBox.getHeight();
+        double sceneW = scene.getWidth();
+        double sceneH = scene.getHeight();
+        if (boxW <= 0 || boxH <= 0 || sceneW <= 0 || sceneH <= 0) {
+            return;
+        }
+        designPrsScale.setX(sceneW / boxW);
+        designPrsScale.setY(sceneH / boxH);
     }
 
     private void hideDesignBoard() {
