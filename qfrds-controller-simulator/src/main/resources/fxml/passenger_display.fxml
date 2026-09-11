@@ -938,7 +938,6 @@
                                             <VBox alignment="CENTER" styleClass="pv-design-prs-seg-62-24,pv-design-uts-train-type"
                                                   HBox.hgrow="NEVER">
                                                 <Label styleClass="pv-design-prs-label-en,pv-design-uts-train-type-en" text="Pay Mode"/>
-                                                <Label styleClass="pv-design-prs-label-hi,pv-design-uts-train-type-hi" text="भुगतान विधि"/>
                                             </VBox>
                                             <StackPane alignment="CENTER_LEFT" maxWidth="Infinity"
                                                        styleClass="pv-design-prs-seg-81-24"
@@ -950,8 +949,8 @@
                                         <HBox styleClass="pv-design-prs-col30-split" VBox.vgrow="NEVER">
                                             <VBox alignment="CENTER" styleClass="pv-design-prs-seg-7-24,pv-design-uts-train-type"
                                                   HBox.hgrow="NEVER">
-                                                <Label alignment="CENTER" maxWidth="Infinity" wrapText="true"
-                                                       styleClass="pv-design-prs-label-en,pv-design-uts-txn-en" text="Transaction Type"/>
+                                                <Label styleClass="pv-design-prs-label-en,pv-design-uts-txn-en" text="Transaction"/>
+                                                <Label styleClass="pv-design-prs-label-en,pv-design-uts-txn-en" text="Type"/>
                                             </VBox>
                                             <StackPane alignment="CENTER_LEFT" styleClass="pv-design-prs-seg-81-24"
                                                        HBox.hgrow="NEVER">

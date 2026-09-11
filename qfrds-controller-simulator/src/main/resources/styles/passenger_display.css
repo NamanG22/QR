@@ -863,11 +863,11 @@ VBox.pv-design-uts-train-type {
 }
 
 .pv-design-uts-txn-en {
-    -fx-font-size: 9mm;
+    -fx-font-size: 8mm;
     -fx-alignment: CENTER;
     -fx-text-alignment: CENTER;
     -fx-max-width: Infinity;
-    -fx-wrap-text: true;
+    -fx-wrap-text: false;
 }
 
 .pv-design-uts-txn-fill {
