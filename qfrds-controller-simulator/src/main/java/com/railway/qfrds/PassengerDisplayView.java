@@ -70,6 +70,11 @@ public class PassengerDisplayView implements Initializable {
     private static final DateTimeFormatter DISPLAY_DDMMYYYY = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final DateTimeFormatter DISPLAY_DDMM = DateTimeFormatter.ofPattern("dd/MM");
 
+    private static final String UNSET_TEXT = "-".repeat(10);
+    private static final String UNSET_DATE = "-".repeat(2) + "/" + "-".repeat(2) + "/" + "-".repeat(4);
+    private static final String UNSET_SHORT = "-".repeat(2);
+    private static final String UNSET_FARE = "-".repeat(2) + "." + "-".repeat(2);
+
     @FXML
     private BorderPane utsBoard;
     @FXML
@@ -189,7 +194,9 @@ public class PassengerDisplayView implements Initializable {
 
     /* UTS design canvas (PRS layout copy) */
     @FXML
-    private Label designUtsOperatorCode;
+    private Label designUtsTerminalId;
+    @FXML
+    private Label designUtsWindowNo;
     @FXML
     private Label designUtsFrom;
     @FXML
@@ -197,7 +204,9 @@ public class PassengerDisplayView implements Initializable {
     @FXML
     private Label designUtsDate;
     @FXML
-    private Label designUtsTotalPax;
+    private Label designUtsAdult;
+    @FXML
+    private Label designUtsChild;
     @FXML
     private Label designUtsClass;
     @FXML
@@ -205,7 +214,9 @@ public class PassengerDisplayView implements Initializable {
     @FXML
     private Label designUtsTrainType;
     @FXML
-    private Label designUtsResUpto;
+    private Label designUtsPayMode;
+    @FXML
+    private Label designUtsTxnType;
     @FXML
     private Label designUtsOperatorName;
     @FXML
@@ -258,14 +269,22 @@ public class PassengerDisplayView implements Initializable {
     }
 
     private void fillUts(TicketData t, WritableImage qrImage) {
-        utsTerminalId.setText(t.getOperator()
+        String terminalId = t.getOperator()
                 .map(OperatorSession::getTerminalId)
                 .filter(s -> !s.isBlank())
-                .orElseGet(() -> compactTerminalId(t.getTransactionId())));
-        utsWindowNo.setText(t.getOperator()
+                .orElseGet(() -> compactTerminalId(t.getTransactionId()));
+        String windowNo = t.getOperator()
                 .map(OperatorSession::windowDisplay)
                 .filter(s -> !s.isBlank())
-                .orElse("—"));
+                .orElse("");
+        String operatorName = t.getOperator()
+                .map(OperatorSession::getOperatorName)
+                .filter(s -> !s.isBlank())
+                .orElse("");
+        String terminalShown = "—".equals(terminalId) ? "" : terminalId;
+
+        utsTerminalId.setText(terminalShown.isBlank() ? "—" : terminalShown);
+        utsWindowNo.setText(windowNo.isBlank() ? "—" : windowNo);
         utsFrom.setText(t.getSourceBoardText());
         utsTo.setText(t.getDestinationBoardText());
         utsDate.setText(t.getDateDisplay().isBlank() ? "--/--" : t.getDateDisplay());
@@ -276,24 +295,24 @@ public class PassengerDisplayView implements Initializable {
         utsTrainType.setText(t.getTrainType().isBlank() ? "—" : TrainTypeField.display(t.getTrainType()));
         utsPayMode.setText(t.getPaymentGw().isBlank() ? "—" : t.getPaymentGw());
         utsTxnType.setText(t.getTxnType().isBlank() ? "—" : TxnTypeField.display(t.getTxnType()));
-        String operatorName = t.getOperator()
-                .map(OperatorSession::getOperatorName)
-                .filter(s -> !s.isBlank())
-                .orElse("");
         utsOperator.setText(dash(operatorName));
-        setEmpty(designUtsOperatorCode);
-        setDesign(designUtsFrom, t.getSourceBoardText());
-        setDesign(designUtsTo, t.getDestinationBoardText());
-        setDesign(designUtsDate, t.getDateDisplay());
-        setEmpty(designUtsTotalPax);
-        setDesign(designUtsClass, t.getTravelClass());
+
+        setUts(designUtsTerminalId, terminalShown, UNSET_TEXT);
+        setUts(designUtsWindowNo, windowNo, UNSET_TEXT);
+        setUts(designUtsFrom, t.getSourceBoardText(), UNSET_TEXT);
+        setUts(designUtsTo, t.getDestinationBoardText(), UNSET_TEXT);
+        setUts(designUtsDate, utsDesignDate(t), UNSET_DATE);
+        setUts(designUtsAdult, t.getAdult(), UNSET_SHORT);
+        setUts(designUtsChild, t.getChild(), UNSET_SHORT);
+        setUts(designUtsClass, t.getTravelClass(), UNSET_SHORT);
         if (designUtsFare != null) {
             String plain = formatFarePlain(t.getFare());
-            designUtsFare.setText(plain.isBlank() ? "—" : plain);
+            designUtsFare.setText(plain.isBlank() ? UNSET_FARE : plain);
         }
-        setDesign(designUtsTrainType, t.getTrainType().isBlank() ? "" : TrainTypeField.display(t.getTrainType()));
-        setEmpty(designUtsResUpto);
-        setDesign(designUtsOperatorName, operatorName);
+        setUts(designUtsTrainType, t.getTrainType().isBlank() ? "" : TrainTypeField.display(t.getTrainType()), UNSET_TEXT);
+        setUts(designUtsPayMode, t.getPaymentGw(), UNSET_TEXT);
+        setUts(designUtsTxnType, t.getTxnType().isBlank() ? "" : TxnTypeField.display(t.getTxnType()), UNSET_TEXT);
+        setUts(designUtsOperatorName, operatorName, "");
 
         bindQr(utsQrImage, utsQrPlaceholder, qrImage);
         bindQr(designUtsQrImage, designUtsQrPlaceholder, qrImage);
@@ -310,23 +329,24 @@ public class PassengerDisplayView implements Initializable {
 
     private void fillPrs(TicketData t, WritableImage qrImage) {
         setOperatorCode("CLIENT");
-        setPaired(prsFrom, designFrom, t.getSourceStation());
-        setPaired(prsTo, designTo, t.getDestinationStation());
-        setPaired(prsTrainNo, designTrainNo, "");
-        setPaired(prsQuota, designQuota, "GN");
+        setPaired(prsFrom, designFrom, t.getSourceStation(), UNSET_TEXT);
+        setPaired(prsTo, designTo, t.getDestinationStation(), UNSET_TEXT);
+        setPaired(prsTrainNo, designTrainNo, "", UNSET_TEXT);
+        setPaired(prsQuota, designQuota, "GN", UNSET_SHORT);
         setPaired(prsDate, designDate, formatDateShort(t.getTimestampRaw()));
+        setUts(designDate, parsedFullDate(t.getTimestampRaw()), UNSET_DATE);
         setTotalPax("01");
         setTravelClass("SL");
         setFare(t.getFare());
-        setPaired(prsBoarding, designBoarding, t.getSourceStation());
-        setPaired(prsResUpto, designResUpto, t.getDestinationStation());
+        setPaired(prsBoarding, designBoarding, t.getSourceStation(), UNSET_TEXT);
+        setPaired(prsResUpto, designResUpto, t.getDestinationStation(), UNSET_TEXT);
 
         Optional<String> name = t.getPassengerName();
         applyPassengerTableOverlay(name);
         clearDesignPax();
         name.filter(n -> !n.isBlank()).ifPresent(n -> setDesignPaxCell(0, 0, n.trim()));
 
-        setPaired(prsOperatorName, designOperatorName, "");
+        setPaired(prsOperatorName, designOperatorName, "", "");
         setPayStatus("");
 
         bindPrsQr(qrImage);
@@ -335,11 +355,12 @@ public class PassengerDisplayView implements Initializable {
 
     private void fillPrsBooking(PrsTdrc t, WritableImage qrImage) {
         setOperatorCode(t.getOperatorCode());
-        setPaired(prsFrom, designFrom, t.getFrom());
-        setPaired(prsTo, designTo, t.getDestination());
-        setPaired(prsTrainNo, designTrainNo, t.getTrainNo());
-        setPaired(prsQuota, designQuota, t.getQuota());
+        setPaired(prsFrom, designFrom, t.getFrom(), UNSET_TEXT);
+        setPaired(prsTo, designTo, t.getDestination(), UNSET_TEXT);
+        setPaired(prsTrainNo, designTrainNo, t.getTrainNo(), UNSET_TEXT);
+        setPaired(prsQuota, designQuota, t.getQuota(), UNSET_SHORT);
         setPaired(prsDate, designDate, t.dateDisplay());
+        setUts(designDate, designDateFromDayMonth(t.getDay(), t.getMonth()), UNSET_DATE);
         String pax = t.getPaxCount();
         if (pax.isBlank() && !t.getPassengers().isEmpty()) {
             pax = String.format("%02d", t.getPassengers().size());
@@ -347,10 +368,9 @@ public class PassengerDisplayView implements Initializable {
         setTotalPax(pax);
         setTravelClass(t.getTravelClass());
         setFare(t.getFare());
-        setPaired(prsBoarding, designBoarding, t.getBoarding());
-        setPaired(prsResUpto, designResUpto, t.getReservationUpto());
-        setPaired(prsOperatorName, designOperatorName, t.getOperatorName());
-
+        setPaired(prsBoarding, designBoarding, t.getBoarding(), UNSET_TEXT);
+        setPaired(prsResUpto, designResUpto, t.getReservationUpto(), UNSET_TEXT);
+        setPaired(prsOperatorName, designOperatorName, t.getOperatorName(), "");
         prsPaxRows.clear();
         for (PrsTdrc.PrsPassenger p : t.getPassengers()) {
             prsPaxRows.add(new PaxRow(p.name(), p.sex(), p.age(), p.status()));
@@ -363,15 +383,15 @@ public class PassengerDisplayView implements Initializable {
     }
 
     private void setOperatorCode(String value) {
-        setPaired(prsOperatorCode, designOperatorCode, value);
+        setPaired(prsOperatorCode, designOperatorCode, value, UNSET_TEXT);
     }
 
     private void setTotalPax(String value) {
-        setPaired(prsTotalPax, designTotalPax, value);
+        setPaired(prsTotalPax, designTotalPax, value, UNSET_SHORT);
     }
 
     private void setTravelClass(String value) {
-        setPaired(prsClass, designClass, value);
+        setPaired(prsClass, designClass, value, UNSET_SHORT);
     }
 
     private void setFare(String value) {
@@ -380,33 +400,34 @@ public class PassengerDisplayView implements Initializable {
         }
         if (designFare != null) {
             String plain = formatFarePlain(value);
-            designFare.setText(plain.isBlank() ? "—" : plain);
+            designFare.setText(plain.isBlank() ? UNSET_FARE : plain);
         }
     }
 
     private void setPaired(Label original, Label design, String value) {
-        String shown = dash(value);
+        setPaired(original, design, value, "—");
+    }
+
+    private void setPaired(Label original, Label design, String value, String designUnset) {
         if (original != null) {
-            original.setText(shown);
+            original.setText(dash(value));
         }
-        if (design != null) {
-            design.setText(shown);
-        }
+        setUts(design, value, designUnset);
     }
 
     private void clearDesignValues() {
-        setEmpty(designOperatorCode);
-        setEmpty(designFrom);
-        setEmpty(designTo);
-        setEmpty(designTrainNo);
-        setEmpty(designQuota);
-        setEmpty(designDate);
-        setEmpty(designTotalPax);
-        setEmpty(designClass);
-        setEmpty(designFare);
-        setEmpty(designBoarding);
-        setEmpty(designResUpto);
-        setEmpty(designOperatorName);
+        setUts(designOperatorCode, "", UNSET_TEXT);
+        setUts(designFrom, "", UNSET_TEXT);
+        setUts(designTo, "", UNSET_TEXT);
+        setUts(designTrainNo, "", UNSET_TEXT);
+        setUts(designQuota, "", UNSET_SHORT);
+        setUts(designDate, "", UNSET_DATE);
+        setUts(designTotalPax, "", UNSET_SHORT);
+        setUts(designClass, "", UNSET_SHORT);
+        setUts(designFare, "", UNSET_FARE);
+        setUts(designBoarding, "", UNSET_TEXT);
+        setUts(designResUpto, "", UNSET_TEXT);
+        setUts(designOperatorName, "", "");
         setPayStatus("");
         clearDesignPax();
         bindQr(designQrImage, designQrPlaceholder, null);
@@ -523,7 +544,8 @@ public class PassengerDisplayView implements Initializable {
     private void setDesignPaxCell(int row, int col, String value) {
         Label cell = designPaxCells[row][col];
         if (cell != null) {
-            cell.setText(dash(value));
+            String unset = (col == 1 || col == 2) ? UNSET_SHORT : UNSET_TEXT;
+            cell.setText(value == null || value.isBlank() ? unset : value);
         }
     }
 
@@ -658,17 +680,59 @@ public class PassengerDisplayView implements Initializable {
     }
 
     private void clearDesignUtsValues() {
-        setEmpty(designUtsOperatorCode);
-        setEmpty(designUtsFrom);
-        setEmpty(designUtsTo);
-        setEmpty(designUtsDate);
-        setEmpty(designUtsTotalPax);
-        setEmpty(designUtsClass);
-        setEmpty(designUtsFare);
-        setEmpty(designUtsTrainType);
-        setEmpty(designUtsResUpto);
-        setEmpty(designUtsOperatorName);
+        setUts(designUtsTerminalId, "", UNSET_TEXT);
+        setUts(designUtsWindowNo, "", UNSET_TEXT);
+        setUts(designUtsFrom, "", UNSET_TEXT);
+        setUts(designUtsTo, "", UNSET_TEXT);
+        setUts(designUtsDate, "", UNSET_DATE);
+        setUts(designUtsAdult, "", UNSET_SHORT);
+        setUts(designUtsChild, "", UNSET_SHORT);
+        setUts(designUtsClass, "", UNSET_SHORT);
+        setUts(designUtsFare, "", UNSET_FARE);
+        setUts(designUtsTrainType, "", UNSET_TEXT);
+        setUts(designUtsPayMode, "", UNSET_TEXT);
+        setUts(designUtsTxnType, "", UNSET_TEXT);
+        setUts(designUtsOperatorName, "", "");
         bindQr(designUtsQrImage, designUtsQrPlaceholder, null);
+    }
+
+    private static void setUts(Label label, String value, String unset) {
+        if (label == null) {
+            return;
+        }
+        label.setText(value == null || value.isBlank() ? unset : value);
+    }
+
+    private static String utsDesignDate(TicketData t) {
+        String fromParts = designDateFromDayMonth(t.getDay(), t.getMonth());
+        if (!fromParts.isBlank()) {
+            return fromParts;
+        }
+        return parsedFullDate(t.getTimestampRaw());
+    }
+
+    private static String designDateFromDayMonth(String day, String month) {
+        boolean hasDay = day != null && !day.isBlank();
+        boolean hasMonth = month != null && !month.isBlank();
+        if (!hasDay && !hasMonth) {
+            return "";
+        }
+        String d = hasDay ? padTwo(day) : "-".repeat(2);
+        String m = hasMonth ? padTwo(month) : "-".repeat(2);
+        String y = hasDay && hasMonth ? String.valueOf(LocalDate.now().getYear()) : "-".repeat(4);
+        return d + "/" + m + "/" + y;
+    }
+
+    private static String parsedFullDate(String tsRaw) {
+        return parseDate(tsRaw).map(DISPLAY_DDMMYYYY::format).orElse("");
+    }
+
+    private static String padTwo(String raw) {
+        String t = raw.trim();
+        if (t.length() == 1) {
+            return "0" + t;
+        }
+        return t.length() > 2 ? t.substring(0, 2) : t;
     }
 
     private void clearAll() {
@@ -699,7 +763,7 @@ public class PassengerDisplayView implements Initializable {
         setFare("");
         setPaired(prsBoarding, designBoarding, "");
         setPaired(prsResUpto, designResUpto, "");
-        setPaired(prsOperatorName, designOperatorName, "");
+        setPaired(prsOperatorName, designOperatorName, "", "");
         setPayStatus("");
         prsPaxRows.clear();
         bindPrsQr(null);

@@ -319,9 +319,7 @@ public final class DisplayController {
             statusView.appendLog(LogFormatter.ts(
                     "Cancellation refund (code 14): " + refund.getCode() + " " + refund.getType()
                             + " " + refund.getAmount()));
-            statusView.setQrGenerationStatus("—");
-            passengerView.applyTicketUpdate(utsTicket, null);
-            statusView.pulseDisplayPipelineLed();
+            refreshUtsQrAndDisplay();
             return;
         }
         if (kind == TicketPacketParser.Kind.OPERATOR) {
@@ -383,7 +381,11 @@ public final class DisplayController {
     private void applyUtsPartial(String message) {
         statusView.setDetectedTicketType("UTS");
         statusView.appendLog(LogFormatter.ts(message));
-        passengerView.applyTicketUpdate(utsTicket, null);
+        if (!utsTicket.getQrPayload().isBlank() || !utsTicket.getFare().isBlank()) {
+            refreshUtsQrAndDisplay();
+        } else {
+            passengerView.applyTicketUpdate(utsTicket, null);
+        }
         statusView.pulseDisplayPipelineLed();
     }
 

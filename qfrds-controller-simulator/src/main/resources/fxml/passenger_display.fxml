@@ -810,18 +810,26 @@
                             <VBox maxWidth="Infinity" styleClass="pv-design-prs-strips"
                                   StackPane.alignment="TOP_LEFT">
                                 <StackPane maxWidth="Infinity" alignment="BOTTOM_LEFT"
-                                           styleClass="pv-design-prs-box-yellow"
+                                           styleClass="pv-design-uts-box-yellow"
                                            VBox.vgrow="NEVER">
                                     <Label alignment="BOTTOM_LEFT" maxWidth="Infinity" maxHeight="Infinity"
                                            styleClass="pv-design-prs-title" text="Ticket Information"/>
+                                    <HBox alignment="TOP_LEFT" styleClass="pv-design-uts-header-left"
+                                          StackPane.alignment="TOP_LEFT">
+                                        <VBox alignment="TOP_CENTER" styleClass="pv-design-prs-opcode">
+                                            <Label styleClass="pv-design-prs-opcode-label" text="Terminal ID"/>
+                                            <Region styleClass="pv-design-prs-opcode-rule"/>
+                                            <Label fx:id="designUtsTerminalId" styleClass="pv-design-prs-opcode-value" text=""/>
+                                        </VBox>
+                                        <VBox alignment="TOP_CENTER" styleClass="pv-design-prs-opcode">
+                                            <Label styleClass="pv-design-prs-opcode-label" text="Windows No."/>
+                                            <Region styleClass="pv-design-prs-opcode-rule"/>
+                                            <Label fx:id="designUtsWindowNo" styleClass="pv-design-prs-opcode-value" text=""/>
+                                        </VBox>
+                                    </HBox>
                                     <HBox alignment="TOP_RIGHT" spacing="2.0" styleClass="pv-design-prs-header-right"
                                           StackPane.alignment="TOP_RIGHT">
-                                        <VBox alignment="TOP_CENTER" styleClass="pv-design-prs-opcode">
-                                            <Label styleClass="pv-design-prs-opcode-label" text="Operator Code"/>
-                                            <Region styleClass="pv-design-prs-opcode-rule"/>
-                                            <Label fx:id="designUtsOperatorCode" styleClass="pv-design-prs-opcode-value" text=""/>
-                                        </VBox>
-                                        <Region styleClass="pv-design-prs-logo"/>
+                                        <Region styleClass="pv-design-uts-logo"/>
                                     </HBox>
                                 </StackPane>
                                 <HBox maxWidth="Infinity" styleClass="pv-design-prs-row-split"
@@ -861,16 +869,33 @@
                                             <Label styleClass="pv-design-prs-label-hi" text="दिनांक"/>
                                         </VBox>
                                         <HBox styleClass="pv-design-prs-rest-split" HBox.hgrow="NEVER">
-                                            <StackPane alignment="CENTER_LEFT" styleClass="pv-design-prs-seg-6-black"
+                                            <StackPane alignment="CENTER_LEFT" styleClass="pv-design-uts-date-value"
                                                        HBox.hgrow="NEVER">
                                                 <Label fx:id="designUtsDate" maxHeight="Infinity" maxWidth="Infinity"
                                                        styleClass="pv-design-prs-value,pv-design-prs-value-lg" text="" wrapText="true"/>
                                             </StackPane>
-                                            <VBox alignment="CENTER" styleClass="pv-design-prs-seg-88-black,pv-design-prs-pax"
+                                            <VBox alignment="CENTER" styleClass="pv-design-uts-adult-child"
                                                   HBox.hgrow="NEVER">
-                                                <Label styleClass="pv-design-prs-pax-title" text="Total Passengers"/>
-                                                <Region styleClass="pv-design-prs-pax-rule"/>
-                                                <Label fx:id="designUtsTotalPax" styleClass="pv-design-prs-pax-value" text=""/>
+                                                <StackPane alignment="CENTER" VBox.vgrow="ALWAYS">
+                                                    <Label styleClass="pv-design-uts-ac-label" text="Adult"/>
+                                                </StackPane>
+                                                <Region styleClass="pv-design-uts-ac-rule"/>
+                                                <StackPane alignment="CENTER" VBox.vgrow="ALWAYS">
+                                                    <Label styleClass="pv-design-uts-ac-label" text="Child"/>
+                                                </StackPane>
+                                            </VBox>
+                                            <VBox alignment="CENTER" maxWidth="Infinity"
+                                                  styleClass="pv-design-uts-ac-value"
+                                                  HBox.hgrow="ALWAYS">
+                                                <StackPane alignment="CENTER" VBox.vgrow="ALWAYS">
+                                                    <Label fx:id="designUtsAdult" maxHeight="Infinity" maxWidth="Infinity"
+                                                           styleClass="pv-design-uts-ac-count" text=""/>
+                                                </StackPane>
+                                                <Region styleClass="pv-design-uts-ac-value-rule"/>
+                                                <StackPane alignment="CENTER" VBox.vgrow="ALWAYS">
+                                                    <Label fx:id="designUtsChild" maxHeight="Infinity" maxWidth="Infinity"
+                                                           styleClass="pv-design-uts-ac-count" text=""/>
+                                                </StackPane>
                                             </VBox>
                                         </HBox>
                                     </HBox>
@@ -898,29 +923,43 @@
                                 </HBox>
                                 <HBox maxWidth="Infinity" styleClass="pv-design-prs-rows56"
                                       VBox.vgrow="NEVER">
-                                    <VBox styleClass="pv-design-prs-rows56-left" HBox.hgrow="NEVER">
+                                    <VBox styleClass="pv-design-uts-rows56-left" HBox.hgrow="NEVER">
                                         <HBox styleClass="pv-design-prs-col30-split" VBox.vgrow="NEVER">
-                                            <VBox alignment="CENTER" styleClass="pv-design-prs-seg-7-24,pv-design-prs-label,pv-design-prs-boarding"
+                                            <VBox alignment="CENTER" styleClass="pv-design-prs-seg-7-24,pv-design-uts-train-type"
                                                   HBox.hgrow="NEVER">
-                                                <Label styleClass="pv-design-prs-label-en" text="Type of"/>
-                                                <Label styleClass="pv-design-prs-label-en" text="Train"/>
+                                                <Label styleClass="pv-design-prs-label-en,pv-design-uts-train-type-en" text="Type of Train"/>
+                                                <Label styleClass="pv-design-prs-label-hi,pv-design-uts-train-type-hi" text="ट्रेन का प्रकार"/>
                                             </VBox>
                                             <StackPane alignment="CENTER_LEFT" styleClass="pv-design-prs-seg-81-24"
                                                        HBox.hgrow="NEVER">
                                                 <Label fx:id="designUtsTrainType" maxHeight="Infinity" maxWidth="Infinity"
                                                        styleClass="pv-design-prs-value" text="" wrapText="true"/>
                                             </StackPane>
-                                            <VBox alignment="CENTER" styleClass="pv-design-prs-seg-62-24,pv-design-prs-label,pv-design-prs-res"
+                                            <VBox alignment="CENTER" styleClass="pv-design-prs-seg-62-24,pv-design-uts-train-type"
                                                   HBox.hgrow="NEVER">
-                                                <Label styleClass="pv-design-prs-label-en,pv-design-prs-res-en" text="Reservation"/>
-                                                <Label styleClass="pv-design-prs-label-en,pv-design-prs-res-en" text="Up To"/>
+                                                <Label styleClass="pv-design-prs-label-en,pv-design-uts-train-type-en" text="Pay Mode"/>
+                                                <Label styleClass="pv-design-prs-label-hi,pv-design-uts-train-type-hi" text="भुगतान विधि"/>
                                             </VBox>
                                             <StackPane alignment="CENTER_LEFT" maxWidth="Infinity"
                                                        styleClass="pv-design-prs-seg-81-24"
                                                        HBox.hgrow="ALWAYS">
-                                                <Label fx:id="designUtsResUpto" maxHeight="Infinity" maxWidth="Infinity"
+                                                <Label fx:id="designUtsPayMode" maxHeight="Infinity" maxWidth="Infinity"
                                                        styleClass="pv-design-prs-value" text="" wrapText="true"/>
                                             </StackPane>
+                                        </HBox>
+                                        <HBox styleClass="pv-design-prs-col30-split" VBox.vgrow="NEVER">
+                                            <VBox alignment="CENTER" styleClass="pv-design-prs-seg-7-24,pv-design-uts-train-type"
+                                                  HBox.hgrow="NEVER">
+                                                <Label alignment="CENTER" maxWidth="Infinity" wrapText="true"
+                                                       styleClass="pv-design-prs-label-en,pv-design-uts-txn-en" text="Transaction Type"/>
+                                            </VBox>
+                                            <StackPane alignment="CENTER_LEFT" styleClass="pv-design-prs-seg-81-24"
+                                                       HBox.hgrow="NEVER">
+                                                <Label fx:id="designUtsTxnType" maxHeight="Infinity" maxWidth="Infinity"
+                                                       styleClass="pv-design-prs-value" text="" wrapText="true"/>
+                                            </StackPane>
+                                            <Region maxWidth="Infinity" styleClass="pv-design-uts-txn-fill"
+                                                    HBox.hgrow="ALWAYS"/>
                                         </HBox>
                                     </VBox>
                                     <StackPane alignment="CENTER" maxWidth="Infinity"

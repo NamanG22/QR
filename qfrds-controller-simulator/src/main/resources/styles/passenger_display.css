@@ -54,6 +54,19 @@
     -fx-max-height: 3.325cm;
 }
 
+.pv-design-uts-box-yellow {
+    -fx-background-color: #ffffff;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 39.6cm;
+    -fx-min-width: 39.6cm;
+    -fx-max-width: 39.6cm;
+    -fx-pref-height: 5.95cm;
+    -fx-min-height: 5.95cm;
+    -fx-max-height: 5.95cm;
+}
+
 .pv-design-prs-title {
     -fx-font-family: "Playfair Display Black", "Georgia", serif;
     -fx-font-size: 96px;
@@ -99,6 +112,12 @@
     -fx-alignment: TOP_RIGHT;
 }
 
+.pv-design-uts-header-left {
+    -fx-padding: 0 0 0 2mm;
+    -fx-spacing: 3mm;
+    -fx-alignment: TOP_LEFT;
+}
+
 .pv-design-prs-logo {
     -fx-background-color: #808080;
     -fx-pref-width: 3.325cm;
@@ -107,6 +126,16 @@
     -fx-pref-height: 3.325cm;
     -fx-min-height: 3.325cm;
     -fx-max-height: 3.325cm;
+}
+
+.pv-design-uts-logo {
+    -fx-background-color: #808080;
+    -fx-pref-width: 5.95cm;
+    -fx-min-width: 5.95cm;
+    -fx-max-width: 5.95cm;
+    -fx-pref-height: 5.95cm;
+    -fx-min-height: 5.95cm;
+    -fx-max-height: 5.95cm;
 }
 
 .pv-design-prs-row-split {
@@ -724,6 +753,134 @@ VBox.pv-design-prs-pay {
     -fx-max-height: 2.4cm;
 }
 
+.pv-design-uts-date-value {
+    -fx-background-color: #000000;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 7.5cm;
+    -fx-min-width: 7.5cm;
+    -fx-max-width: 7.5cm;
+    -fx-pref-height: 2.4cm;
+    -fx-min-height: 2.4cm;
+    -fx-max-height: 2.4cm;
+}
+
+.pv-design-uts-adult-child {
+    -fx-background-color: #ffffff;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-spacing: 0;
+    -fx-pref-width: 4.5cm;
+    -fx-min-width: 4.5cm;
+    -fx-max-width: 4.5cm;
+    -fx-pref-height: 2.4cm;
+    -fx-min-height: 2.4cm;
+    -fx-max-height: 2.4cm;
+}
+
+.pv-design-uts-ac-label {
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
+    -fx-font-size: 8mm;
+    -fx-font-weight: 700;
+    -fx-text-fill: #470000;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-max-width: Infinity;
+    -fx-wrap-text: false;
+}
+
+.pv-design-uts-ac-rule {
+    -fx-background-color: #000000;
+    -fx-pref-height: 1;
+    -fx-min-height: 1;
+    -fx-max-height: 1;
+    -fx-pref-width: 3.6cm;
+    -fx-min-width: 3.6cm;
+    -fx-max-width: 3.6cm;
+}
+
+.pv-design-uts-ac-value {
+    -fx-background-color: #000000;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-spacing: 0;
+    -fx-pref-width: 2.6cm;
+    -fx-min-width: 0;
+    -fx-pref-height: 2.4cm;
+    -fx-min-height: 2.4cm;
+    -fx-max-height: 2.4cm;
+}
+
+.pv-design-uts-ac-count {
+    -fx-font-family: "Playfair Display Black", "Georgia", serif;
+    -fx-font-size: 8mm;
+    -fx-font-weight: 700;
+    -fx-text-fill: #ffffff;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-max-width: Infinity;
+    -fx-wrap-text: false;
+}
+
+.pv-design-uts-ac-value-rule {
+    -fx-background-color: #ffffff;
+    -fx-pref-height: 1;
+    -fx-min-height: 1;
+    -fx-max-height: 1;
+    -fx-pref-width: 2cm;
+    -fx-min-width: 2cm;
+    -fx-max-width: 2cm;
+}
+
+.pv-design-uts-train-type {
+    -fx-alignment: CENTER;
+    -fx-padding: 0 1mm 0 1mm;
+    -fx-spacing: -1mm;
+}
+
+VBox.pv-design-uts-train-type {
+    -fx-padding: 0 1mm 0 1mm;
+    -fx-alignment: CENTER;
+    -fx-spacing: -1mm;
+}
+
+.pv-design-uts-train-type .pv-design-prs-label-en,
+.pv-design-uts-train-type .pv-design-prs-label-hi {
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-max-width: Infinity;
+}
+
+.pv-design-uts-train-type-en {
+    -fx-font-size: 9mm;
+}
+
+.pv-design-uts-train-type-hi {
+    -fx-font-size: 8mm;
+}
+
+.pv-design-uts-txn-en {
+    -fx-font-size: 9mm;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-max-width: Infinity;
+    -fx-wrap-text: true;
+}
+
+.pv-design-uts-txn-fill {
+    -fx-background-color: #000000;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-pref-width: 14.5cm;
+    -fx-min-width: 0;
+    -fx-pref-height: 2.4cm;
+    -fx-min-height: 2.4cm;
+    -fx-max-height: 2.4cm;
+}
+
 .pv-design-prs-seg-48 {
     -fx-background-color: #ffffff;
     -fx-border-width: 0;
@@ -773,6 +930,21 @@ VBox.pv-design-prs-pay {
     -fx-spacing: 2mm;
     -fx-fill-width: true;
     -fx-alignment: TOP_LEFT;
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 30cm;
+    -fx-min-width: 30cm;
+    -fx-max-width: 30cm;
+    -fx-pref-height: 7.8cm;
+    -fx-min-height: 7.8cm;
+    -fx-max-height: 7.8cm;
+}
+
+.pv-design-uts-rows56-left {
+    -fx-spacing: 2mm;
+    -fx-fill-width: true;
+    -fx-alignment: CENTER_LEFT;
     -fx-background-color: transparent;
     -fx-border-width: 0;
     -fx-padding: 0;

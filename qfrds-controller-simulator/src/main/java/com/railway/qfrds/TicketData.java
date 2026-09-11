@@ -252,6 +252,14 @@ public final class TicketData {
         return d + "/" + m;
     }
 
+    public String getDay() {
+        return day;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
     public String getAdult() {
         return adult;
     }
