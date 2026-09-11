@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -492,7 +493,11 @@
                                             <Region styleClass="pv-design-prs-opcode-rule"/>
                                             <Label fx:id="designOperatorCode" styleClass="pv-design-prs-opcode-value" text=""/>
                                         </VBox>
-                                        <Region styleClass="pv-design-prs-logo"/>
+                                        <ImageView fitHeight="117.2" preserveRatio="true" smooth="true">
+                                            <image>
+                                                <Image url="@../images/logo.jpg"/>
+                                            </image>
+                                        </ImageView>
                                     </HBox>
                                 </StackPane>
                                 <HBox maxWidth="Infinity" styleClass="pv-design-prs-row-split"
@@ -829,7 +834,11 @@
                                     </HBox>
                                     <HBox alignment="TOP_RIGHT" spacing="2.0" styleClass="pv-design-prs-header-right"
                                           StackPane.alignment="TOP_RIGHT">
-                                        <Region styleClass="pv-design-uts-logo"/>
+                                        <ImageView fitHeight="158.7" preserveRatio="true" smooth="true">
+                                            <image>
+                                                <Image url="@../images/logo.jpg"/>
+                                            </image>
+                                        </ImageView>
                                     </HBox>
                                 </StackPane>
                                 <HBox maxWidth="Infinity" styleClass="pv-design-prs-row-split"

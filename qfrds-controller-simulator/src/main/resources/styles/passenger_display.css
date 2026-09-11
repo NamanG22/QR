@@ -118,26 +118,6 @@
     -fx-alignment: TOP_LEFT;
 }
 
-.pv-design-prs-logo {
-    -fx-background-color: #808080;
-    -fx-pref-width: 3.325cm;
-    -fx-min-width: 3.325cm;
-    -fx-max-width: 3.325cm;
-    -fx-pref-height: 3.325cm;
-    -fx-min-height: 3.325cm;
-    -fx-max-height: 3.325cm;
-}
-
-.pv-design-uts-logo {
-    -fx-background-color: #808080;
-    -fx-pref-width: 5.95cm;
-    -fx-min-width: 5.95cm;
-    -fx-max-width: 5.95cm;
-    -fx-pref-height: 5.95cm;
-    -fx-min-height: 5.95cm;
-    -fx-max-height: 5.95cm;
-}
-
 .pv-design-prs-row-split {
     -fx-spacing: 2mm;
     -fx-fill-height: true;
