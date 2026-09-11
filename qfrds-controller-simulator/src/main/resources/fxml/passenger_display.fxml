@@ -493,7 +493,7 @@
                                             <Region styleClass="pv-design-prs-opcode-rule"/>
                                             <Label fx:id="designOperatorCode" styleClass="pv-design-prs-opcode-value" text=""/>
                                         </VBox>
-                                        <ImageView fitHeight="117.2" preserveRatio="true" smooth="true">
+                                        <ImageView fitHeight="124.0" preserveRatio="true" smooth="true">
                                             <image>
                                                 <Image url="@../images/logo.jpg"/>
                                             </image>
@@ -834,7 +834,7 @@
                                     </HBox>
                                     <HBox alignment="TOP_RIGHT" spacing="2.0" styleClass="pv-design-prs-header-right"
                                           StackPane.alignment="TOP_RIGHT">
-                                        <ImageView fitHeight="158.7" preserveRatio="true" smooth="true">
+                                        <ImageView fitHeight="174.0" preserveRatio="true" smooth="true">
                                             <image>
                                                 <Image url="@../images/logo.jpg"/>
                                             </image>
