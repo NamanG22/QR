@@ -834,7 +834,7 @@
                                     </HBox>
                                     <HBox alignment="TOP_RIGHT" spacing="2.0" styleClass="pv-design-prs-header-right"
                                           StackPane.alignment="TOP_RIGHT">
-                                        <ImageView fitHeight="174.0" preserveRatio="true" smooth="true">
+                                        <ImageView fitHeight="220.0" preserveRatio="true" smooth="true">
                                             <image>
                                                 <Image url="@../images/logo.jpg"/>
                                             </image>
